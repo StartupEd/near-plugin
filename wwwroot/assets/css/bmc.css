@@ -1,0 +1,105 @@
+/******************BUSINESS MODEL CANVAS COMPONENT*******************/
+.flex-container {
+	border: 2px solid #5dba47;
+	flex-direction: column;
+}
+
+.flex-item {
+	border: 1px solid #5dba47;
+	display: flex;
+	flex-grow: 1;
+	flex-basis: 1px;
+	flex-direction: column;
+	width: 15rem;
+}
+.flex-item__head {
+	display: flex;
+	padding: 1rem 1rem 0.5rem;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+.flex-item__body {
+	height: 100%;
+}
+.flex-item__body .ql-editor {
+	padding-right: 15px;
+	height: 15rem;
+}
+.flex-item__body .ql-toolbar {
+	z-index: 1000;
+}
+.flex-item__title {
+	font-size: 1.3rem;
+	color: #000;
+}
+.flex-item__1,
+.flex-item__2 {
+	border: 1px solid #5dba47;
+}
+
+.flex-item1__container .flex-item:nth-child(2) .flex-item__1,
+.flex-item1__container .flex-item:nth-child(2) .flex-item__2 {
+	height: 50%;
+}
+
+.flex-item1__container .flex-item:nth-child(1) .ql-editor,
+.flex-item1__container .flex-item:nth-child(3) .ql-editor,
+.flex-item1__container .flex-item:nth-child(6) .ql-editor {
+	height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+	.flex-item1__container {
+		flex-direction: column;
+	}
+	.flex-item2__container {
+		flex-direction: column;
+	}
+	.flex-item2__container > div {
+		width: 100%;
+	}
+	.flex-item {
+		width: 100%;
+	}
+	.flex-item__1,
+	.flex-item__2 {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+	}
+	.flex-item1__container .flex-item:nth-child(2),
+	.flex-item1__container .flex-item:nth-child(4) {
+		flex-direction: row;
+	}
+}
+
+@media only screen and (max-width: 520px) {
+	.flex-item {
+		flex-direction: column;
+	}
+	.flex-item__1,
+	.flex-item__2 {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+	.flex-item1__container .flex-item:nth-child(2),
+	.flex-item1__container .flex-item:nth-child(4) {
+		flex-direction: column;
+	}
+}
+
+#editor-1:empty:before {
+	content: attr(data-text);
+}
+
+@media only screen and (min-width: 520px) and (max-width: 1142px) {
+	.flex-item__head {
+		flex-wrap: wrap;
+	}
+}
+
+.ql-bubble .ql-tooltip {
+	z-index: 1000;
+}

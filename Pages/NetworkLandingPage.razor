@@ -1,0 +1,58 @@
+﻿@page "/home"
+@page "/"
+
+
+<OneUX_SubHeader IsInviteShow="true"/>
+<Head Title="Feed"> </Head>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+        {
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <div id="feedPost">
+                        <OneUX_Composer OnClickCallback="@SubmitPost"></OneUX_Composer>
+                    </div>
+                    <PostReaderExperience />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-12 col-xl-8">
+                    <div id="feedPost">
+                        <OneUX_Composer OnClickCallback="@SubmitPost"></OneUX_Composer>
+                    </div>
+
+                    <XFeed />
+
+                </div>
+                <div class="col-lg-12 col-xl-4">
+                    @if (State == LoadingContainerState.Loading)
+                    {
+                        <OneUX_Spinner />
+                    }
+                    else if (State == LoadingContainerState.Error)
+                    {
+                        <p>Oops something went wrong ...</p>
+                    }
+                    else if (State == LoadingContainerState.Loaded)
+                    {
+
+                        <RecommendedBoard GroupList="@RecommendedGroups" />
+                    }
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+
+@code{
+   
+
+
+}

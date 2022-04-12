@@ -1,0 +1,32 @@
+﻿<div class="d-flex flex-column mb-2 align-items-start">
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-circle symbol-30 mr-3">
+            @if (!string.IsNullOrEmpty(AvatarUrl))
+            {
+                <div class="symbol-label" style="background-image: url('@AvatarUrl')"></div>
+            }
+            else
+            {
+                <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+            }
+        </div>
+        @if (MessagedAt.ToString("MM/dd/yyyy") == DateTime.UtcNow.ToString("MM/dd/yyyy"))
+        {
+            <div>
+                <a href="#" class="text-dark-75 text-hover-primary font-weight-bold">@SenderName</a>
+                <span class="text-muted font-size-sm">@MessagedAt.ToString("h:mm tt")</span>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a href="#" class="text-dark-75 text-hover-primary font-weight-bold">@SenderName</a>
+                <span class="text-muted font-size-sm">@MessagedAt.ToString("dd MMMM yyyy")</span>
+            </div>
+        }
+    </div>
+    <div class="mt-1 rounded p-2 bg-light-primary text-dark-50 font-weight-bold font-size-md text-left max-w-400px">
+        <p class="text-left p-0 m-0">@((MarkupString)MessageValue)</p>
+    </div>
+</div>
+

@@ -1,0 +1,43 @@
+﻿@using StartupEd.Engine.MarketNetwork;
+
+<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success" id="eventModalLabel">Invite Your Friends</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close text-danger"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body py-3" style="height: auto;">
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <input id="inviteTagging" class="form-control tagify" name='invitetags' placeholder="Enter Email To Invite" @bind="@EmailAddresses" />
+                        <span class="form-text text-muted">You can Add More Emails To Invite.</span>
+                    </div>                    
+                </div>
+                <div class="card-body p-0" data-scroll="true" data-height="220">
+                    <div class="m-0 px-2">                        
+                        <p>Get on a journey to explore our Apps, Incubation Programs & network with Startup Ecosystems to bring your ideas to life.</p>
+                        <b>Why StartupEd?</b><br />
+                        <p>
+                            <b>Connect with like-minded people:</b><br />Now you can connect with entrepreneurs who want to build their own empire (& that too in cloud!)<br />
+                            <b>Real-Time Collaboration:</b><br />Collaborate with your connections over apps to discuss your ideas in real-time.<br />
+                            <b>Personalised Dashboard:</b><br />Have a look at your profile insights anytime.
+                        </p>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                <button type="submit" id="directInviteBtn" class="btn btn-primary font-weight-bold" @onclick="NetworkInviteAsync">Invite</button>
+            </div>
+        </div>
+    </div>
+</div>
+@code{    
+   
+
+}

@@ -1,0 +1,124 @@
+﻿@page "/root/network-user"
+<OneUX_SubHeader />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <div class="card-header card-header-tabs-line">
+                <div class="card-title">
+                    <h3 class="card-label text-primary">Network User Accounts</h3>
+                    <ul class="nav nav-light-primary nav-pills nav-bold  d-none">
+                        <li class="nav-item">
+                            <a class="nav-link active py-5 mr-5" data-toggle="tab" href="#network_user_accounts">
+                                <span class="nav-text">User Accounts</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pt-3">
+                    <!--begin:Search-->
+                    <div class="input-group input-group-solid">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <span class="svg-icon svg-icon-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control py-4 h-auto" @bind="@SearchString" @bind:event="oninput" placeholder="Name\Designation" />
+                    </div>
+                    <!--end:Search-->
+                </div>
+
+            </div>
+            @if (State == LoadingContainerState.Loading)
+            {
+                <div class="d-flex justify-content-center">
+                    <div class="fa-5x">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+            }
+            else if (State == LoadingContainerState.Error)
+            {
+                <p>Oops something went wrong ...</p>
+            }
+            else if (State == LoadingContainerState.Loaded)
+            {
+                <div class="card-body px-5 pt-3">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="kt_tab_find_connection" role="tabpanel" aria-labelledby="kt_tab_find_connection">
+                            <div class="pt-2">
+
+                                <div class="row">
+                                    @if (UserAccounts != null && UserAccounts.Count != 0)
+                                    {
+                                        @foreach (var Account in UserAccounts)
+                                        {
+                                            if (!SearchOnTextChange(Account.UserModel)) continue;
+
+                                            <UserAccountCard ProfileModel="@Account.ProfileModel" UserModel="Account.UserModel" OnDeactivateClick="DeactivateUserAccount">
+                                                @if (Account.ProfileModel.Core.IsActive == false && Account.ProfileModel.Core.IsDeleted == true && Account.UserModel.Core.IsActive == false)
+                                                {
+                                                    <button class="btn btn-block btn-sm btn-primary font-weight-bolder py-2" @onclick="()=>ActivateUserAccount(Account.UserModel.Id)">Activate</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-block btn-sm btn-primary font-weight-bolder py-2" @onclick="()=>SubmitChatThreadModel(Account.UserModel.Id)">Message</button>
+                                                }
+                                            </UserAccountCard>
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!--begin::Card-->
+<div class="card card-custom d-none">
+    <div class="card-header">
+        <div class="card-title">
+            <span class="card-icon">
+                <i class="flaticon2-delivery-package text-primary"></i>
+            </span>
+            <h3 class="card-label">Network All User</h3>
+        </div>
+        <div class="card-toolbar">
+
+        </div>
+    </div>
+    <div class="card-body">
+        <!--begin: Datatable-->
+        <div class="row">
+            @if (UserAccounts != null && UserAccounts.Count > 0)
+            {
+                @*<OneUX_ListView Data="" Route="root/user" ListDivId="allUserList" />*@
+            }
+        </div>
+        <!--end: Datatable-->
+
+    </div>
+</div>
+<!--end::Card-->
+
+
+@code {
+    
+
+
+
+
+}

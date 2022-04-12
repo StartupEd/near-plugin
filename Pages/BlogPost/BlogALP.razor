@@ -1,0 +1,93 @@
+﻿@page "/blog"
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Blogs" />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (Blogs != null && Blogs.Count > 0)
+            {
+                <OneUX_AlpHeader HeaderId="newBlog" Route="blog/create" Name="Blog" Count="Blogs.Count" ReturnSearchedQuery="GetSearchedString">
+                    @if (Blogs.Count > 4)
+                    {
+                        //<OneUX_ToggleViewsEvent ReturnView="ToggleView" />
+                    }
+                    <a href="blog/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                    </a>
+                </OneUX_AlpHeader>
+                @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                {
+                    @if (ProgramView == "Flix")
+                    {
+                        @*<Virtualize Items="AllEvent" Context="Events">*@
+                        @foreach (var Blog in Blogs)
+                        {
+                            if (!IsVisible(Blog)) continue;
+                            <BlogCard Model="Blog" GetId="ShowSweetAlert" AddBookmark="@Bookmark" RemoveBookmark="@Unbookmark" ShowReactionModalCallBack="()=>CallReactionListModal(Blog.Id)" UpdateBlogPosts="LoadData" />
+                        }
+                        @*</Virtualize>*@
+                    }
+                    else
+                    {
+                        <Virtualize Items="Blogs" Context="Blog">
+                            @*<OneUX_Flix Model="Events" />*@
+                        </Virtualize>
+
+                        <Virtualize Items="Blogs" Context="Blog">
+                            @*<OneUX_CollapseItem Model="Events" />*@
+                        </Virtualize>
+                    }
+                }
+                else
+                {
+                    @if (ProgramView == "Flix")
+                    {
+                        @*<Virtualize Items="AllEvent" Context="Events">*@
+                        @foreach (var Blog in Blogs)
+                        {
+                            if (!IsVisible(Blog)) continue;
+                            <BlogCard Model="Blog" GetId="ShowSweetAlert" AddBookmark="@Bookmark" RemoveBookmark="@Unbookmark" ShowReactionModalCallBack="()=>CallReactionListModal(Blog.Id)" UpdateBlogPosts="LoadData" />
+                        }
+                        @*</Virtualize>*@
+                    }
+                    else
+                    {
+                        <Virtualize Items="Blogs" Context="Blog">
+                            @*<OneUX_Flix Model="Events" />*@
+                        </Virtualize>
+
+                        <Virtualize Items="Blogs" Context="Blog">
+                            @*<OneUX_CollapseItem Model="Events" />*@
+                        </Virtualize>
+                    }
+                }
+
+            }
+            else
+            {
+
+                <OneUX_AlpHeader HeaderId="newBlog" Route="blog/create" Name="Blog" Count="0" />
+
+            }
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteBlog" />
+
+@if (Model != null)
+{
+    <BlogReactionListModal @ref="OpenReactionList" Model="Model" CachedUsers ="@cachedUsers" Reactions="@cachedUserss"/>
+}
+

@@ -1,0 +1,192 @@
+﻿@page "/root/dashboard"
+@using System.ComponentModel.DataAnnotations
+<OneUX_SubHeader />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-lg-6 draggable-zone">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Account Registration</h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <span class="symbol symbol-light-primary symbol-2by3 symbol-35">
+                                <span class="symbol-label font-weight-bolder font-size-h6">
+                                    @if (UserAccounts != null)
+                                    {
+                                        @UserAccounts.Count
+                                    }
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body px-5 pt-0">
+                        <div class="d-flex align-items-center justify-content-end mx-2 mb-2">
+                            <div class="text-left flex-grow">
+
+                            </div>
+                            <div class="text-left flex-grow" style="width:130px;">
+                                <select class="form-control kt-selectpicker" id="userFilter" data-style="btn-light-primary" @onchange="@OnChangeForUserAccounts">
+                                    @foreach (var option in Enum.GetValues(typeof(FilterOption)))
+                                    {
+                                        <option value="@option">@Utility.GetDisplayName((Enum)option)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        @if (State == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (State == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (State == LoadingContainerState.Loaded)
+                        {
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;max-height:300px;">
+                                <Virtualize Context="Info" Items="UserAccounts" ItemSize="9">
+                                    <OneUX_CardView LabelText="@Info.UserModel.Name" MutedText="@Info.UserModel.Persona" ImageUrl="@Info.ProfileModel.AvatarImageUrl" Route="@("profile/" + Info.UserModel.Id)" SymbolCss="symbol-45">
+                                        <a href="root/user-profile/@Info.UserModel.Id" class="navi-item d-none">
+                                            <div class="symbol symbol-35 bg-light mr-3 d-none">
+                                                <div class="symbol-label"><i class="far fa-edit text-primary icon-lg"></i></div>
+                                            </div>
+                                        </a>
+                                    </OneUX_CardView>
+                                </Virtualize>
+                            </div>
+                            @if (RegistrationPeriod != null && RegistrationData != null)
+                            {
+                                <OneUX_LineChart Id="registredAccountChart" Height="300" XAxisItems="@RegistrationPeriod" Data="@RegistrationData" Title="" />
+                            }
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 2</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body py-5">body</div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 3</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">body</div>
+                </div>
+                <!--end::Card-->
+            </div>
+            <div class="col-lg-6 draggable-zone">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Recent Activities Of Users</h3>
+                        </div>
+                        <div class="card-toolbar">
+                        </div>
+                    </div>
+                    <div class="card-body px-5 pt-2">
+                        <div class="d-flex align-items-center justify-content-end mx-2 mb-3">
+                            @if (UserModels != null && UserModels.Count != 0)
+                            {
+                                <div class="text-right flex-grow-1 mr-5">
+                                    <select class="form-control kt-selectpicker" id="userActivityFilter" data-size="9" @onchange="@OnChangeUserNameForActivity">
+                                        @foreach (var item in UserModels)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="text-left flex-grow" style="width:130px;">
+                                    <select class="form-control kt-selectpicker" id="activityFilter" data-style="btn-light-primary" @onchange="@OnChangeActivityFilter">
+                                        @foreach (var option in Enum.GetValues(typeof(FilterOption)))
+                                        {
+                                            <option value="@option">@Utility.GetDisplayName((Enum)option)</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                        </div>
+                        @if (ActivityState == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (ActivityState == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (ActivityState == LoadingContainerState.Loaded)
+                        { 
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;height:300px;">
+                                @if (RecentActivities != null && RecentActivities.Activities.Count != 0)
+                                {
+                                    <Virtualize Items="RecentActivities.Activities" Context="activity" ItemSize="19">
+                                        <ActivityCard Description="@activity.Description" ActivityAt="@activity.ActionedAt.ToLocalTime().ToString("hh:mm tt")" />
+                                    </Virtualize>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 5</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">body</div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 6</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">body</div>
+                </div>
+                <!--end::Card-->
+
+            </div>
+        </div>
+        <!--end:: Row-->
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" />
+
+
+@code {
+
+  
+
+
+}

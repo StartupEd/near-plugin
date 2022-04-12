@@ -1,0 +1,365 @@
+﻿@page "/startuprunway/create"
+@page "/startuprunway/{RunwayId}/{RunwayName}"
+@page "/startuprunway/{RunwayId}/{RunwayName}/edit"
+@using System.Net.Mail
+@using StartupEd.Engine.MarketNetwork
+
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="wizard wizard-5 d-flex flex-column flex-lg-row flex-row-fluid" id="kt_wizard">
+            <!--begin::Aside-->
+            <div class="wizard-aside bg-white d-flex flex-column flex-row-auto w-100 w-lg-300px w-xl-400px w-xxl-500px">
+                <!--begin::Aside Top-->
+                <div class="d-flex flex-column-fluid flex-column px-xxl-30 px-10">
+                    <!--begin: Wizard Nav-->
+                    <div class="wizard-nav d-flex d-flex justify-content-center pt-10 pt-lg-20 pb-5">
+                        <!--begin::Wizard Steps-->
+                        <div class="wizard-steps">
+                            <!--begin::Wizard Step 1 Nav-->
+
+                            <h3>
+                                <center>User Guide</center>
+                            </h3>
+                            <br />
+                            <br />
+                            <div class="accordion accordion-toggle-arrow" id="accordionExample1">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title" data-toggle="collapse" data-target="#collapseOne1">
+                                            Startup Burnrate
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Burn rate is a measure of how quickly a business is losing, or burning through, money. This is a particularly important metric for startups and venture-backed businesses that might be operating at a loss intentionally, investing more than they’re earning back into the business.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1">
+                                            Cash Runway
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Cash Runway helps business owners understand how long they can continue to operate at this rate before running out of money.Burn rate is a key factor in determining cash runway, or how long your business can continue to operate at that rate before hitting zero dollars in the bank.
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <br />
+                            <br />
+                            <h4>
+                                <center>How To Improve Burn Rate Metrics?</center>
+                            </h4>
+                            <div class="accordion accordion-toggle-arrow" id="accordionExample2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title" data-toggle="collapse" data-target="#collapseOne2">
+                                            Study your financial reports
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne2" class="collapse" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            Gather the last few months’ financial reports and spend some time digesting them. Did any changes in revenue or spending occur? Can you pinpoint when they happened and in what area of the business? Your financial reports can reveal a great deal when reviewed closely.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo2">
+                                            Reduce costs
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo2" class="collapse" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            For startups especially, this is the most useful lever to pull to adjust burn rate. Review your COGS and operating expenses closely to look for extraneous spending that could be cut.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree2">
+                                            Sell Assets
+                                        </div>
+                                    </div>
+                                    <div id="collapseThree2" class="collapse" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            Take a close look at your assets. Is there anything that could be liquidated for additional cash? For instance, if you have three delivery vans but really only need two, consider selling the third.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseFour2">
+                                            Increase Revenue
+                                        </div>
+                                    </div>
+                                    <div id="collapseFour2" class="collapse" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            For small and well-established businesses, finding ways to increase revenue will be a better long-term fix than simply reducing costs. Examine your marketing and sales processes and test out some new ideas before resorting to selling assets or cutting expenses.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 3 Nav-->
+                        </div>
+                        <!--end::Wizard Steps-->
+                    </div>
+                    <!--end: Wizard Nav-->
+                </div>
+                <!--end::Aside Top-->
+            </div>
+            <!--begin::Aside-->
+            <!--begin::Content-->
+            <div class="wizard-content bg-gray-100 d-flex flex-column flex-row-fluid py-15 px-5 px-lg-10">
+                <!--begin::Form-->
+                <div class="d-flex justify-content-center flex-row-fluid">
+                    <EditForm class="pb-5 w-100 w-md-450px w-lg-500px" novalidate="novalidate" id="kt_wizard_form" Model="@Model">
+                        <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+
+                            <div class="pb-10 pb-lg-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2">Startup Runway Calculator</h3>
+
+                                @if (RunwayId != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                                {
+                                    <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Title <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @Validation.BoxBorder h-auto rounded-lg font-size-h6" @bind="@Model.Title" @oninput="@(()=>Validation.InputTextChanged(false,string.Empty))">
+                                        @if (Validation.IsEmpty)
+                                        {
+                                            <span class="form-text text-danger">@Validation.Message</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Cash Balance($) : </label>
+                                        <input type="number" class="form-control h-auto border-0 rounded-lg font-size-h6" @bind="@Model.Cash1">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Month 1</label>
+                                    <OneUX_DatePicker ElementId="balanceMonth1" PlaceholderText="Select date" DateValue="@Model.Month1" />
+                                    @*<div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Month 1</label>
+                                            <input class="form-control" type="date" id="month-1">
+                                        </div>*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Cash Balance($) : </label>
+                                        <input type="number" class="form-control h-auto border-0 rounded-lg font-size-h6" @bind="@Model.Cash2">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Month 2</label>
+                                    <OneUX_DatePicker ElementId="balanceMonth2" PlaceholderText="Select date" DateValue="@Model.Month2" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Cash Balance($) : </label>
+                                        <input type="number" class="form-control h-auto border-0 rounded-lg font-size-h6" @bind="@Model.Cash3">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Month 3</label>
+                                    <OneUX_DatePicker ElementId="balanceMonth3" PlaceholderText="Select date" DateValue="@Model.Month3" />
+                                    @*<div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Month 3</label>
+                                            <input class="form-control" type="date" id="month-3">
+                                        </div>*@
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary mr-2" @onclick="getrunwayChart">Compute</button>
+                                    <button type="button" class="btn btn-primary mr-2" @onclick="SubmitRunway">Save</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Burn Rate: </label>
+                                        <input type="number" class="form-control h-auto border-0 rounded-lg font-size-h6" @bind="@Model.BurnRate" readonly>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Cash Runway:</label>
+                                        <input type="number" class="form-control h-auto border-0 rounded-lg font-size-h6" @bind="@Model.CashRunway" readonly>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="runwayChart">
+
+                            </div>
+                            <!--end::Form Group-->
+                        </div>
+                    </EditForm>
+                </div>
+                <!--end::Form-->
+            </div>
+            <!--end::Content-->
+        </div>
+    </div>
+</div>
+@*@if (Model.Id != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+{
+    <ShareModal SharedModel="Model" OnShareCallBack="RenderOnShare" ObjectName="Startup Runway"></ShareModal>
+}*@
+@code
+ {
+    [Parameter]
+    public string RunwayId { get; set; }
+    [Parameter]
+    public string RunwayName { get; set; }
+    public Runway Model = new Runway();
+    public CS_Runway ModelService { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+    private RunwayValidation Validation = new RunwayValidation();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SyncLoggedInUserStatus();
+        //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+        ModelService = new CS_Runway(ClientExchange, EngineServices.MarketNetwork);
+        if (RunwayId != null)
+        {
+            Model = await ModelService.GetRunwayById(RunwayId);
+        }
+        else
+        {
+            Model.Name = UXUtility.LoggedInUser.Name;
+            Model.Email = UXUtility.LoggedInUser.Email;
+        }
+    }
+    private async Task RenderOnShare()
+    {
+        if (RunwayId != null)
+        {
+            Model = await ModelService.GetRunwayById(RunwayId);
+            StateHasChanged();
+        }
+    }
+
+    public async Task SubmitRunway()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(Model.Title))
+            {
+                Validation.IsEmpty = true;
+                Validation.Message = "Please enter startup runway title.";
+                Validation.BoxBorder = "border border-danger";
+                ToastService.ShowWarning("Runway title Can't Be Empty!");
+                return;
+            }
+
+            if (RunwayId == null)
+            {
+                Model.Month1 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth1");
+                Model.Month2 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth2");
+                Model.Month3 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth3");
+
+                HttpResponseMessage response = await ModelService.PostAsync(Model);
+                if (response.IsSuccessStatusCode)
+                {
+                    await RunwayUserActivity(response.Content.ReadAsStringAsync().Result, Model.Title, "You have recently created a Runway titled " + Model.Title);
+                    ToastService.ShowSuccess("Runway & Burn Rate Submitted", "Success");
+                    navigationManager.NavigateTo("/startuprunway");
+                }
+                else
+                {
+                    ToastService.ShowError(await response.Content.ReadAsStringAsync(), "Error");
+                }
+            }
+            else
+            {
+                Model.Month1 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth1");
+                Model.Month2 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth2");
+                Model.Month3 = await JSRuntime.InvokeAsync<DateTime>("DatePickerValue", "balanceMonth3");
+                HttpResponseMessage response = await ModelService.PutAsync(Model);
+                if (response.IsSuccessStatusCode)
+                {
+                    await RunwayUserActivity(RunwayId, Model.Title, "You have made changes to runway titled " + Model.Title);
+                    ToastService.ShowSuccess("Runway & Burn Rate is Updated", "Success");
+                    navigationManager.NavigateTo("/startuprunway");
+                }
+                else
+                {
+                    ToastService.ShowError(await response.Content.ReadAsStringAsync(), "Error");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+            ToastService.ShowError(ex.Message, "Error");
+        }
+    }
+
+    public async void getrunwayChart()
+    {
+        Model.Compute();
+        //for line chart
+        List<string> XAxisItems = new List<string>() { "BurnRate", "Cash Runway" };
+        List<double> YAxisItems = new List<double>() { Model.BurnRate, Model.CashRunway };
+        string XTitle = "Burn Rate and CashRunway";
+        string YTitle = "Value";
+        IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/charts.js");
+        await module.InvokeVoidAsync("Charts", "runwayChart", XAxisItems, YAxisItems, XTitle, YTitle, "bar", "rounded", "400", "20%");
+
+
+        //for area chart
+        //List<string> SeriesA_Label = new List<string>() { "Burn Rate"};
+        //List<double> SeriesA_Value = new List<double>() { BurnRate,BurnRate };
+        //List<string> SeriesB_Label = new List<string>() { "Cash Runway"};
+        //List<double> SeriesB_Value = new List<double>() {CashRunway,CashRunway};
+        //IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/areachart.js");
+        //await module.InvokeVoidAsync("Charts", "areaChart", SeriesA_Label, SeriesA_Value, SeriesB_Label, SeriesB_Value, "400");
+
+
+
+        //for donut chart
+        //List<string> SeriesLabel = new List<string>() { "BurnRate", "Cash Runway" };
+        //List<double> SeriesValue = new List<double>() { BurnRate, CashRunway };
+        //IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/donutchart.js");
+        //await module.InvokeVoidAsync("Charts", "donutChart", SeriesLabel, SeriesValue, "380","donut");
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Startup Runway","/startuprunway" }
+    };
+
+    protected async Task RunwayUserActivity(string Id, string Title, string description)
+    {
+        UserActivity userActivity = new UserActivity();
+        userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+        userActivity.Activities.Add(new ActivityModule { FeatureId = Id, Feature = Title, SubModuleId = "", Description = description });
+        await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+    }
+
+}

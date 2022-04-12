@@ -1,0 +1,259 @@
+﻿@page "/businesspage/{Id}/{name}/edit"
+
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/businesspage" class="text-muted">Business Pages</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Id/@Model.Name" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Id/@Model.Name/edit" class="text-muted">Edit</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <EditForm class="form" id="eventForm" Model="@Model" OnValidSubmit="SubmitModel">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <div class="d-flex">
+                        @if (!string.IsNullOrEmpty(Model.Core.ImageUrl))
+                        {
+                            <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(@Model.Core.ImageUrl)">
+                                <div class="image-input-wrapper" style="background-image: url(@Model.Core.ImageUrl)"></div>
+                                <div class="url-encoded"></div>
+                                <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                    <i class="fa fa-pen icon-sm text-muted"></i>
+                                    <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                    <input type="hidden" name="profile_avatar_remove" />
+                                </label>
+
+                                <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                </span>
+
+                                <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                </span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(https://s2.startuped.net/incubation_cloud/assets/media/users/default.jpg)">
+                                <div class="image-input-wrapper" style="background-image: url(https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                <div class="url-encoded"></div>
+                                <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                    <i class="fa fa-pen icon-sm text-muted"></i>
+                                    <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                    <input type="hidden" name="profile_avatar_remove" />
+                                </label>
+
+                                <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                </span>
+
+                                <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                </span>
+                            </div>
+                        }
+                        <div class="d-flex align-items-center ml-10 flex-grow-1 justify-content-between">
+                            <OneUX_InputBox @bind-Value="Model.Name" Label="Name" StarValidation="@Validation" />
+                            <div>
+                                <button type="submit" class="btn btn-secondary  mr-2" id="updateBpageBtn">Submit</button>
+                                <a href="businesspage/@Id/@Model.Name" class="btn btn-light-secondary btn-hover-light-secondary" id="cancelBpageLink">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">
+                            Description
+                            <span class="text-danger">*</span>
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Body-->
+                <div class="card-body">
+                    <OneUX_QuillEditor ElementId="businessPageAbout" Summary="@Model.Core.Description" />
+                </div>
+                <!--end::Body-->
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="card-icon">
+                                    <i class="fas fa-info-circle text-primary"></i>
+                                </span>
+                                <h3 class="card-label">
+                                    Page Info
+                                </h3>
+                            </div>
+                        </div>
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            @*<OneUX_InputSelect @bind-Value="Model.Category" Label="Page Category" Id="categoryList" Title="Select Industry">
+                                    @foreach (var category in PageCategories)
+                                    {
+                                        <option value=@category>@category</option>
+                                    }
+                                </OneUX_InputSelect>*@
+                            <OneUX_InputSelect @bind-Value="Model.FocusIndustry" Label="Focus Industry" Id="industryList" Title="Select Industry" Data="@Model.FocusIndustry">
+                                @foreach (var industry in FocusIndustry)
+                                {
+                                    <option value=@industry>@industry</option>
+                                }
+                            </OneUX_InputSelect>
+                            @if (Model.Category == "INCUBATOR")
+                            {
+                                <OneUX_InputSelect @bind-Value="Model.IncubatorDetails.Type" Label="Incubator Type" Id="incubatorList" Title="Select Type" Data="@Model.IncubatorDetails.Type">
+                                    @foreach (var incubatorType in Enum.GetValues(typeof(IncubatorType)))
+                                        {
+                                        <option value="@incubatorType.ToString()">@incubatorType.ToString()</option>
+                                        }
+                                </OneUX_InputSelect>
+
+                                <OneUX_MultiSelect ElementId="incubationServices" Label="Incubation Services" PlaceholderText="Select Services" MultipleValues="multiple" Data="@Model.IncubatorDetails.IncubationServices">
+                                    @foreach (var service in IncubationServiceList)
+                                    {
+                                        <option value="@service">@service</option>
+                                    }
+                                </OneUX_MultiSelect>
+                            }
+                            else if (Model.Category == "E-CELL")
+                            {
+                                <OneUX_InputBox @bind-Value="Model.ECellDetails.UniversityName" Label="University Name" PlaceholderText="University Associated with the ECell" />
+                                <OneUX_InputBox @bind-Value="Model.ECellDetails.NoOfStartupsAssociated" Label="Startups Associated" PlaceholderText="Total No of Startups Associated with the ECell" />
+                            }
+                            else if (Model.Category == "STARTUP")
+                            {
+                                <OneUX_InputSelect @bind-Value="Model.StartupDetails.StartupStage" Label="Startup Stage" Id="stageList" Title="Select Stage" Data="@Model.StartupDetails.StartupStage">
+                                    @foreach (var stage in StartupStage)
+                                        {
+                                        <option value=@stage>@stage</option>
+                                        }
+                                </OneUX_InputSelect>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label">Enter Social Links</h3>
+                            </div>
+                        </div>
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <OneUX_InputBox @bind-Value="Model.Social.FacebookUrl" Label="Facebook" PlaceholderText="FacebookURL" />
+                                    <OneUX_InputBox @bind-Value="Model.Social.InstagramUrl" Label="Instagram" PlaceholderText="InstagramURL" />
+                                    <OneUX_InputBox @bind-Value="Model.Social.TwitterUrl" Label="Twitter" PlaceholderText="TwitterURL" />
+                                </div>
+                                <div class="col">
+                                    <OneUX_InputBox @bind-Value="Model.Social.WebUrl" Label="Website" PlaceholderText="WebsiteURL" />
+                                    <OneUX_InputBox @bind-Value="Model.Social.LinkedInUrl" Label="LinkedIn" PlaceholderText="LinkedInURL" />
+                                    <OneUX_InputBox @bind-Value="Model.Social.GithubUrl" Label="Github" PlaceholderText="GithubURL" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="card-icon">
+                                    <i class="fas fa-map-marker-alt text-primary"></i>
+                                </span>
+                                <h3 class="card-label">
+                                    Enter Location
+                                </h3>
+                            </div>
+                        </div>
+
+                        <!--begin::Body-->
+                        <div class="card-body">
+                                <OneUX_GetLocation ReturnLocation="GetLocation" />
+                            <div class="row">
+                                <div class="col">
+                                    @if (!string.IsNullOrEmpty(Model.Address.Country))
+                                    {
+                                        <OneUX_InputSelect @bind-Value="Model.Address.Country" Label="Country" Id="countryInputSelect" Title="Select Country">
+                                            <option selected="selected" value=@Model.Address.Country>@Model.Address.Country</option>
+                                            @foreach (var country in CountryList)
+                                                {
+                                                <option value=@country>@country</option>
+
+                                                }
+                                        </OneUX_InputSelect>
+                                    }
+                                    else
+                                    {
+                                        <OneUX_InputSelect @bind-Value="Model.Address.Country" Label="Country" Id="countryInputSelect" Title="Select Country">
+                                            @foreach (var country in CountryList)
+                                                {
+                                                <option value=@country>@country</option>
+                                                }
+                                        </OneUX_InputSelect>
+                                    }
+                                    <OneUX_InputBox @bind-Value="Model.Address.State" Label="State" PlaceholderText="State" ElementId="stateInputId" />
+                                </div>
+                                <div class="col">
+                                    <OneUX_InputBox @bind-Value="Model.Address.City" Label="City" PlaceholderText="City" ElementId="cityInputId" />
+                                    <OneUX_InputBox @bind-Value="Model.Address.Zip" Label="Postal Code" PlaceholderText="Postal Code" ElementId="zipInputId" />
+                                </div>
+                            </div>
+                            @*<div class="d-flex justify-content-around">
+
+                                </div>
+                                <div class="d-flex justify-content-around">
+
+                                </div>*@
+
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label">Additional Information</h3>
+                            </div>
+                        </div>
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <OneUX_InputBox @bind-Value="Model.ContactInfo.Name" ElementId="contactName" PlaceholderText="Name" Label="Contact Name" StarValidation="@Validation" />
+                            <OneUX_InputBox @bind-Value="Model.ContactInfo.PhoneNo" ElementId="phone" PlaceholderText="Phone" Label="Contact Phone" MaxLength="10" StarValidation="@Validation" />
+                            <OneUX_InputBox @bind-Value="Model.ContactInfo.Email" ElementId="email" PlaceholderText="Email" Label="Email Address" StarValidation="@Validation" />
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+

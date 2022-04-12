@@ -1,0 +1,111 @@
+﻿@page "/uploadedFiles"
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Files"></Head>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <div class="d-flex justify-content-center">
+                <div class="fa-5x">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+            </div>
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (AllFiles != null && AllFiles.Count > 0)
+            {
+                <OneUX_AlpHeader Route="anyupload" Name="Files" Count="AllFiles.Count" ReturnSearchedQuery="GetSearchedString">
+                    @if (AllFiles.Count > 4)
+                    {
+                        <OneUX_ToggleViewsEvent ReturnView="ToggleView" />
+                    }
+                    <a href="anyupload" class="btn btn-sm btn-secondary btn-hover-secondary">
+                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                    </a>
+                </OneUX_AlpHeader>
+
+                @if (ProgramView == "Flix")
+                {
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <!--begin::Heading-->
+                            <div class="d-flex justify-content-between align-items-center mb-7">
+                                <h2 class="font-weight-bolder text-dark font-size-h3 mb-0">All Files</h2>
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Products-->
+                            <div class="row">
+                                <!--begin::Product-->
+                                @foreach (var item in AllFiles)
+                                {
+                                    <div class="col-md-4 col-xxl-4 col-lg-12">
+                                        <!--begin::Card-->
+                                        <div class="card card-custom card-shadowless">
+                                            <div class="card-body p-0">
+                                                <div class="d-flex justify-content-end">
+                                                    <OneUX_DotToolbar>
+                                                        <a class="dropdown-item" @onclick="(()=>DeleteFile(item.Id))" @onclick:preventDefault>Delete</a>
+                                                    </OneUX_DotToolbar>
+                                                </div>
+                                                <!--begin::Image-->
+                                                <div class="overlay">
+                                                    <div class="overlay-wrapper rounded bg-light text-center">
+                                                        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="" class="mw-100 w-200px">
+                                                    </div>
+                                                    <div class="overlay-layer">
+                                                        @*<a href="@item.UploadUrl" class="btn font-weight-bolder btn-sm btn-primary mr-2" target="_blank">View</a>*@
+                                                        <a href="file/@item.UploadUrl" class="btn font-weight-bolder btn-sm btn-primary mr-2" target="_blank">View</a>
+                                                        @*<a class="btn font-weight-bolder btn-sm btn-light-primary" @onclick="(() => DownloadFile(item.UploadUrl))">Downlaod</a>*@
+                                                    </div>
+                                                </div>
+                                                <!--end::Image-->
+                                                <!--begin::Details-->
+                                                <div class="text-center mt-5 mb-md-0 mb-lg-5 mb-md-0 mb-lg-5 mb-lg-0 mb-5 d-flex flex-column">
+                                                    <a href="" class="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">@item.Name</a>
+                                                    @*<span class="font-size-lg">Outlines keep poorly thought</span>*@
+                                                </div>
+                                                <!--end::Details-->
+                                            </div>
+                                        </div>
+                                        <!--end::Card-->
+                                    </div>
+                                }
+
+                            </div>
+                            <!--end::Products-->
+                        </div>
+                    </div>
+
+                    @*<Virtualize Items="AllEvent" Context="Events">
+                        @foreach (var files in AllFiles)
+                        {
+                            if (!IsVisible(files)) continue;
+                            <EventCard Model="Events" />
+                        }
+                        </Virtualize>*@
+                }
+                else
+                {
+                    <Virtualize Items="AllFiles" Context="Events">
+                        @*<OneUX_Flix Model="Events" />*@
+                    </Virtualize>
+
+                    <Virtualize Items="AllFiles" Context="Events">
+                        @*<OneUX_CollapseItem Model="Events" />*@
+                    </Virtualize>
+                }
+            }
+            else
+            {
+                <div id="newevent">
+                    <OneUX_AlpHeader Route="anyupload" Name="Upload File" Count="0" />
+                </div>
+            }
+        }
+    </div>
+</div>

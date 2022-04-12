@@ -1,0 +1,585 @@
+﻿@page "/welcome"
+@layout FullPageLayout
+
+<style>
+
+
+    body {
+        font-size: 100%;
+        background-color: #FFF;
+    }
+
+    svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -250px;
+        margin-left: -400px;
+    }
+
+    .message-box {
+        height: 200px;
+        width: 500px;
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        margin-top: -100px;
+        color: #2F3242;
+        /*color: #FFF;*/
+        /*font-family: Roboto;*/
+        font-weight: 300;
+    }
+
+        .message-box h1 {
+            font-size: 60px;
+            line-height: 56px;
+            margin-bottom: 40px;
+        }
+
+    .buttons-con .action-link-wrap {
+        margin-top: 40px;
+    }
+
+        .buttons-con .action-link-wrap a {
+            background: #68c950;
+            padding: 8px 25px;
+            border-radius: 4px;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s linear;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px
+        }
+
+            .buttons-con .action-link-wrap a:hover {
+                background: #5A5C6C;
+                color: #fff;
+            }
+
+    #Polygon-1, #Polygon-2, #Polygon-3, #Polygon-4, #Polygon-4, #Polygon-5 {
+        animation: float 1s infinite ease-in-out alternate;
+    }
+
+    #Polygon-2 {
+        animation-delay: .2s;
+    }
+
+    #Polygon-3 {
+        animation-delay: .4s;
+    }
+
+    #Polygon-4 {
+        animation-delay: .6s;
+    }
+
+    #Polygon-5 {
+        animation-delay: .8s;
+    }
+
+    .symbol-label {
+        cursor: pointer;
+    }
+    .dot {
+        height: 16px;
+        width: 16px;
+        background: #5ABA47;
+        border-radius: 50%;
+        display: inline-block;
+        margin-left:5px;
+    }
+</style>
+
+@*<svg width="380px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+            <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#007FB2" stroke-width="6" sketch:type="MSShapeGroup"></path>
+            <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z" id="Polygon-2" stroke="#EF4A5B" stroke-width="6" sketch:type="MSShapeGroup"></path>
+            <path d="M773,186 L827,217.538705 L827,279.636651 L773,310 L719,279.636651 L719,217.538705 L773,186 Z" id="Polygon-3" stroke="#795D9C" stroke-width="6" sketch:type="MSShapeGroup"></path>
+            <path d="M639,529 L773,607.846761 L773,763.091627 L639,839 L505,763.091627 L505,607.846761 L639,529 Z" id="Polygon-4" stroke="#F2773F" stroke-width="6" sketch:type="MSShapeGroup"></path>
+            <path d="M281,801 L383,861.025276 L383,979.21169 L281,1037 L179,979.21169 L179,861.025276 L281,801 Z" id="Polygon-5" stroke="#36B455" stroke-width="6" sketch:type="MSShapeGroup"></path>
+        </g>
+    </svg>*@
+  <img src="_content/OneUX/assets/imgs/welcome/LeftBackground1.svg" style="margin-left:80px" />
+
+<!--<div class="message-box">
+    <h1>
+        Welcome to StartupEd-Incubation Cloud
+
+    </h1>
+    <p style="font-size:medium">Get connected with a wide network of players from the startup ecosystem. Have real-time collaboration with the players and explore the various joint venture development apps. Enroll your idea in the never-ending list of business events and incubation programs. Have a wonderful journey! </p>
+    <div class="buttons-con">
+        <div class="action-link-wrap">
+            <a href="settings/personal/@UXUtility.LoggedInUser.Id" class="link-button">Let's Get Started</a>-->
+            @*<a href="home" class="link-button">Let's Get Started!</a>*@
+        <!--</div>
+    </div>
+</div>-->
+<div class="message-box">
+
+    <h2>
+        Welcome to StartupEd!
+    </h2>
+    <!--begin: Wizard Step 1-->
+    @if (IsFirstStep == true)
+    {
+        <div class="wizard-step" data-wizard-type="step-content" data-wizard-state="current">
+            <h5>
+                how do you plan to make use of Incubation Cloud:
+            </h5>
+            <div class="symbol-list d-flex flex-wrap">
+                <div class="symbol symbol-100 text-center mr-15 " @onclick="@(()=>BorderColorChange(17))">
+                    @if (IsIconActive_17)
+                    {
+                        <span class="symbol-label @BorderColor">Networking</span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label">Networking</span>
+                    }
+                    
+                </div>
+                <div class="symbol symbol-100 text-center mr-15" @onclick="@(()=>BorderColorChange(18))">
+                    @if (IsIconActive_18)
+                    {
+                        <span class="symbol-label @BorderColor">Business Management</span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label">Business Management</span>
+                    }
+                    
+                </div>
+                <div class="symbol symbol-100 text-center mr-15" @onclick="@(()=>BorderColorChange(19))">
+                    @if (IsIconActive_19)
+                    {
+                        <span class="symbol-label @BorderColor">Business Development</span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label">Business Development</span>
+                    }
+                   
+                </div>
+                <div class="symbol symbol-100 text-center mr-15 mt-10" @onclick="@(()=>BorderColorChange(20))">
+                    @if (IsIconActive_20)
+                    {
+                        <span class="symbol-label @BorderColor">Mentorship</span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label">Mentorship</span>
+                    }
+                </div>
+                <div class="symbol symbol-100 text-center mr-15 mt-10" @onclick="@(()=>BorderColorChange(21))">
+                    @if (IsIconActive_21)
+                    {
+                        <span class="symbol-label @BorderColor">Scouting</span>
+                    }
+                    else
+                    {
+                         <span class="symbol-label">Scouting</span>
+                    }
+                   
+                </div>
+                <div class="symbol symbol-100 text-center mt-10" @onclick="@(()=>BorderColorChange(22))">
+                    @if (IsIconActive_22)
+                    {
+                        <span class="symbol-label @BorderColor">Other</span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label">Other</span>
+                    }
+                </div>
+            </div>
+            <p style="margin-top: 10px;">Not as per your choice? Don't worry you can mention below :</p>
+            @if (IsIconActive_22)
+            {
+                <input @bind="OtherIcPlan" class="form-control form-control-solid form-control-lg" id="personaId" placeholder="Eg. Freelancer" autocomplete="off">
+            }
+            else
+            {
+                <input class="form-control form-control-solid form-control-lg" id="personaId" placeholder="Eg. xyz" autocomplete="off" disabled>
+            }
+        </div>
+    }
+    @if (IsSecondStep == true)
+    {
+        <div class="wizard-step" data-wizard-type="step-content" data-wizard-state="current">
+            <h5>
+                What describes your role?:
+            </h5>
+            @*<p>Whichever best describes you!</p>*@
+            <div class="symbol-list d-flex flex-wrap">
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(1))">
+                    @if (IsIconActive_1)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/Founder.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Founder_d.svg" /></span>
+
+                    }
+                    <span>Founder</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(2))">
+                    @if (IsIconActive_2)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/Investor.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Investor_d.svg" /></span>
+                    }
+                    <span>Investor</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(3))">
+                    @if (IsIconActive_3)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/Mentor.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Mentor_d.svg" /></span>
+                    }
+                    <span>Mentor</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(4))">
+                    @if (IsIconActive_4)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/Intrapreneur.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Intrapreneur_d.svg" /></span>
+
+                    }
+                    <span>Intrapreneur</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(5))">
+                    @if (IsIconActive_5)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/Startup.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Startup_d.svg" /></span>
+
+                    }
+                    <span>Startup</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(6))">
+                    @if (IsIconActive_6)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Incubator.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Incubator_d.svg" /></span>
+                    }
+                    <span>Incubator</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(7))">
+                    @if (IsIconActive_7)
+                    {
+                        <span class="symbol-label">
+                            <img src="_content/OneUX/assets/imgs/welcome/StudentEnterpreneur.svg" />
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/StudentEnterpreneur_d.svg" /></span>
+
+                    }
+                    <span>Student <br />Entrepreneur</span>
+                </div>
+                <div class="symbol symbol-85 text-center" @onclick="@(()=>BorderColorChange(8))">
+                    @if (IsIconActive_8)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Others.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Other_d.svg" /></span>
+                    }
+                    <span>Other</span>
+                </div>
+            </div>
+            <p style="margin-top: 10px;">Not as per your profession? Don't worry you can mention below :</p>
+            @if (IsIconActive_8)
+            {
+                <input @bind="OtherPersonaName" class="form-control form-control-solid form-control-lg" id="personaId" placeholder="Eg. Freelancer" autocomplete="off">
+            }
+            else
+            {
+                <input class="form-control form-control-solid form-control-lg" id="personaId" placeholder="Eg. Freelancer" autocomplete="off" disabled>
+            }
+        </div>
+    }
+
+    <!--end: Wizard Step 1-->
+    <!--begin: Wizard Step 2-->
+    @if (IsThirdStep == true)
+    {
+        <div class="wizard-step" data-wizard-type="step-content" data-wizard-state="current">
+            <h5>
+                Choose your area of Expertise:
+            </h5>
+            @*<p>Whichever you are expert in!</p>*@
+            <div class="symbol-list d-flex flex-wrap">
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(9))">
+                    @if (IsIconActive_9)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Product.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Product_d.svg" /></span>
+                    }
+                    <span>Product</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(10))">
+                    @if (IsIconActive_10)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Strategy.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Strategy_d.svg" /></span>
+                    }
+                    <span>Strategy</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(11))">
+                    @if (IsIconActive_11)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Finance.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Finance_d.svg" /></span>
+                    }
+                    <span>Finance</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(12))">
+                    @if (IsIconActive_12)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Engineering.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Engineering_d.svg" /></span>
+                    }
+                    <span>Engineering</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(13))">
+                    @if (IsIconActive_13)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Legal.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Legal_d.svg" /></span>
+                    }
+                    <span>Legal</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(14))">
+                    @if (IsIconActive_14)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Operations.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Operations_d.svg" /></span>
+                    }
+                    <span>Operations</span>
+                </div>
+                <div class="symbol symbol-85 text-center mr-10" @onclick="@(()=>BorderColorChange(15))">
+                    @if (IsIconActive_15)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Growth.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Growth_d.svg" /></span>
+                    }
+                    <span>Growth</span>
+                </div>
+                <div class="symbol symbol-85 text-center" @onclick="@(()=>BorderColorChange(16))">
+                    @if (IsIconActive_16)
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Others.svg" /></span>
+                    }
+                    else
+                    {
+                        <span class="symbol-label"><img src="_content/OneUX/assets/imgs/welcome/Other_d.svg" /></span>
+                    }
+                    <span>Other</span>
+                </div>
+            </div>
+            <p style="margin-top: 10px;">Not as per your choice? Don't worry you can mention below :</p>
+            @if (IsIconActive_16)
+            {
+                <input @bind="OtherProductName" class="form-control form-control-solid form-control-lg" id="ProductId" placeholder="Eg. xyz" autocomplete="off">
+            }
+            else
+            {
+                <input class="form-control form-control-solid form-control-lg" id="ProductId" placeholder="Eg. xyz" autocomplete="off" disabled>
+            }
+
+        </div>
+    }
+
+    <!--end: Wizard Step 2-->
+    <div class="d-flex mt-5">
+        <ul class="nav" style="margin-left:230px;">
+            @if (IsFirstStep)
+            {
+                <li class="navi-item"><span class="dot"></span></li>
+            }
+            else
+            {
+                <li class="navi-item" style="opacity:@Opacity"><span class="dot"></span></li>
+            }
+            @if (IsSecondStep)
+            {
+                <li class="navi-item"><span class="dot"></span></li>
+            }
+            else
+            {
+                <li class="navi-item" style="opacity:@Opacity"><span class="dot"></span></li>
+            }
+            @if (IsThirdStep)
+            {
+                <li class="navi-item"><span class="dot"></span></li>
+            }
+            else
+            {
+                <li class="navi-item" style="opacity:@Opacity"><span class="dot"></span></li>
+            }
+        </ul>
+    </div>
+
+
+
+    <div class="d-flex justify-content-between mt-0">
+        <div class="mr-2">
+            @if (IsSecondStep)
+            {
+                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="nextTab" @onclick="PreviousStep">
+                    Previous
+                </button>
+            }
+            else if (IsThirdStep)
+            {
+                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="nextTab" @onclick="PreviousStep">
+                    Previous
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="nextTab" disabled>
+                    Previous
+                </button>
+            }
+
+        </div>
+        <div>
+            @if (IsThirdStep)
+            {
+                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="nextTab" @onclick="HandleClick">
+                    Let's Get Started
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="nextTab" @onclick="NextStep">
+                    Next
+                </button>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+
+@*<style>
+
+
+        .welcome-container {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .about-container {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+        }
+
+        .welcome-container svg {
+            position: absolute;
+            right: 50%;
+        }
+
+        #Polygon-1, #Polygon-2, #Polygon-3, #Polygon-4, #Polygon-4, #Polygon-5 {
+            animation: float 1s infinite ease-in-out alternate;
+        }
+
+        #Polygon-2 {
+            animation-delay: .2s;
+        }
+
+        #Polygon-3 {
+            animation-delay: .4s;
+        }
+
+        #Polygon-4 {
+            animation-delay: .6s;
+        }
+
+        #Polygon-5 {
+            animation-delay: .8s;
+        }
+
+    </style>
+    <div class="d-flex justify-content-center align-item-center welcome-container">
+        <svg width="380px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#007FB2" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z" id="Polygon-2" stroke="#EF4A5B" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                <path d="M773,186 L827,217.538705 L827,279.636651 L773,310 L719,279.636651 L719,217.538705 L773,186 Z" id="Polygon-3" stroke="#795D9C" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                <path d="M639,529 L773,607.846761 L773,763.091627 L639,839 L505,763.091627 L505,607.846761 L639,529 Z" id="Polygon-4" stroke="#F2773F" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                <path d="M281,801 L383,861.025276 L383,979.21169 L281,1037 L179,979.21169 L179,861.025276 L281,801 Z" id="Polygon-5" stroke="#36B455" stroke-width="6" sketch:type="MSShapeGroup"></path>
+            </g>
+        </svg>
+        <div class="d-flex flex-column about-container">
+            <h1 class="display-3">
+                Welcome To StartupEd's Incubation Cloud
+            </h1>
+            <p class="font-size-h1 lead">Explore Several Incubation Programs, Get Connected With A Wide Network Of Entrepreneurs, Investors, Incubators ,Mentors, Student Entrepreneurs And A Lot More!! Collaborate With The Network And Explore Several Joint Venture Apps . Have A Wonderful Journey Ahead!!</p>
+            <div class="button-container">
+                <button class="btn btn-secondary" @onclick="HandleClick">Let's Get Started</button>
+            </div>
+        </div>
+    </div>*@
+
+
+@code {
+   
+}

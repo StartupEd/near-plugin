@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+
+<div class="modal fade" id="resumeUploader-@Posting.Core.Id" tabindex="-1" aria-labelledby="resumeUploaderLabel" aria-modal="true" role="dialog">
+    @if (value)
+    {
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resumeUploaderLabel">Apply to StartupEd</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <EditForm Model="Model" OnValidSubmit="SubmitModel">
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label text-lg-right">Upload Resume:</label>
+                            <div class="col-lg-6">
+                                <div class="uppy" id="kt_uppy_5">
+                                    <div class="uppy-wrapper">
+                                        <div class="uppy-Root uppy-FileInput-container">
+                                            <InputFile class="uppy-FileInput-input uppy-input-control" name="files[]" multiple="" type="file" id="@InputId" OnChange="OnInputFileChange" />
+                                            <label class="uppy-input-label btn btn-light-primary btn-sm btn-bold" for="@InputId">Attach files</label>
+                                        </div>
+                                    </div>
+                                    @if (DisplayFile)
+                                    {
+                                        <div class="uppy-list">
+                                            <div class="uppy-list-item" data-id="@Model.Id">
+                                                <div class="uppy-list-label">@Model.Name (@Model.Size)</div>
+                                                <span class="uppy-list-remove" data-id="@Model.Id">
+                                                    <i class="flaticon2-cancel-music" @onclick="CancelFile"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <span class="form-text text-muted">Max file size is 5MB</span>
+                                <span class="form-text text-muted">File name must be in this format Name_Resume.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        @if (IsUploading)
+                        {
+                            <button type="submit" class="btn btn-primary font-weight-bold"><i class="fas fa-spinner fa-spin"></i>Uploading..</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary font-weight-bold">Upload</button>
+                        }
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+    else
+    {
+        <OneUX_Spinner />
+    }
+</div>
+
+
+
+@code{
+   
+
+
+}

@@ -1,0 +1,68 @@
+﻿@page "/project/{Id}/{Name}/settings"
+
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="project/create" class="text-muted">Project</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="project/@Id/@Name/kanban" class="text-muted">Task</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="project/@Id/@Name/settings" class="text-muted">Board Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="flex-row-fluid ml-lg-9">
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Setting</h3>
+                    </div>
+                </div>
+                <EditForm class="form" novalidate="novalidate" id="personalPage" Model="@PModel" OnValidSubmit="UpdateProject">
+                    <div class="card-body">
+                        <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+                            <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                                <CascadingValue Value="@LabelStyle" Name="Label Class">
+                                    <CascadingValue Value="@ElementWrapperStyle" Name="Wrapper Class">
+                                        <OneUX_InputBox @bind-Value="PModel.Name" Label="Name" ElementId="projectname" />
+                                        <OneUX_InputBox @bind-Value="PModel.AuthorName" Label="Creater" ElementId="projectcreater" IsTrue="true" />
+                                        <OneUX_InputBox @bind-Value="PModel.ProjectType" Label="Type" ElementId="email" Type="email" IsTrue=true />
+                                    </CascadingValue>
+                                </CascadingValue>
+                            </CascadingValue>
+                        </CascadingValue>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+            <KanbanContainerSettings OnStatusUpdated="LoadData" PModel="PModel" ModelService="ModelService">
+                @foreach (var i in PModel.BoardStatus)
+                {
+
+                    <KanbanItemListSettings TaskStatus=@i Model="PModel" ClientServices="ClientService" OnStatusUpdated="LoadData"></KanbanItemListSettings>
+                }
+            </KanbanContainerSettings>
+
+        </div>
+    </div>
+</div>
+@code {
+   
+}
+
+

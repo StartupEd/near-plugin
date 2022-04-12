@@ -1,0 +1,73 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.Extensions.Configuration
+<Head>
+</Head>
+<!--begin::Main-->
+<div class="d-flex flex-column flex-root" id="loginLayout" style="background-image: url(_content/OneUX/assets/imgs/Login-Background.jpg)">
+    <div class="login login-6 login-signin-on login-signin-on d-flex flex-column-fluid" id="kt_login">
+        <div class="d-flex flex-column flex-lg-row flex-row-fluid text-center">
+            <div class="d-flex w-100 flex-center p-15">
+                <div class="login-wrapper">
+                    <div class="text-dark-75">
+                        <a href="www.startuped.net">
+                            <img src="_content/OneUX/assets/imgs/StartupEd_Logo.png" class="max-h-75px" alt="" />
+                        </a>
+                        <h3 class="mb-8 mt-8 font-weight-bold text-tras">INCUBATION CLOUD</h3>
+                        <p class="mb-9 text-muted font-weight-bold">
+                            Turn Ideas Into Reality
+                        </p>
+                        <a href="signup" type="button" id="kt_login_signup" class="btn btn-outline-primary btn-pill py-4 px-9 font-weight-bold">Create New Account</a>
+                        <p class="my-5 text-muted font-weight-bold">OR</p>
+                        <a href="" type="button" id="claim_modal" class="btn btn-outline-primary btn-pill" @onclick="CallClaimAccountModal" @onclick:preventDefault>
+                            Claim Account
+                        </a>
+
+                        <br />
+                        <div class="md-2 align-items-stretch">
+                            <div class="flex-shrink-0 text-center">
+                                <a href="#" @onclick="@((e) => RedirectToSocial("LinkedIn"))" class="btn btn-icon btn-light-linkedin mr-2">
+                                    <i class="socicon-linkedin"></i>
+                                </a>
+                                <a href="#" @onclick="@((e) => RedirectToSocial("Google"))" class="btn btn-icon btn-light-google mr-2">
+                                    <i class="socicon-google"></i>
+                                </a>
+                            </div>
+                            @*<div class="text-muted">socicon-twitter</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="login-divider">
+                <div></div>
+            </div>
+            <div class="d-flex w-100 flex-center p-15 position-relative">
+                <div class="login-wrapper">
+                    @Body
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ClaimOnBoardAccount @ref="ConfirmShowClaimModal" />
+
+<OneUX_Toast />
+
+@code{
+    protected ClaimOnBoardAccount ConfirmShowClaimModal { get; set; }
+    [Inject]
+    IConfiguration Configuration { get; set; }
+
+    protected void CallClaimAccountModal()
+    {
+        ConfirmShowClaimModal.ShowModal();
+    }
+
+    public void RedirectToSocial(string socialNetwork)
+    {
+        string callBackUrl = Uri.EscapeDataString(Configuration.GetValue<string>("Authentication:" + socialNetwork + ":CallbackUrl"));
+        string url = string.Format(Configuration.GetValue<string>("Authentication:" + socialNetwork + ":AuthorizationUrl"),
+            Configuration.GetValue<string>("Authentication:" + socialNetwork + ":ClientId"), callBackUrl);
+        navigationManager.NavigateTo(url);
+    }
+}

@@ -1,0 +1,105 @@
+﻿@page "/job/{Id}/{Name}/insight"
+
+<Head Title="Job Postings" />
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <!--begin::Page Heading-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Page Title-->
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <!--end::Page Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/businesspage" class="text-muted">Job Postings</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="job/@Id/@Name.Replace(',', ' ')" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="job/@Id/@Name.Replace(',', ' ')/insight" class="text-muted">Insight</a>
+                    </li>
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page Heading-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">List Of Applicants for @Name Role</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <!--begin::Example-->
+                @*<OneUX_List Data="Model.Users" Route="app/business-model-canvas" GridDivId="event_insight" />*@
+                <div class="example mb-10">
+                    <div class="example-preview">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">S.No</th>
+                                        <th scope="col">User Name</th>
+                                        <th scope="col">User Email</th>
+                                        <th scope="col">Apply Date</th>
+                                        <th scope="col">Resume Url</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*<Virtualize Items="RegisteredUser" Context="user">*@
+                                    @if (ApplicationList != null && ApplicationList.Count > 0)
+                                    {
+                                        @foreach (var user in ApplicationList)
+                                        {
+                                            <tr>
+                                                <th scope="row">@y</th>
+                                                <td>
+                                                    <a href="profile/@user.Core.CreatorId">@user.Name</a>
+                                                </td>
+                                                <td>@user.EmailId</td>
+                                                <td>@user.ApplyDate.ToString("dd MMMM yy")</td>
+                                                @if (ResumeList != null && ResumeList.Count > 0)
+                                                {
+                                                    if (ResumeList.Any(file => file.Core.CreatorId == user.Core.CreatorId && file.DataProperty.ObjectLinks["JobPosting"].Contains(Id)))
+                                                    {
+                                                        <td>
+                                                            <a href="@ResumeList[0].UploadUrl" target="_blank">@ResumeList[0].Name</a>
+                                                        </td>
+                                                    }
+
+                                                }
+                                            </tr>
+                                            y = y + 1;
+                                        }
+                                    }
+                                    @*</Virtualize>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+   
+
+
+}

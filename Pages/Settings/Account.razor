@@ -1,0 +1,201 @@
+@page "/settings/account"
+
+<!--<div class="content  d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-row"></div>
+        <div class="flex-row-auto offcanvas-mobile w-300px w-xxl-350px" id="kt_profile_aside"></div>
+            <!--begin::Profile Card-->
+<!--<div class="card card-custom card-stretch">-->
+<!--begin::Body-->
+<!--<div class="card-body pt-4">
+    <div class="d-flex justify-content-end ml-10">-->
+@*<OneUX_DotToolbar>
+        <a class="dropdown-item" href="#"><i class="la la-dropbox mr-2"></i>Users</a>
+        <a class="dropdown-item" href="#"><i class="flaticon2-calendar-8 mr-2"></i>Reports</a>
+        <a class="dropdown-item" href="#"><i class="la la-plus-circle mr-2"></i> Statements</a>
+    </OneUX_DotToolbar>*@
+<!--</div>-->
+<!--begin::User-->
+<!--<div class="d-flex align-items-center">
+    <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
+        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="image">
+        <i class="symbol-badge bg-success"></i>
+    </div>
+    <div>
+        <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
+            UXUtility.LoggedInUser.Name
+        </a>
+    </div>
+</div>-->
+<!--end::User-->
+<!--<div class="py-9"></div>-->
+<!--begin::Nav-->
+<!--<div class="navi navi-bold navi-hover navi-active navi-link-rounded">
+    <div class="navi-item mb-2">
+        <a href="settings/personal" class="navi-link py-4">
+            <span class="navi-icon mr-2">
+                <span class="navi-icon mr-2">
+                    <i class="far fa-id-card"></i>
+                </span>
+            </span>
+            <span class="navi-text font-size-lg">
+                Personal
+            </span>
+        </a>
+    </div>
+    <div class="navi-item mb-2">
+        <a href="settings/profile" class="navi-link py-4">
+            <span class="navi-icon mr-2">
+                <span class="navi-icon mr-2">
+                    <i class="fas fa-user-alt"></i>
+                </span>
+            </span>
+            <span class="navi-text font-size-lg">
+                Profile
+            </span>
+        </a>
+    </div>
+    <div class="navi-item mb-2">
+        <a href="settings/educationdetails" class="navi-link py-4">
+            <span class="navi-icon mr-2">
+                <span class="navi-icon mr-2">
+                    <i class="fas fa-graduation-cap"></i>
+                </span>
+            </span>
+            <span class="navi-text font-size-lg">
+                Education Details
+            </span>
+        </a>
+    </div>
+    <div class="navi-item mb-2">
+        <a href="settings/social" class="navi-link py-4">
+            <span class="navi-icon mr-2">
+                <i class="fas fa-key"></i>
+            </span>
+            <span class="navi-text font-size-lg">
+                Social
+            </span>
+        </a>
+    </div>
+    <div class="navi-item mb-2">
+        <a href="settings/account" class="navi-link py-4 active">
+            <span class="navi-icon mr-2">
+                <i class="fas fa-user-edit"></i>
+            </span>
+            <span class="navi-text font-size-lg">
+                Account
+            </span>
+        </a>
+    </div>
+    <div class="navi-item mb-2">
+        <a href="settings/password/change" class="navi-link py-4 ">
+            <span class="navi-icon mr-2">
+                <i class="fas fa-key"></i>
+            </span>
+            <span class="navi-text font-size-lg">
+                Change Password
+            </span>
+        </a>
+    </div>
+</div>-->
+<!--end::Nav-->
+<!--</div>-->
+<!--end::Body-->
+<!--</div>-->
+<!--end::Profile Card-->
+<!--</div>
+<div class="flex-row-fluid ml-lg-8">
+    <div class="card card-custom">
+        <div class="card-header py-3">
+            <div class="card-title align-items-start flex-column">
+                <h3 class="card-label font-weight-bolder text-dark">Account Information</h3>
+                <span class="text-muted font-weight-bold font-size-sm mt-1">Change your account settings</span>
+            </div>
+            <div class="card-toolbar">
+            </div>
+        </div>
+        <EditForm class="form" novalidate="novalidate" id="profile-Personal-Info" Model="@Model" OnValidSubmit="SubmitAccountInfo">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="card-body">
+
+                <div class="form-group row">
+                    <label class="col-xl-3 col-lg-3 col-form-label">User Name</label>
+                    <div class="col-lg-9 col-xl-6">
+                        <InputText class="form-control form-control-lg form-control-solid" readonly="true" @bind-Value="@Model.Settings.DefaultName" placeholder="UserName" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-xl-3 col-lg-3 col-form-label">Email</label>
+                    <div class="col-lg-9 col-xl-6">
+                        <InputText class="form-control form-control-lg form-control-solid" readonly="true" @bind-Value="@Model.Email" placeholder="UserName" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-xl-3"></label>
+                    <div class="col-lg-9 col-xl-6">
+                        <h5 class="font-weight-bold mt-10 mb-6">Language & Time Zone Settings</h5>
+                    </div>
+                </div>-->
+<!--begin::Form Group-->-->
+<!--@*<div class="form-group row">
+    <label class="col-xl-3 col-lg-3 col-form-label">Choose Language</label>
+    <div class="col-lg-9 col-xl-6">
+        <InputSelect @bind-Value="@Model.Settings.Language" @onchange="@OnLanguageChange" class="form-control form-control-lg form-control-solid">
+            @foreach (var language in LanguageList)
+            {
+                <option value=@language>@language</option>
+            }
+        </InputSelect>
+    </div>
+</div>*@-->
+                 <!--<!--begin::Form Group-->-->
+<!--@*<div class="form-group row">
+                            <label class="col-xl-3 col-lg-3 col-form-label">Time Zone</label>
+                            <div class="col-lg-9 col-xl-6">
+                                <InputSelect @bind-Value="@Model.Settings.TimeZone" @onchange="@OnTimeZoneChange" class="form-control form-control-lg form-control-solid">
+                                    @foreach (var timeZone in TimeZoneList)
+                                    {
+                                        <option value=@timeZone>@timeZone</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>*@
+
+                        <div class="row py-3">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-3 col-xl-3">
+                                <button type="submit" class="btn btn-primary btn-shadow-hover">Save Change</button>
+                            </div>
+                            <div class="col-lg-6 col-xl-6">
+                                <button type="button" class="btn btn-secondary">Discard</button>
+                            </div>
+                        </div>
+
+                        <div class="separator separator-dashed my-5"></div>
+                        <div class="row">
+                            <label class="col-xl-3"></label>
+                            <div class="col-lg-9 col-xl-6">
+                                <h5 class="font-weight-bold mb-6">Deactivate Your Account ?</h5>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-xl-6 col-lg-4 col-form-label">Password Verification Required</label>
+                            <div class="col-lg-9 col-xl-6">
+                                <p class="text-muted py-3">You will get an email to varify account deactivation... </p>
+                                <button type="button" class="btn btn-light-danger font-weight-bold btn-sm">Deactivate Account</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+@code {
+
+   
+}

@@ -1,0 +1,509 @@
+﻿@page "/captable/create"
+@page "/captable/{Id}/{Title}"
+@page "/captable/{Id}/{Title}/edit"
+@using StartupEd.Engine.MarketNetwork
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="wizard wizard-5 d-flex flex-column flex-lg-row flex-row-fluid" id="capTableWizard">
+
+            <div class="wizard-aside bg-white d-flex flex-column flex-row-auto w-100 w-lg-300px w-xl-400px w-xxl-500px">
+                <div class="d-flex flex-column-fluid flex-column px-xxl-30 px-10">
+                    <div class="wizard-nav d-flex d-flex justify-content-center pt-10 pt-lg-20 pb-5">
+                        <div class="wizard-steps">
+                            <!--begin::Wizard Step 1 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="step1">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <i class="wizard-check ki ki-check"></i>
+                                        <span class="wizard-number">1</span>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <h3 class="wizard-title">
+                                            Pre Money Vs Post Money Evaluation
+                                        </h3>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 1 Nav-->
+                            <!--begin::Wizard Step 2 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" id="step2">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <i class="wizard-check ki ki-check"></i>
+                                        <span class="wizard-number">2</span>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <h3 class="wizard-title">
+                                            Founder Ownership
+                                        </h3>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 2 Nav-->
+                            <!--begin::Wizard Step 3 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" id="step3">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <i class="wizard-check ki ki-check"></i>
+                                        <span class="wizard-number">3</span>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <h3 class="wizard-title">
+                                            Invest-Ability-Ogram
+                                        </h3>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <h3>
+                                <center>User Guide</center>
+                            </h3>
+                            <br />
+                            <br />
+                            <div class="accordion accordion-toggle-arrow" id="accordionExample1">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title" data-toggle="collapse" data-target="#collapseOne1">
+                                            Pre-Money Evaluation
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Pre-money Evaluation refers to the valuation of a company or asset prior to an investment or financing. If an investment adds cash to a company, the company will have different valuations before and after the investment.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1">
+                                            Post-Money Evaluation
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Post money valuation is the equity value of a company after it receives the cash from a round of financing it is undertaking. Since adding cash to a company’s balance sheet increases its equity value, the post-money valuation will be higher than the pre-money valuation because it has received additional cash.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1">
+                                            Equity
+                                        </div>
+                                    </div>
+                                    <div id="collapseThree1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Equity Value is the value of the company available to the owners and shareholders. Although equity value will be impacted after putting additional cash,the individual share price will be unaffected
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseFour1">
+                                            Shares
+                                        </div>
+                                    </div>
+                                    <div id="collapseFour1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Shares are referred to as a unit of ownership which represents an equal proportion of a company’s capital. It entitles the shareholders to an equal claim on profit and losses of the company.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseFive1">
+                                            Seed Amount
+                                        </div>
+                                    </div>
+                                    <div id="collapseFive1" class="collapse" data-parent="#accordionExample1">
+                                        <div class="card-body">
+                                            Seed capital is a form of securities offering in which an investor invests capital in a startup company in exchange for an equity stake or convertible note stake in the company.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 3 Nav-->
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-y-bottom bgi-position-x-center bgi-size-contain pt-2 pt-lg-5 h-350px"
+                     style="background-image: url(assets/media/svg/illustrations/features.svg)">
+                </div>
+            </div>
+
+            <div class="wizard-content bg-gray-100 d-flex flex-column flex-row-fluid py-15 px-5 px-lg-10">
+
+                <div class="d-flex justify-content-center flex-row-fluid">
+                    <EditForm class="form" novalidate="novalidate" id="capTableForm" Model="@Model" OnValidSubmit="SubmitModel">
+                        <!--begin: Wizard Step 1-->
+                        <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                            <div class="pb-10 pb-lg-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2">Pre Money Vs Post Money Evaluation</h3>
+                                @*@if (Id != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                                {
+                                    <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                }*@
+                            </div>
+                            <div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Title <span class="text-danger">*</span></label>
+                                <InputText class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Title" @oninput="@(()=>Validation.InputChanged(false,string.Empty))" @bind-Value="@Model.Title" />
+                                @if (Validation.IsEmpty)
+                                {
+                                    <span class="form-text text-danger">@Validation.Message</span>
+                                }
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Investment($)</label>
+                                <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Investment Amount" @bind-Value="@Model.InvestmentAmount" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Equity Percentage(%)</label>
+                                <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Equity Percentage" @bind-Value="@Model.EquityPercentage" />
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary mr-1" @onclick="getChart">Compute</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">PreMoneyValue : </label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" @bind-Value="@Model.PreMoneyValue" readonly />
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">PostMoneyValue</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" @bind-Value="@Model.PostMoneyValue" readonly />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="ventureChart">
+                            </div>
+                        </div>
+                        <!--end: Wizard Step 1-->
+                        <!--begin: Wizard Step 2-->
+                        <div class="pb-5" data-wizard-type="step-content">
+                            <div class="pb-10 pb-lg-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2">Founder's Ownership %</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Enterprise Value($)</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Enterprise Value" @bind-Value="@Model.EnterpriseValue" />
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Seed Amount($)</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Seed Amount" @bind-Value="@Model.SeedAmount" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Shares($)</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Your Shares" @bind-Value="@Model.Shares" />
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Founder's Share($)</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" placeholder="Enter Founder's Share" @bind-Value="@Model.FounderShare" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary mr-1" @onclick="getOwnershipChart">Compute</button>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Pre Value Ownership % </label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" @bind-Value="@Model.PreFounderOwnerPerc" readonly />
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Post Value Ownership %</label>
+                                        <InputNumber class="form-control h-auto border-0 rounded-lg font-size-h6" @bind-Value="@Model.PostFounderOwnPerc" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="ventureOwnershipChart">
+                            </div>
+                        </div>
+                        <!--end: Wizard Step 2-->
+                        <!--begin: Wizard Step 3-->
+                        <div class="pb-5" data-wizard-type="step-content">
+                            <div class="pb-10 pb-lg-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2">Invest-Ability-Ogram</h3>
+                                <div class="text-muted font-weight-bold font-size-h4">
+                                    Select all that apply to your startup!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-list">
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C1" />
+                                        <span></span>
+                                        <b>You are growing (revenue or active users) by more than 10% per week</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C2" />
+                                        <span></span>
+                                        <b>You have at least one paying customer</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C3" />
+                                        <span></span>
+                                        <b>Your launch was featured on Techcrunch or ProductHunt</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C4" />
+                                        <span></span>
+                                        <b>You were the CEO or co-founder of a previous startup that was acquired for at least $10M</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C5" />
+                                        <span></span>
+                                        <b>You graduated from Stanford or Harvard or worked at Google or Facebook</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C6" />
+                                        <span></span>
+                                        <b>You are so charismatic you could sell ice to eskimos</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C7" />
+                                        <span></span>
+                                        <b>The founding team has more than 10 years of combined experience in the industry you are trying to disrupt</b>
+                                    </label>
+                                    <label class="checkbox">
+                                        <InputCheckbox @bind-Value="@Model.C8" />
+                                        <span></span>
+                                        <b>You already have a lead investor or famous angel who committed to investing at least a little bit</b>
+                                    </label>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary mr-2" @onclick="getLineChart">Predict</button>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Result:</label>
+                                    <InputText class="form-control h-auto border-0 rounded-lg font-size-h6" @bind-Value="@Model.Output" readonly />
+                                </div>
+                                @*<div id="lineChart"></div>*@
+                            </div>
+                            <!--end::Section-->
+                        </div>
+                        <!--end: Wizard Step 3-->
+                        <!--begin: Wizard Actions-->
+                        <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                            <div class="mr-2">
+                                <button type="button" class="btn btn-light-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-prev">
+                                    <span class="svg-icon svg-icon-md mr-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3" transform="translate(15.000000, 12.000000) scale(-1, 1) rotate(-90.000000) translate(-15.000000, -12.000000)" x="14" y="7" width="2" height="10" rx="1" />
+                                                <path d="M3.7071045,15.7071045 C3.3165802,16.0976288 2.68341522,16.0976288 2.29289093,15.7071045 C1.90236664,15.3165802 1.90236664,14.6834152 2.29289093,14.2928909 L8.29289093,8.29289093 C8.67146987,7.914312 9.28105631,7.90106637 9.67572234,8.26284357 L15.6757223,13.7628436 C16.0828413,14.136036 16.1103443,14.7686034 15.7371519,15.1757223 C15.3639594,15.5828413 14.7313921,15.6103443 14.3242731,15.2371519 L9.03007346,10.3841355 L3.7071045,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(9.000001, 11.999997) scale(-1, -1) rotate(90.000000) translate(-9.000001, -11.999997)" />
+                                            </g>
+                                        </svg>
+                                    </span>Previous
+                                </button>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-secondary font-weight-bold text-uppercase px-9 py-4 submitFormBtn" data-wizard-type="action-submit">
+                                    Submit
+                                    <span class="svg-icon svg-icon-md ml-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next">
+                                    Next Step
+                                    <span class="svg-icon svg-icon-md ml-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <!--end: Wizard Actions-->
+                    </EditForm>
+                </div>
+                <!--end::Form-->
+            </div>
+            <!--end::Content-->
+        </div>
+    </div>
+</div>
+@*@if (Model.Id != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+{
+    <ShareModal SharedModel="Model" ObjectName="Cap Table"/>
+}*@
+@code
+{
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string Title { get; set; }
+    public Simulator Model = new Simulator();
+    public CS_Simulator SimulatorService { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+    public int number { get; set; }
+
+    private InputBoxValidation Validation = new InputBoxValidation();
+
+    protected override async Task OnInitializedAsync()
+    {
+        SimulatorService = new CS_Simulator(ClientExchange, EngineServices.MarketNetwork);
+        //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+        if (Id != null)
+        {
+            Model = await CS_Simulator.GetSimulatorById(Id);
+
+        }
+    }
+
+
+    public async Task SubmitModel()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(Model.Title))
+            {
+                Validation = new InputBoxValidation();
+                Validation.IsEmpty = true;
+                Validation.Message = "Cap table Title Can't Be Empty.";
+                ToastService.ShowWarning("Empty Title");
+                return;
+            }
+
+            HttpResponseMessage response;
+            number++;
+            if (Id != null && Id != "new")
+            {
+                response = await SimulatorService.PutAsync(Model);
+                if (response.IsSuccessStatusCode)
+                {
+                    await CapTaableUserActivity(Id, Model.Title, "You have made changes into Cap Table titled " + Model.Title);
+                    ToastService.ShowSuccess("Cap table Updated Successfully!", "");
+                }
+            }
+            else
+            {
+                Model.Name = UXUtility.LoggedInUser.Name;
+                response = await SimulatorService.PostAsync(Model);
+                if (response.IsSuccessStatusCode)
+                {
+                    await CapTaableUserActivity(response.Content.ReadAsStringAsync().Result, Model.Title, "You have created new Cap Table titled " + Model.Title);
+                    ToastService.ShowSuccess("Cap table Created Successfully!", "");
+                }
+                else
+                {
+                    ToastService.ShowError(await response.Content.ReadAsStringAsync(), "Error in Submitting");
+                }
+            }
+            navigationManager.NavigateTo("/captable");
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+            ToastService.ShowError(ex.Message, "Error");
+        }
+
+
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./assets/js/wizards/capTable_wizard.js");
+        await module.InvokeVoidAsync("Wizard", "capTableWizard", "capTableForm");
+    }
+
+    public async void getChart()
+    {
+        Model.CalculateInvestment();
+
+        List<string> XAxisItems = new List<string>() { "Pre Money Value", "Post Money Value" };
+        List<double> YAxisItems = new List<double>() { Model.PreMoneyValue, Model.PostMoneyValue };
+        string XTitle = "Evaluation";
+        string YTitle = "Value";
+        IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/charts.js");
+        await module.InvokeVoidAsync("Charts", "ventureChart", XAxisItems, YAxisItems, XTitle, YTitle, "bar", "rounded");
+    }
+
+    public async void getOwnershipChart()
+    {
+        Model.CalculateOwnership();
+
+        List<string> XAxisItems = new List<string>() { "PreMoney Ownership", "PostMoney Ownership" };
+        List<double> YAxisItems = new List<double>() { Model.PreFounderOwnerPerc, Model.PostFounderOwnPerc };
+        string XTitle = "Founder's Ownership %";
+        string YTitle = "Value";
+        IJSObjectReference module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/charts.js");
+        await module.InvokeVoidAsync("Charts", "ventureOwnershipChart", XAxisItems, YAxisItems, XTitle, YTitle, "bar", "rounded");
+    }
+
+    public async void getLineChart()
+    {
+        Model.Calculate();
+    }
+
+    protected async Task CapTaableUserActivity(string Id, string Title, string description)
+    {
+        //UserActivity userActivity = new UserActivity();
+        //Activity Module = new Activity();
+        //Module.CreateActivity("Cap Table", Id, Title, description);
+        //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+        //userActivity.Activities.Add(Module);
+        //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+    }
+
+    public string InputElementStyle { get; set; } = "form-control h-auto border-0 rounded-lg font-size-h6";
+    public string LabelStyle { get; set; } = "col-xl-3 col-lg-3 col-form-label";
+    public string ElementWrapperStyle { get; set; } = "col-lg-9 col-xl-6";
+    public string FormElementStyle { get; set; } = "row";
+
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Cap table","/captable" }
+    };
+
+}
+
+
+
+
+

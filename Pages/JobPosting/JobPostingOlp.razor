@@ -1,0 +1,74 @@
+﻿@page "/job/{Id}/{Name}"
+@inject IStripHTMLTags StripHTMLTags
+<Head Title="Incubation Programs" />
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <!--begin::Page Heading-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Page Title-->
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <!--end::Page Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Page.Id/@Page.Name" class="text-muted">Business Page</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="job/@Id/@Name" class="text-muted">Job</a>
+                    </li>
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page Heading-->
+        </div>
+    </div>
+</div>
+
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <JobPostingCard Model="Model" Page="Page" GetJobId="@ShowSweetAlert2" />
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">Description</h3>
+                    </div>
+                </div>
+                <!--begin::Body-->
+                <div class="card-body">
+                    <!--begin::Text-->
+                    <p>@((MarkupString)Model.Description)</p>
+                    <!--end::Text-->
+                </div>
+                <!--end::Body-->
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (Model != null)
+{
+    <ResumeUploaderModal Posting="@Model" Returncallback="DisableApplybtn" />
+}
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlertForJobPosting" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteJobPostingAsync" />
+
+
+@code {
+   
+}
+
+

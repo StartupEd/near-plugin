@@ -1,0 +1,38 @@
+﻿
+<div class="card card-custom gutter-b">
+    <div class="card-body py-2">
+
+        <div class="d-flex align-items-center justify-content-between  mb-3">
+            <div class="d-flex align-items-center">
+                <div class="symbol symbol-90">
+                    @if (CoverImageUrl != null)
+                    {
+                        <img src="@CoverImageUrl" alt="coverImg">
+                    }
+                    else
+                    {
+                        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+                    }
+                </div>
+                <div class="d-flex flex-column ml-5">
+                    <label class="text-primary-50 font-weight-bold font-size-h5">@Name</label>
+                    <label class="text-dark-50 font-weight-bold">@Organisation</label>
+                    <p class="text-dark-50 font-weight-bold mb-lg-0">
+                        <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-dark-50"></i>
+                        @StartDate.ToString("dd MMM yyyy") - @EndDate.ToString("dd MMM yyyy")
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-end">
+                @ChildContent
+                @*<button type="button" class="btn btn-secondary btn-sm @BtnDesabled" @onclick="@OnClaimClick">Claim Certificate</button>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+   
+        
+}

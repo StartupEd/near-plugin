@@ -1,0 +1,106 @@
+﻿
+<div class="card card-custom gutter-b">
+    <!--begin::Body-->
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <!--begin::Pic-->
+            <a href="job/@Model.Id/@Model.Name.Replace(',',' ')" class="flex-shrink-0 mr-4 symbol symbol-65 symbol-circle">
+                @if (Page.CoverImage != null)
+                {
+                    <img src="@Page.CoverImage" alt="coverImg">
+                }
+                else
+                {
+                    <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+
+                }
+            </a>
+            <!--end::Pic-->
+            <!--begin::Info-->
+            <div class="d-flex flex-column mr-auto">
+                <a href="job/@Model.Id/@Model.Name.Replace(',',' ')" class="card-title text-hover-primary font-weight-bolder font-size-h5 text-dark mb-1">@Model.Name</a>
+                <span class="text-muted font-weight-bold">@Page.Name</span>
+                <!--end::Title-->
+            </div>
+            <!--end::Info-->
+            <!--begin::Toolbar-->
+            <div class="card-toolbar mb-auto">
+                @if (Model.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                {
+                    <a id="jobInsightLink" href="job/@Model.Core.Id/@Model.Name.Replace(',',' ')/insight" class="btn btn-primary btn-sm font-weight-bold btn-upper btn-text mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto">Insight</a>
+                    <OneUX_DotToolbar MenuDirection="dropdown-menu-right">
+                        <a class="dropdown-item" href="job/@Model.Id/@Model.Name.Replace(',',' ')/edit"><i class="fas fa-pen"></i>&nbsp;Edit</a>
+                        <a class="dropdown-item" href="" @onclick="(() => CallShowSweetAlertDeleteJobPosting(Model.Id))" @onclick:preventDefault><i class="fas fa-trash"></i>&nbsp;Delete</a>
+                    </OneUX_DotToolbar>
+                }
+                else
+                {
+                    @if (IsApplied)
+                    {
+                        <button id="BtnId-@Model.Core.Id" class="btn btn-primary btn-sm font-weight-bold btn-upper btn-text mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" data-toggle="modal" data-target="#resumeUploader-@Model.Core.Id" disabled>APPLIED</button>
+                    }
+                    else
+                    {
+                        <button id="BtnId-@Model.Core.Id" class="btn btn-primary btn-sm font-weight-bold btn-upper btn-text mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto jobApplyBtn" data-toggle="modal" data-target="#resumeUploader-@Model.Core.Id">APPLY</button>
+                    }
+                }
+            </div>
+            <!--end::Toolbar-->
+        </div>
+        <div class="separator separator-solid my-7"></div>
+        <div class="d-flex flex-wrap">
+            <div class="mr-12 d-flex flex-column">
+                <span class="font-weight-bolder font-size-h5 mb-4">Experience</span>
+                @if (Model.Experience != null)
+                {
+                    <span class="font-weight-bolder text-center">
+                        @Model.Experience 
+                    </span>
+                }
+
+            </div>
+            <div class="mr-12 d-flex flex-column">
+                <span class="font-weight-bolder font-size-h5 mb-4">Employment Type</span>
+                @if (Model.EmploymentType != null)
+                {
+                    <span class="font-weight-bolder text-center">
+                        @Model.EmploymentType
+                    </span>
+                }
+            </div>
+            <div class="mr-12 d-flex flex-column">
+                <span class="font-weight-bolder font-size-h5 mb-4">Salary</span>
+                @if (!string.IsNullOrEmpty(Model.Salary))
+                {
+                    <span class="font-weight-bolder text-center">
+                        @Model.Salary
+                    </span>
+                }
+                else
+                {
+                    <span class="font-weight-bolder text-center">
+                        Not Disclosed
+                    </span>
+                }
+            </div>
+
+            <div class="mr-12 d-flex flex-column">
+                <span class="font-weight-bolder font-size-h5 mb-4">No of Applicants</span>
+                @if (RModel != null)
+                {
+                    <span class="font-weight-bolder text-center">
+                        @RModel.Count
+                    </span>
+                }
+            </div>
+            <!--end::Item-->
+        </div>
+    </div>
+    <!--end::Body-->
+
+</div>
+
+
+@code{
+   
+}

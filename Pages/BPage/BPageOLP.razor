@@ -1,0 +1,432 @@
+﻿@page "/businesspage/{Id}/{PageName}"
+<Head Title="Business Page" />
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/businesspage" class="text-muted">Business Pages</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Id/@Page.Name" class="text-muted">Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    @if (Page != null)
+    {
+        <div class="d-flex flex-column-fluid">
+            <div class="container">
+                <div class="card card-custom gutter-b">
+                    <div class="card-body pb-3">
+                        <div class="d-flex mb-9">
+                            <div class="flex-shrink-0 mt-lg-0 mt-3">
+                                <a href="businesspage/@Page.Id/@Page.Name" class="symbol symbol-100 mr-5 align-self-start">
+                                    @if (Page.CoverImage != null)
+                                    {
+                                        <img src="@Page.CoverImage" alt="coverImg">
+                                    }
+                                    else
+                                    {
+                                        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+                                    }
+                                </a>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between flex-wrap mt-1">
+                                    <div class="d-flex mr-3">
+                                        <a class="text-dark-75 font-size-h5 font-weight-bold mr-3">@Page.Name</a>
+                                        <span class="label label-light-success label-inline font-weight-bolder mr-1">@Page.Category</span>
+                                    </div>
+                                    <div class="d-flex my-lg-0 my-0">
+                                        <div class="my-lg-0 my-3">
+                                            @if (Id != null && Page.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                                            {
+                                                <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                                                    <i class="fas fa-share-alt"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                        @if (!Page.PageLikes.Any(pl => pl.AuthorId == UXUtility.LoggedInUser.Id && pl.IsLiked == true))
+                                        {
+                                            <button id="pageLikeBtn" class="btn btn-light-primary" @onclick="@PageLikes">
+                                                <i class="far fa-thumbs-up"></i> Like
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button id="pageUnLikeBtn" class="btn btn-primary" @onclick="PageUnLike">
+                                                <i class="fas fa-thumbs-up"></i> Unlike
+                                            </button>
+                                        }
+                                        @*<button class="btn btn-sm btn-outline-primary font-weight-bolder text-uppercase mr-3">
+                                                <i class="fa fa-envelope-open-text"></i>
+                                                Message
+                                            </button>*@
+
+                                        @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-ver">
+                                                <ul class="navi navi-hover">
+                                                    <li class="navi-item">
+                                                        <a href="businesspage/@Page.Id/@Page.Name/edit" class="navi-link">
+                                                            <span class="navi-icon"><i class="far fa-edit"></i></span>
+                                                            <span class="navi-text">Edit</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="navi-item">
+                                                        <a class="navi-link" href="" @onclick="ShowSweetAlert1" @onclick:preventDefault>
+                                                            <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                                            <span class="navi-text">Delete</span>
+                                                        </a>
+                                                    </li>
+
+                                                    @*<li class="navi-item">
+                                                            <a href="bpage/detail/edit/@Page.Id" class="navi-link">
+                                                                <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                                                <span class="navi-text">Share</span>
+                                                            </a>
+                                                        </li>*@
+                                                    @*<li class="navi-item">
+                                                            <a href="" class="navi-link">
+                                                                <span class="navi-icon"><i class="fas fa-minus-circle"></i></span>
+                                                                <span class="navi-text">Block Page</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="navi-item">
+                                                            <a class="navi-link">
+                                                                <span class="navi-icon"><i class="fas fa-exclamation-circle"></i></span>
+                                                                <span class="navi-text">Report Page</span>
+                                                            </a>
+                                                        </li>*@
+                                                </ul>
+                                            </OneUX_DotToolbar>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="d-flex flex-column flex-grow-1 pr-8">
+                                        <div class="d-flex flex-wrap mb-1">
+                                            <a class="text-dark-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2"><i class="flaticon2-new-email mr-2 font-size-lg"></i>@Page.ContactInfo.Email</a>
+                                            <a class="text-dark-50 font-weight-bold"><i class="fas fa-map-marker-alt mr-2 font-size-lg"></i>@Page.Address.Country</a>
+                                        </div>
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <span class="text-dark-50 font-weight-bold">
+                                                <i class="far fa-thumbs-up  mr-2 font-size-lg"></i>
+                                                @Page.PageLikes.Where(pl => pl.IsLiked == true).ToList().Count&nbsp;Likes
+                                            </span>
+                                            @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                            {
+                                                <div class="my-lg-0">
+                                                    <a href="businesspage/@Page.Id/@Page.Name/insight" class="btn btn-primary btn-sm font-weight-bold btn-upper btn-text mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto">Insight</a>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="separator separator-solid"></div>
+                        <ul class="nav nav-tabs nav-bold nav-tabs-line d-flex align-items-center flex-wrap mt-2 border-bottom-0">
+                            @foreach (var tab in Tabs)
+                            {
+                                @switch (tab.Key)
+                                {
+                                    case "About":
+                                        <li class="nav-item" id="pageAboutTab">
+                                            <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1_1">
+                                                <div class="d-flex align-items-center flex-lg-fill">
+                                                    <span class="mr-4">
+                                                        <i class="@tab.Value icon-xl text-primary">
+                                                        </i>
+                                                    </span>
+                                                    <div class="d-flex flex-column text-dark-75">
+                                                        <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        break;
+                                    case "Jobs":
+                                        <li class="nav-item" id="pageJobTab">
+                                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_2" @onclick:preventDefault>
+                                                <div class="d-flex align-items-center flex-lg-fill">
+                                                    <span class="mr-4">
+                                                        <i class="@tab.Value icon-xl text-primary">
+                                                        </i>
+                                                    </span>
+                                                    <div class="d-flex flex-column text-dark-75">
+                                                        <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    @foreach (var tab in Tabs)
+                    {
+                        @switch (tab.Key)
+                        {
+                            case "About":
+                                <div class="tab-pane fade show active" id="kt_tab_pane_1_1" role="tabpanel" aria-labelledby="kt_tab_pane_1_1">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-row-auto offcanvas-mobile w-300px w-xl-350px">
+                                            <div class="card card-custom">
+                                                <!--begin::Body-->
+                                                <div class="card-body py-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="font-weight-bold mr-2">Focus Industry:</span>
+                                                        <span class="font-weight-bolder">@Page.FocusIndustry</span>
+                                                    </div>
+
+                                                    @if (Page.Category == "INCUBATOR")
+                                                    {
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="font-weight-bold mr-2">Incubator Type:</span>
+                                                            <span class="font-weight-bolder">@Page.IncubatorDetails.Type</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="font-weight-bold">Services:</span>
+                                                            <span class="font-weight-bolder d-flex justify-content-end flex-column">
+                                                                @if (Page.IncubatorDetails.IncubationServices != null && Page.IncubatorDetails.IncubationServices.Count > 0)
+                                                                {
+                                                                    @foreach (var Services in Page.IncubatorDetails.IncubationServices)
+                                                                    {
+                                                                        <span>@Services</span>
+                                                                    }
+                                                                }
+
+                                                            </span>
+                                                        </div>
+                                                    }
+                                                    else if (Page.Category == "E-CELL")
+                                                    {
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="font-weight-bold mr-2">University Name:</span>
+                                                            <span class="font-weight-bolder">@Page.ECellDetails.UniversityName</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="font-weight-bold mr-2">NoOfStartupsAssociated:</span>
+                                                            <span class="font-weight-bolder">@Page.ECellDetails.NoOfStartupsAssociated</span>
+                                                        </div>
+
+                                                    }
+                                                    else if (Page.Category == "STARTUP")
+                                                    {
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="font-weight-bold mr-2">Startup Stage:</span>
+                                                            <span class="font-weight-bolder">@Page.StartupDetails.StartupStage</span>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <div class="card card-custom">
+                                                @if (Page.Social.FacebookUrl == null && Page.Social.TwitterUrl == null && Page.Social.GithubUrl == null && Page.Social.LinkedInUrl == null && Page.Social.InstagramUrl == null && Page.Social.WebUrl == null)
+                                                {
+                                                    @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                                    {
+                                                        <a href="businesspage/@Page.Id/@Page.Name/edit" class="btn btn-secondary btn-sm m-5">
+                                                            Add Social Links
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="label label-light-secondary label-inline font-weight-bolder m-5 p-5">No Social Links</span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="card-header border-0">
+                                                        <div class="d-flex justify-content-around align-items-center flex-wrap w-500px">
+                                                            @if (Page.Social.FacebookUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.FacebookUrl" target="_blank" class="btn btn-icon btn-circle btn-light-facebook" data-toggle="tooltip" title="facebook">
+                                                                    <i class="socicon-facebook"></i>
+                                                                </a>
+                                                            }
+
+                                                            @if (Page.Social.TwitterUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.TwitterUrl" target="_blank" class="btn btn-icon btn-circle btn-light-twitter" data-toggle="tooltip" title="twitter">
+                                                                    <i class="socicon-twitter"></i>
+                                                                </a>
+                                                            }
+                                                            @if (Page.Social.GithubUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.GithubUrl" target="_blank" class="btn btn-icon btn-circle btn-light-dark" data-toggle="tooltip" title="github">
+                                                                    <i class="socicon-github"></i>
+                                                                </a>
+                                                            }
+                                                            @if (Page.Social.LinkedInUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.LinkedInUrl" target="_blank" class="btn btn-icon btn-circle btn-light-linkedin" data-toggle="tooltip" title="linkedin">
+                                                                    <i class="socicon-linkedin"></i>
+                                                                </a>
+                                                            }
+                                                            @if (Page.Social.InstagramUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.InstagramUrl" target="_blank" class="btn btn-icon btn-circle btn-light-linkedin" data-toggle="tooltip" title="instagram">
+                                                                    <i class="socicon-instagram"></i>
+                                                                </a>
+                                                            }
+                                                            @if (Page.Social.WebUrl != null)
+                                                            {
+                                                                <a href="@Page.Social.WebUrl" target="_blank" class="btn btn-icon btn-circle btn-light-warning" data-toggle="tooltip" title="website-link">
+                                                                    <i class="fas fa-link"></i>
+                                                                </a>
+                                                            }
+                                                        </div>
+                                                        <!--end::Header-->
+                                                    </div>
+                                                }
+
+                                            </div>
+                                            <div class="card card-custom">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        @*<span class="card-icon">
+                                                                <i class="text-primary"></i>
+                                                            </span>*@
+                                                        <h3 class="card-label">
+                                                            Additional Information
+                                                        </h3>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body py-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="font-weight-bold mr-2">Page Created:</span>
+                                                        <span class="font-weight-bolder"> @Page.Core.CreatedAt.ToString("dd MMM yy")</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="font-weight-bold mr-2">Phone:</span>
+                                                        <span class="font-weight-bolder">@Page.ContactInfo.PhoneNo</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                                        <span class="font-weight-bold mr-2">City:</span>
+                                                        <span class="font-weight-bolder">@Page.Address.City</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-row-fluid ml-lg-8">
+                                            <div class="card card-custom">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <span class="card-icon">
+                                                            <i class="fas fa-info-circle text-primary"></i>
+                                                        </span>
+                                                        <h3 class="card-label">
+                                                            About
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div>@((MarkupString)Page.Description)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                break;
+                            case "Jobs":
+                                <div class="tab-pane fade" id="kt_tab_pane_1_2" role="tabpanel" aria-labelledby="kt_tab_pane_1_2">
+                                    @if (Jobs != null && Jobs.Count > 0)
+                                    {
+                                        <OneUX_AlpHeader Route="@BusinessPageRoute" Name="Job Posting" Count="Jobs.Count" ReturnSearchedQuery="GetSearchedString">
+                                            @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id && UXUtility.LoggedInUserRole != Roles.Root_SuperAdmin.ToString())
+                                            {
+                                                <a href="@BusinessPageRoute" class="btn btn-sm btn-secondary btn-hover-secondary">
+                                                    <i class="far fa-plus-square"></i>&nbsp;Create New
+                                                </a>
+                                            }
+                                        </OneUX_AlpHeader>
+
+                                        @if (ProgramView == "Flix")
+                                        {
+                                            @foreach (var JobPosting in Jobs)
+                                            {
+                                                if (!IsVisible(JobPosting)) continue;
+                                                <JobPostingCard Model="JobPosting" Page="Page" GetJobId="@ShowSweetAlert2" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <Virtualize Items="Jobs" Context="JobPosting">
+                                                @*<OneUX_Flix Model="Events" />*@
+                                            </Virtualize>
+
+                                            <Virtualize Items="Jobs" Context="JobPosting">
+                                                @*<OneUX_CollapseItem Model="Events" />*@
+                                            </Virtualize>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (Page != null)
+                                        {
+                                            @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                            {
+                                                <div id="newjob">
+                                                    <OneUX_AlpHeader Route="@BusinessPageRoute" Name="Job Posting" Count="0" />
+                                                </div>
+                                            }
+
+                                        }
+                                    }
+                                </div>
+
+                                break;
+                            default:
+                                // code block
+                                break;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+}
+@if (Page.Id != null && Page.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+{
+    <ShareModal SharedModel="Page" ObjectName="Business Page" />
+}
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlertForBPage" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteBPage" />
+
+@if (Jobs != null && Jobs.Count > 0)
+{
+    @foreach (var JobPosting in Jobs)
+    {
+        <ResumeUploaderModal Posting="@JobPosting" Returncallback="DisableApplybtn" />
+    }
+}
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlertForJobPosting" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteJobPostingAsync" />

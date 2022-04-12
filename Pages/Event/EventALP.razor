@@ -1,0 +1,85 @@
+﻿@page "/events"
+
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Events" />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (AllEvent != null && AllEvent.Count > 0)
+            {
+                @*<OneUX_InputSelect @bind-Value="EType" @bind-Value:event="@onchange" Label="Event Type" Id="eventList" Title="Select Type" StarValidation="@Validation">
+                        @foreach (var type in EventType)
+                                {
+                            <option value=@type>@type</option>
+                                }
+                    </OneUX_InputSelect>*@
+
+                <OneUX_AlpHeader HeaderId="newEvent" Route="event/create" Name="Event" Count="AllEvent.Count" ReturnSearchedQuery="GetSearchedString">
+                    @if (AllEvent.Count > 4)
+                    {
+                        //<OneUX_ToggleViewsEvent ReturnView="ToggleView" />
+                    }
+                    <a href="event/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                    </a>
+                    <select @bind="EType" @bind:event="onchange" class="dropdown-toggle ml-3 btn btn-sm like-btn btn-primary">
+                        <option value=""> ALL </option>
+                        @foreach (var eventtype in EventType)
+                        {
+                            <option value="@eventtype"> @eventtype </option>
+                        }
+                    </select>
+                </OneUX_AlpHeader>
+
+                @if (ProgramView == "Flix")
+                {
+                    @*<Virtualize Items="AllEvent" Context="Events">*@
+                    @foreach (var Events in AllEvent)
+                    {
+                        if (!IsVisible(Events)) continue;
+                        if (String.IsNullOrEmpty(EType))
+                        {
+                            <EventCard Model="Events" GetId="ShowSweetAlert" />
+                        }
+                        else if (Events.Type == EType)
+                        {
+                            <EventCard Model="Events" GetId="ShowSweetAlert" />
+                        }
+
+                    }
+                    @*</Virtualize>*@
+                }
+                else
+                {
+                    <Virtualize Items="AllEvent" Context="Events">
+                        @*<OneUX_Flix Model="Events" />*@
+                    </Virtualize>
+
+                    <Virtualize Items="AllEvent" Context="Events">
+                        @*<OneUX_CollapseItem Model="Events" />*@
+                    </Virtualize>
+                }
+            }
+            else
+            {
+
+                <OneUX_AlpHeader HeaderId="newEvent" Route="event/create" Name="Event" Count="0" />
+
+            }
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteEvent" />
+

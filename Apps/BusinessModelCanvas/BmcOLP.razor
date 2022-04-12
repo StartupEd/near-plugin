@@ -1,0 +1,164 @@
+﻿@page "/businessmodelcanvas/create"
+@page "/businessmodelcanvas/{BmcId}/{BmcName}"
+@page "/businessmodelcanvas/{BmcId}/{BmcName}/{EventName}"
+@using StartupEd.UX.Incubation;
+@inherits BMCOLPBase
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <div class="d-flex justify-content-between align-items-stretch p-3 flex-wrap">
+                <div class="d-flex">
+                    <input type="text" class="form-control" @bind="@Title" placeholder="Title" />
+                    <select class="form-control ml-3" id="eventList" @onchange=@SelectEvent>
+                        <option>Select Event</option>
+                        @foreach (var Event in AllEvent)
+                        {
+                            <option value="@Event.Core.Id">@Event.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="d-flex">
+                    @if (BmcId != null)
+                    {
+                        <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    }
+
+                    @if (EventName == null)
+                    {
+                        if (Save)
+                        {
+                            @if (IsSpinning)
+                            {
+                                <button type="submit" class="btn btn-secondary" disabled><i class="fas fa-spinner fa-spin"></i>Submitting...</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-secondary submitFormBtn" @onclick="SubmitModel">Submit</button>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="d-flex flex-container">
+                    <div class="d-flex flex-item1__container">
+                        <div class="flex-item">
+                            <div class="flex-item__head">
+                                <h5 class="flex-item__title">
+                                    <i class="fas fa-hands-helping"></i> Key Partners
+                                </h5>
+                            </div>
+                            <div class="flex-item__body">
+                                <div name="editor-1" id="editor-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="flex-item__1">
+                                <div class="flex-item__head">
+                                    <h5 class="flex-item__title">
+                                        <i class="fas fa-people-carry"></i> Key Activities
+                                    </h5>
+                                </div>
+                                <div class="flex-item__body">
+                                    <div name="editor-2" id="editor-2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-item__2">
+                                <div class="flex-item__head">
+                                    <h5 class="flex-item__title">
+                                        <i class="fas fa-briefcase"></i> Key Resources
+                                    </h5>
+                                </div>
+                                <div class="flex-item__body">
+                                    <div name="editor-3" id="editor-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="flex-item__head">
+                                <h5 class="flex-item__title">
+                                    <i class="fas fa-gift"></i> Value Proposition
+                                </h5>
+                            </div>
+                            <div class="flex-item__body">
+                                <div name="editor-4" id="editor-4">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="flex-item__1">
+                                <div class="flex-item__head">
+                                    <h5 class="flex-item__title">
+                                        <i class="fas fa-heart"></i> Customer Relationship
+                                    </h5>
+                                </div>
+                                <div class="flex-item__body">
+                                    <div name="editor-5" id="editor-5">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-item__2">
+                                <div class="flex-item__head">
+                                    <h5 class="flex-item__title">
+                                        <i class="fas fa-truck-moving"></i> Channels
+                                    </h5>
+                                </div>
+                                <div class="flex-item__body">
+                                    <div name="editor-6" id="editor-6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="flex-item__head">
+                                <h5 class="flex-item__title">
+                                    <i class="fas fa-male"></i> Customers Segments
+                                </h5>
+                            </div>
+                            <div class="flex-item__body">
+                                <div name="editor-7" id="editor-7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-item2__container">
+                        <div class="d-flex flex-item">
+                            <div class="flex-item__head">
+                                <h5 class="flex-item__title">
+                                    <i class="fas fa-money-check-alt"></i> Cost Structure
+                                </h5>
+                            </div>
+                            <div class="flex-item__body">
+                                <div name="editor-8" id="editor-8">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-item">
+                            <div class="flex-item__head">
+                                <h5 class="flex-item__title">
+                                    <i class="fas fa-cash-register"></i> Revenue Streams
+                                </h5>
+                            </div>
+                            <div class="flex-item__body">
+                                <div name="editor-9" id="editor-9">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.Id != null)
+{
+    <ShareModal SharedModel="@Model" ObjectName="Business Model Canvas"></ShareModal>
+}

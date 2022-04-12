@@ -1,0 +1,67 @@
+﻿@page "/businesspage/{Id}/{PageName}/insight"
+
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <!--begin::Page Heading-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Page Title-->
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <!--end::Page Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/businesspage" class="text-muted">Business Pages</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Id/@Page.Name" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="businesspage/@Id/@Page.Name/insight" class="text-muted">Insight</a>
+                    </li>
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page Heading-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (Jobs != null && Jobs.Count > 0)
+        {
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">List Of Jobs</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <OneUX_ListView Data="Jobs" Route="" ListDivId="jobPostingTable" />
+                </div>
+            </div>
+        }
+        @if (BP != null && BP.Count > 0)
+        {
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">List Of People who liked the Page</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <OneUX_ListView Data="BP" ListDivId="LikesTable" Nested="true" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

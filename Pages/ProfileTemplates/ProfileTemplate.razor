@@ -1,0 +1,380 @@
+﻿@page "/profile/{UserId}"
+@page "/{ProfileUrl}"
+@using Microsoft.AspNetCore.SignalR.Client
+
+@if (UserDetails.Name != null)
+{
+    <Head Title="@UserDetails.Name" />
+}
+
+@if (Error)
+{
+    <ErrorPage />
+}
+else
+{
+
+    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <!--begin::Page Title-->
+                    <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                    <!--end::Page Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item">
+                            <a href="profile/@UserId" class="text-muted">Profile</a>
+                        </li>
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page Heading-->
+            </div>
+            <!--end::Info-->
+        </div>
+    </div>
+
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+
+            @if (State == LoadingContainerState.Loading)
+            {
+                <OneUX_Spinner />
+            }
+            else if (State == LoadingContainerState.Error)
+            {
+                <p>Oops something went wrong ...</p>
+            }
+            else if (State == LoadingContainerState.Loaded)
+            {
+                <div class="d-flex flex-row">
+                    @if (ProfileDetails != null && UserDetails != null && ConnectButton != "")
+                    {
+                        <ProfileCard Tabs="ProfileTabs" ProfileModel="@ProfileDetails" UserModel="@UserDetails" ConnectButton="@ConnectButton" OnClickCallBack="ButtonClickCallBackEvent" />
+                    }
+                </div>
+
+                <div class="pr-8">
+                    <div class="tab-content">
+                        @foreach (var tab in ProfileTabs)
+                        {
+                            @switch (@tab.Key)
+                            {
+                                case "About":
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1_1" role="tabpanel" aria-labelledby="kt_tab_pane_1_1">
+                                        <div class="row">
+                                            <div class="col-xl-5">
+                                                <div class="card card-custom">
+                                                    <!--begin::Body-->
+                                                    <div class="card-body py-4">
+                                                        @if (UserDetails.DateOfBirth.ToString("dd MMM yyyy") != "01 Jan 0001")
+                                                        {
+                                                            <div class="form-group row my-2">
+                                                                <label class="col-5 col-form-label">Date Of Birth:</label>
+                                                                <div class="col-7">
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @UserDetails.DateOfBirth.ToString("dd MMM yyyy")
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        @if (UserDetails.ConnectionIds.Contains(UXUtility.LoggedInUser.Id) || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                                        {
+                                                            <div class="form-group row my-2">
+                                                                <label class="col-5 col-form-label">Phone :</label>
+                                                                <div class="col-7">
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @UserDetails.ContactNo.Mobile
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">Focus Industry :</label>
+                                                            <div class="col-7">
+                                                                <span class="form-control-plaintext font-weight-bolder">
+                                                                    @ProfileDetails.FocusIndustry
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">College\University :</label>
+                                                            <div class="col-7">
+                                                                @if (ProfileDetails.Education.College != null)
+                                                                {
+                                                                    List<string> College = new List<string>();
+                                                                    College = ProfileDetails.Education.College;
+                                                                    string MyCollege = string.Join(",", College);
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @MyCollege.TrimEnd(',')
+                                                                    </span>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">Degree :</label>
+                                                            <div class="col-7">
+                                                                @if (ProfileDetails.Education.Degree != null)
+                                                                {
+                                                                    List<string> Streams = new List<string>();
+                                                                    Streams = ProfileDetails.Education.Degree;
+                                                                    string MyDegree = string.Join(", ", Streams);
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @MyDegree.TrimEnd(',')
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">School :</label>
+                                                            <div class="col-7">
+                                                                @if (ProfileDetails.Education.School != null)
+                                                                {
+                                                                    List<string> School = new List<string>();
+                                                                    School = ProfileDetails.Education.School;
+                                                                    string MySchool = string.Join(",", School);
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @MySchool.TrimEnd(',')
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">Entrepreneurship Cell :</label>
+                                                            <div class="col-7">
+                                                                <span class="form-control-plaintext font-weight-bolder">
+                                                                    @ProfileDetails.EntrepreneurshipCell
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">Country :</label>
+                                                            <div class="col-7">
+                                                                <span class="form-control-plaintext font-weight-bolder">
+                                                                    @UserDetails.Address.Country
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">State :</label>
+                                                            <div class="col-7">
+                                                                <span class="form-control-plaintext font-weight-bolder">
+                                                                    @UserDetails.Address.State
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row my-2">
+                                                            <label class="col-5 col-form-label">City :</label>
+                                                            <div class="col-7">
+                                                                <span class="form-control-plaintext font-weight-bolder">
+                                                                    @UserDetails.Address.City
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        @if (UXUtility.LoggedInUser.Persona == "Founder")
+                                                        {
+                                                            <div class="form-group row my-2">
+                                                                <label class="col-5 col-form-label">Founder Stage :</label>
+                                                                <div class="col-7">
+                                                                    <span class="form-control-plaintext font-weight-bolder">
+                                                                        @ProfileDetails.FounderStage
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-7">
+                                                <div class="card card-custom">
+                                                    <div class="card-header">
+                                                        <div class="card-title">
+                                                            <span class="card-icon">
+                                                                <i class="fas fa-info-circle text-primary"></i>
+                                                            </span>
+                                                            <h3 class="card-label">
+                                                                About
+                                                            </h3>
+                                                        </div>
+                                                        <div class="card-toolbar">
+                                                            @if (ProfileDetails.Core.CreatorId == UXUtility.LoggedInUser.Id)
+                                                            {
+                                                                <a href="settings/personal/@UXUtility.LoggedInUser.Id" class="btn btn-sm btn-icon btn-light-primary" id="profileEditBtn">
+                                                                    <i class="flaticon2-edit"></i>
+                                                                </a>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div>@((MarkupString)ProfileDetails.Core.Description)</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    break;
+                                case "Ideas":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_2" role="tabpanel" aria-labelledby="kt_tab_pane_1_2">
+                                        <XFeed UserId="@UserId" />
+                                    </div>
+                                    break;
+                                case "Community":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_3" role="tabpanel" aria-labelledby="kt_tab_pane_1_3">
+                                        @if (ProfileDetails.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            <div class="card card-custom">
+                                                <div class="card-header border-0 py-3">
+                                                    <div class="card-title align-items-start flex-column">
+                                                        <h3 class="card-label font-weight-bolder text-dark">Recently Joined Or Created Community</h3>
+                                                        <span class="text-muted font-weight-bold font-size-sm mt-1">You can Create your Own Community</span>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <a href="community/create" class="btn btn-sm btn-secondary"><i class="far fa-plus-square"></i>&nbsp;Create New</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (MyGroups != null && MyGroups.Count != 0)
+                                        {
+                                            <Virtualize Items="MyGroups" Context="group" ItemSize="9">
+                                                <GroupsCard GroupDetail="group" OnButtonClick="CommunityButtonClickCallBack" />
+                                            </Virtualize>
+                                        }
+                                    </div>
+                                    break;
+                                case "Events":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_4" role="tabpanel" aria-labelledby="kt_tab_pane_1_4">
+                                        @if (ProfileDetails.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            @if (AllEvent != null && AllEvent.Count != 0)
+                                            {
+                                                <OneUX_AlpHeader HeaderId="newEvent" Route="event/create" Name="Event" Count="AllEvent.Count" ReturnSearchedQuery="GetSearchedString">
+                                                    <a href="event/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                                                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                                                    </a>
+                                                </OneUX_AlpHeader>
+                                                @foreach (var Events in AllEvent)
+                                                {
+                                                    if (!IsVisible(Events)) continue;
+                                                    <EventCard Model="Events" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <OneUX_AlpHeader Route="event/create" Name="Event" Count="0" HeaderId="newEvent" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @foreach (var Events in AllEvent)
+                                            {
+                                                if (!IsVisible(Events)) continue;
+                                                <EventCard Model="Events" />
+                                            }
+                                        }
+
+                                    </div>
+                                    break;
+                                case "Incubation Programs":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_5" role="tabpanel" aria-labelledby="kt_tab_pane_1_5">
+                                        @if (ProfileDetails.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            @if (IPList != null && IPList.Count != 0)
+                                            {
+                                                <OneUX_AlpHeader HeaderId="newProgram" Route="incubationprogram/create" Name="Incubation Program" Count="IPList.Count" ReturnSearchedQuery="GetSearchedString">
+                                                    <a href="incubationprogram/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                                                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                                                    </a>
+                                                </OneUX_AlpHeader>
+                                                @foreach (var IncubationPrograms in IPList)
+                                                {
+                                                    if (!IsVisible(IncubationPrograms)) continue;
+                                                    <IncubationCard Model="IncubationPrograms" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div id="">
+                                                    <OneUX_AlpHeader HeaderId="newProgram" Route="incubationprogram/create" Name="Incubation Program" Count="0" />
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @foreach (var IncubationPrograms in IPList)
+                                            {
+                                                if (!IsVisible(IncubationPrograms)) continue;
+                                                <IncubationCard Model="IncubationPrograms" />
+                                            }
+                                        }
+                                    </div>
+                                    break;
+                                case "Business Pages":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_6" role="tabpanel" aria-labelledby="kt_tab_pane_1_6">
+                                        @if (ProfileDetails.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            @if (Pages != null && Pages.Count != 0)
+                                            {
+                                                <OneUX_AlpHeader HeaderId="newBPage" Route="businesspage/create" Name="BusinessPage" Count="Pages.Count" ReturnSearchedQuery="GetSearchedString">
+
+                                                    <a href="businesspage/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                                                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                                                    </a>
+                                                </OneUX_AlpHeader>
+                                                @foreach (var BusinessPages in Pages)
+                                                {
+                                                    if (!IsVisible(BusinessPages)) continue;
+                                                    <BusinessPageCard Page="BusinessPages" />
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                <OneUX_AlpHeader HeaderId="newBPage" Route="businesspage/create" Name="Business Page" />
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Pages != null)
+                                            {
+                                                @foreach (var BusinessPages in Pages)
+                                                {
+                                                    if (!IsVisible(BusinessPages)) continue;
+                                                    <BusinessPageCard Page="BusinessPages" />
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    break;
+                                case "Entrepreneurial Education":
+                                    <div class="tab-pane fade" id="kt_tab_pane_1_7" role="tabpanel" aria-labelledby="kt_tab_pane_1_7">
+
+                                    </div>
+                                    break;
+                                default:
+                                    // code block
+                                    break;
+                            }
+                        }
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+}
+
+@code{
+    //var Request = ConnectionList.Find(cr => (cr.FromUserId == UXUtility.LoggedInUser.Id && cr.ToUserId == UserDetails.Id && cr.Status == "Created") || (cr.FromUserId == UserDetails.Id && cr.ToUserId == UXUtility.LoggedInUser.Id && cr.Status == "Created"))
+
+    
+}
+
+

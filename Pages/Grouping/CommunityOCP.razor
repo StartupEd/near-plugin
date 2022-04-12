@@ -1,0 +1,75 @@
+﻿@page "/community/create"
+@using Microsoft.AspNetCore.SignalR.Client
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Community">
+</Head>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+            <div class="card-header">
+                <div class="card-title align-items-start flex-column">
+                    <h3 class="card-label font-weight-bolder text-dark">Create New Community</h3>
+                    <span class="text-muted font-weight-bold font-size-sm mt-1">You can Create your Own Community</span>
+                </div>
+            </div>
+            <!--begin::Form-->
+            <div class="card-body">
+                <div class="row justify-content-center py-8 px-8 pb-md-10 px-md-0">
+                    <div class="col-lg-8">
+                        <OneUX_ImageInputBox ReturnImgbase64="Imagebase64" CustomHeight="200px" CustomWidth="calc(100% - 0px)" ImageDataUrl="@GroupInfo.Core.ImageUrl" Label="CoverImage" />
+                        <div class="form-group">
+                            <label class="text-dark-75">Community Name&nbsp;<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @Validation.InputStyle" @bind-value="@GroupInfo.Name" @oninput="@(()=>Validation.InputTextChanged(false,string.Empty))" />
+                            @if (Validation.IsEmpty)
+                            {
+                                <span class="form-text text-danger">@Validation.Message</span>
+                            }
+                        </div>
+                        <OneUX_QuillEditor ElementId="communityDescription" Label="Descriptions" Summary="@GroupInfo.Core.Description" StarValidation="true" PlaceholderText="Write about community.." />
+
+                        <div class="form-group">
+                            <label class="text-dark-75">Privacy</label>
+                            <div class="radio-inline">
+                                <label class="radio radio-solid">
+                                    <input type="radio" name="privacy" checked="@(PrivacyCode == 1)" @onchange="@(() => PrivacyCode = 1)" />
+                                    <span></span>Public
+                                </label>
+                                <label class="radio radio-solid">
+                                    <input type="radio" name="privacy" checked="@(PrivacyCode == 2)" @onchange="@(() => PrivacyCode = 2)" />
+                                    <span></span>Private
+                                </label>
+                                <label class="radio radio-solid">
+                                    <input type="radio" name="privacy" checked="@(PrivacyCode == 3)" @onchange="@(() => PrivacyCode = 3)" />
+                                    <span></span>Connections
+                                </label>
+                            </div>
+                        </div>
+                        <OneUX_MultiSelect ElementId="memberName" Label="Add Connections As Member" PlaceholderText="Enter Name" MultipleValues="multiple">
+                            @if (Connections != null)
+                            {
+                                @foreach (var User in Connections)
+                                {
+                                    <option value="@User.Id">@User.Name</option>
+                                }
+                            }
+                        </OneUX_MultiSelect>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-9 text-lg-right">
+                            <button type="submit" class="btn btn-primary submitFormBtn" @onclick="SubmitGroupInformation">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+</div>
+<!-- An Idea: From Add Member Option user will add his/her connections and then a Invite Notification will Send them to Accept Invitation-->
+
+@code {
+    
+}

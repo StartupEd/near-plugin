@@ -1,0 +1,19 @@
+﻿
+<OneUX_InputBox @bind-Value="StageData.Name" PlaceholderText="Stage Title" Label="Title" />
+@*<OneUX_InputSelect @bind-Value="StageData.BusinessApp" Label="Select App" Title="Select App">
+        <option>Select App</option>
+        @foreach (var type in ListofBusinessAppValue)
+        {
+            <option value="@type">@type</option>
+        }
+    </OneUX_InputSelect>*@
+<OneUX_TextArea @bind-Value="StageData.Description" PlaceholderText="Stage Description" Label="Description" />
+
+<OneUX_DateRangePicker Label1="Stage Dates" Style="@Style" ElementId_1="startStageId" ElementId_2="endStageId" Stages="StageData"/>
+
+<button class="btn btn-light-secondary" @onclick="OnClickCallback2" @onclick:preventDefault>Cancel</button>
+<button class="btn btn-secondary" @onclick="OnClickCallback1" @onclick:preventDefault>Save and close</button>
+
+@code {
+  
+}

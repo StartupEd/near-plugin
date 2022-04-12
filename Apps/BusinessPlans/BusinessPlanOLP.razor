@@ -1,0 +1,236 @@
+﻿@page "/businessplan/{BplanId}/{BplanName}"
+@inherits BusninessPlanOLPBase
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b">
+                    <div class="card-body">
+                        <!--begin::Details-->
+                        <div class="d-flex mb-9">
+                            <!--begin::Info-->
+                            <div class="flex-grow-1">
+                                <!--begin::Title-->
+                                <div class="d-flex justify-content-between flex-wrap mt-1">
+                                    <div class="d-flex mr-3">
+                                        <a class="text-dark-75 font-size-h2 font-weight-bold mr-3">@Model.VentureName</a>
+                                    </div>
+                                    <div class="my-lg-0 my-3">
+
+                                    </div>
+                                    <div class="my-lg-0 my-3">
+                                        @if (BplanId != null)
+                                        {
+                                            <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                                                <i class="fas fa-share-alt"></i>
+                                            </button>
+                                        }
+                                        <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-hor" MenuDirection="dropdown-menu-right">
+                                            <a href="businessplan/@Model.Id/@Model.VentureName/edit" class="font-weight-bold dropdown-item"><i class="fas fa-pen icon-md"></i>&nbsp;Edit</a>
+                                            <a class="font-weight-bold dropdown-item" href="" @onclick="CallDeleteBPlanAlert" @onclick:preventDefault>
+                                                <i class="far fa-trash-alt icon-md"></i>&nbsp;Delete
+                                            </a>
+                                        </OneUX_DotToolbar>
+                                    </div>
+                                </div>
+                                <!--end::Title-->
+                                <!--begin::Content-->
+                                <div class="d-flex flex-wrap justify-content-between mt-1">
+                                    <div class="d-flex flex-column flex-grow-1 pr-8">
+                                        <div class="d-flex flex-wrap mb-4">
+                                            <a class="text-dark-75 font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                <i class="flaticon2-new-email mr-2 font-size-lg"></i>@Model.Email
+                                            </a>
+                                            <a class="text-dark-75 font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>@Model.ContactNo
+                                            </a>
+
+                                        </div>
+                                        <span class="font-weight-bold text-dark-75">@Model.ShortDescription</span>
+
+                                    </div>
+
+                                </div>
+                                <!--end::Content-->
+                            </div>
+                            <!--end::Info-->
+                        </div>
+                        <!--end::Details-->
+                        <div class="separator separator-solid"></div>
+                        <!--begin::Items-->
+                        <div class="d-flex align-items-center flex-wrap mt-8">
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Event</span>
+                                    <span class="font-weight-bolder font-size-h5">
+                                        <span class="font-weight-bolder font-size-sm"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Team Member</span>
+
+                                    <span class="font-weight-bolder font-size-sm"></span>@Model.TeamMember
+
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Focus Industry</span>
+
+                                    <span class="font-weight-bolder font-size-sm"></span>@Model.FocusIndustry
+
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Summary Link</span>
+
+                                    <span class="font-weight-bolder font-size-sm"></span>@Model.SummaryLink
+
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Video Link</span>
+
+                                    <span class="font-weight-bolder font-size-sm"></span>@Model.VideoLink
+
+                                </div>
+                            </div>
+                            <!--end::Item-->
+
+                        </div>
+                        <!--begin::Items-->
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!--begin::List Widget 11-->
+                        <div class="card card-custom card-stretch gutter-b">
+                            <div class="card-header border-0" id="headingOne8">
+
+                            </div>
+                            <!--begin::Body-->
+                            <div class="card-body pt-0">
+                                <div class="d-flex align-items-center mb-9 bg-light-secondary rounded p-5">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Problem Statement</b></a>
+                                        <span class="font-weight-bold">@Model.ProblemStatement</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5 mb-9">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Mission & Vision Statement</b></a>
+                                        <span class="font-weight-bold">@Model.MissionStatement</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5 mb-9">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Solution Statement</b></a>
+                                        <span class="font-weight-bold">@Model.SolutionStatement</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Competitive Statement/ Unique Selling Statement (USP)</b></a>
+                                        <span class="font-weight-bold">@Model.Usp</span>
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="d-flex align-items-center mb-9 bg-light-secondary rounded p-5">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Identify Some Challenges or Risks In your Business?</b></a>
+                                        <span class="font-weight-bold">@Model.Risks</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::List Widget 11-->
+                    </div>
+                    <div class="col-lg-6">
+                        <!--begin::List Widget 11-->
+                        <div class="card card-custom card-stretch gutter-b">
+                            <div class="card-header border-0" id="headingOne2">
+
+                            </div>
+                            <!--begin::Body-->
+                            <div class="card-body pt-0">
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5 mb-9">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Founding Team Details</b></a>
+                                        <span class="font-weight-bold">@Model.FoundingTeam</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5 mb-9">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>The Ask</b></a>
+                                        <span class="font-weight-bold">@Model.Ask</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Project Traction</b></a>
+                                        <span class="font-weight-bold">@Model.ProjectTraction</span>
+                                    </div>
+                                </div>
+
+                                <br /><br />
+                                <div class="d-flex align-items-center mb-9 bg-light-secondary rounded p-5">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>What Kind Of Help Are You Seeking From Us?</b></a>
+                                        <span class="font-weight-bold">@Model.StartupedHelp</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center bg-light-secondary rounded p-5 mb-9">
+                                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                                        <a class="font-weight-bolder text-dark-75 font-size-lg mb-1"><b>Anything Else You wish To Tell Us?</b></a>
+                                        <span class="font-weight-bold">@Model.ExtraDetails</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::List Widget 11-->
+                    </div>
+                </div>
+                <!--end::Row-->
+            </div>
+            <!--end::Container-->
+        </div>
+    </div>
+</div>
+@if (Model.Id != null)
+{
+    <ShareModal SharedModel="Model" ObjectName="Business Plan" />
+
+}
+
+<OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" OnButtonClickk="DeleteBPlanAsync" />

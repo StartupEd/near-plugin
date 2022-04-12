@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<UseBlazorWebAssembly>true</UseBlazorWebAssembly>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+		<AssemblyVersion>2.0.0.1</AssemblyVersion>
+		<RootNamespace>StartupEd.UX.Incubation</RootNamespace>
+		<AssemblyName>StartupEd.UX.Incubation</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Pages\Event\RoundTimeline.razor.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Pages\Event\RoundTimeline.razor.cs" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="blazor-dragdrop" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.3" />
+		<PackageReference Include="Stripe.net" Version="39.35.0" />
+		<PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\One\UX.One.csproj" />
+	</ItemGroup>
+
+	<!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
+	<!--<ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
+    <Content Remove="wwwroot\service-worker.js" />
+    <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
+  </ItemGroup>-->
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+</Project>

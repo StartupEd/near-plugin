@@ -1,0 +1,332 @@
+﻿@typeparam T 
+@using StartupEd.Lib.Engine
+@using Microsoft.AspNetCore.SignalR.Client
+@using StartupEd.Engine.MarketNetwork 
+
+@*<style>
+        .select2-search__field {
+            width: 340px !important;
+        }
+    </style>*@
+
+<div class="modal fade" id="ShareWithConnections" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="width:600px" role="document">
+        <div class="modal-content" style="width:600px">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Share with users on the Network</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <EditForm class="form" Model="Model" OnValidSubmit="SubmitModel">
+                <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+                    <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                        <CascadingValue Value="@LabelStyle" Name="Label Class">
+                            <CascadingValue Value="@ElementWrapperStyle" Name="Wrapper Class">
+                                <div class="modal-body">
+                                    @if (Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core).Share == true)
+                                    {
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <OneUX_MultiSelect ElementId="shareWithConnections" PlaceholderText="Connection Name" StarValidation="true" MultipleValues="multiple">
+                                                    @if (ConnectedUsers.Count > 0 && ConnectedUsers != null)
+                                                    {
+                                                        @foreach (var User in ConnectedUsers)
+                                                        {
+                                                            if (Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core).Admin == true)
+                                                            {
+                                                                <option  value="@User.Id" >@User.Name</option>
+                                                            }
+                                                            else if (!Model.DataProperty.Permissions.ContainsKey(User.Id))
+                                                            {
+                                                                <option value="@User.Id">@User.Name</option>
+                                                            }
+                                                            else if (Model.DataProperty.GetPermission(User.Core).Admin == false)
+                                                            {
+                                                                <option  value="@User.Id" >@User.Name</option>
+                                                            }
+                                                        }
+                                                    }
+                                                </OneUX_MultiSelect>
+                                            </div>
+                                            <div class="col-4">
+                                                <OneUX_InputSelect @bind-Value="UserRole" Id="selectroleList" Title="Select Role">
+                                                    @foreach (var role in Enum.GetValues(typeof(Role)))
+                                                        {
+                                                            if (role.ToString() == Role.Owner.ToString())
+                                                            {
+                                                                if (Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core).Admin == true)
+                                                                {
+                                                                <option value="@role">@role</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                            <option value="@role">@role</option>
+                                                            }
+                                                        }
+                                                </OneUX_InputSelect>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <OneUX_CardView LabelText="@UXUtility.LoggedInUser.Name" MutedText="@UXUtility.LoggedInUser.Email" ImageUrl="@UXUtility.LoggedInUserImage">
+                                        <span>@Model.DataProperty.GetRole(Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core)).ToString()</span>
+                                    </OneUX_CardView>
+
+                                    <!-- Use it into Loop For User who have shared with-->
+
+                                    @foreach (var item in SharedUser)
+                                    {
+                                        if (item.UserModel.Id != UXUtility.LoggedInUser.Id)
+                                        {
+                                            <OneUX_CardView LabelText="@item.UserModel.Name" MutedText="@item.UserModel.Email" ImageUrl="@item.ProfileModel.AvatarImageUrl">
+                                                @if (Model.DataProperty.GetRole(Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core)).ToString() == Role.Owner.ToString())
+                                                {
+                                                    <OneUX_InputSelect Id="roleList" Title="Select Role" @bind-Value="@UserRole">
+                                                        @foreach (var role in Enum.GetValues(typeof(Role)))
+                                                                    {
+                                                                        if (role.ToString() == Model.DataProperty.GetRole(Model.DataProperty.GetPermission(item.UserModel.Core)).ToString())
+                                                                        {
+                                                                <option value="@role" selected="selected">@role</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                <option value="@role">@role</option>
+                                                                        }
+
+                                                                    }
+                                                    </OneUX_InputSelect>
+                                                    @*<span>@Model.DataProperty.GetRole(Model.DataProperty.GetPermission(item.UserModel.Core)).ToString()</span>*@
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.DataProperty.GetRole(Model.DataProperty.GetPermission(item.UserModel.Core)).ToString()</span>
+                                                }
+                                            </OneUX_CardView>
+                                        }
+                                    }
+
+                                    <!-- Use it into Loop For User who have shared with-->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary font-weight-bold">Share</button>
+                                </div>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </CascadingValue>
+                </CascadingValue>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string ObjectName { get; set; }
+    [Parameter] public T SharedModel { get; set; }
+    public IModel Model { get; set; }
+    [Parameter] public EventCallback<string> OnShareCallBack { get; set; }
+    public CS_User UserService { get; set; }
+    public List<User> ConnectedUsers = new List<User>();
+    //public Shared_ClientService<T> Shared_ModelService { get; set; }
+    public List<Select> SharingUserName { get; set; } = new List<Select>();
+    //Permission permission = new Permission(Role.Viewer);
+    public string UserRole { get; set; }
+    //public Role rolestatus { get; set; }
+    //public Role SingleRoleStatus { get; set; }
+    public string CoverImageUrl { get; set; }
+    public List<UserFullInfo> SharedUser = new List<UserFullInfo>();
+    IJSObjectReference module = null;
+    public string ModelName { get; set; }
+    //private Notification_ClientService NotificationClientService { get; set; }
+    private HubConnection notificationSharedModelHubConnection;
+
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+    private string TeamMembersName = "";
+
+    protected override async void OnInitialized()
+    {
+        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/script.js");
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        try
+        {
+            SyncLoggedInUserStatus();
+            Model = (IModel)SharedModel;
+            UserService = new CS_User(ClientExchange, EngineServices.MarketNetwork);
+            //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            //Shared_ModelService = new Shared_ClientService<T>(ClientExchange, EngineServices.MarketNetwork);
+            ConnectedUsers = await UserService.GetUserConnectionsListAsync(UXUtility.LoggedInUser.Id);
+            //Model_ClientService = new BusinessModel_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            ModelName = typeof(T).ToString();
+            //NotificationClientService = new Notification_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            notificationSharedModelHubConnection = new HubConnectionBuilder().WithUrl(EngineServices.MarketNetwork.EndPoint + "/notificationhub").Build();
+            await notificationSharedModelHubConnection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex.Message);
+        }
+    }
+    public bool IsSharedMNotiConnected => notificationSharedModelHubConnection.State == HubConnectionState.Connected;
+    Task SendSharedMNotification() => notificationSharedModelHubConnection.SendAsync("SendNotification", "", "Assessment-Registered");
+
+    protected override async Task OnParametersSetAsync()
+    {
+        FindSharedUserData(Model);
+        StateHasChanged();
+    }
+
+    protected override bool ShouldRender()
+    {
+        var renderUI = true;
+
+        return renderUI;
+    }
+
+    public async void SubmitModel()
+    {
+        try
+        {
+            var x = await JSRuntime.InvokeAsync<Object>("getName", "shareWithConnections");
+            SharingUserName = JsonConvert.DeserializeObject<List<Select>>(x.ToString());
+            if (UserRole != null)
+            {
+                //rolestatus = (Role)Enum.Parse(typeof(Role), UserRole, true);
+            }
+            else
+            {
+                ToastService.ShowWarning("Please Select User Role...!");
+                return;
+            }
+            foreach (var Name in SharingUserName)
+            {
+                if (Name.Id == Name.Text)
+                {
+                    if (Name.Id == Name.Text)
+                    {
+                        ToastService.ShowInfo($"{Name.Text} it is not your Connection");
+                    }
+                    continue;
+                }
+                //var user = ConnectedUsers.Where(us => us.Id == Name.Id).FirstOrDefault();
+                //permission = Model.DataProperty.GetPermission(user.Core);
+                //if (Model.DataProperty.GetPermission(user.Core) == null)
+                //{
+                //    permission = new Permission(rolestatus);
+                //    Model.DataProperty.SetPermission(permission, Model.DataProperty, Name.Id);
+
+                //}
+                //else
+                //{
+                //    permission = Model.DataProperty.GetPermission(UXUtility.LoggedInUser.Core);
+                //    if (permission.Share == true)
+                //    {
+                //        permission = new Permission(rolestatus);
+                //        Model.DataProperty.Permissions[Name.Id] = permission;
+
+                //    }
+                //}
+
+                string MemberAs = Name.Text + " as " + UserRole+", ";
+                TeamMembersName += MemberAs;
+            }
+
+            SharedModel = (T)Model;
+            //Shared_ModelService.PutAsync(SharedModel,SharingUserName);
+            FindSharedUserData(Model);
+            OnShareCallBack.InvokeAsync(Model.Core.Id);
+            await SharingRecentActivity("You have recently shared " + ObjectName + " " + Model.Core.Name + " with " + TeamMembersName.TrimEnd(','));
+            await JSRuntime.InvokeVoidAsync("remove", "shareWithConnections");
+            await JSRuntime.InvokeVoidAsync("removeInputSelect", "shareWithConnections");
+            StateHasChanged();
+            await module.InvokeAsync<object>("HideModal", "ShareWithConnections");
+            ToastService.ShowSuccess(ModelName.Remove(0, ModelName.LastIndexOf('.') + 1) + " shared successfully..!!");
+            //Notification NotificationModel = new Notification();
+            //NotificationModel.SenderId = UXUtility.LoggedInUser.Id;
+            //NotificationModel.ReceiverId = "";
+            //NotificationModel.SentAt = DateTime.UtcNow;
+            //NotificationModel.NotificationType = ModelName.Remove(0, ModelName.LastIndexOf('.') + 1);
+            //NotificationModel.Message = UXUtility.LoggedInUser.Name + " has shared " + ModelName.Remove(0, ModelName.LastIndexOf('.') + 1) + " with you";
+            //var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri).ToString();
+            //NotificationModel.Url = uri.Remove(0, uri.IndexOf("/"));
+            //await NotificationClientService.PostAsync(NotificationModel);
+            //if (IsSharedMNotiConnected) await SendSharedMNotification();
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex.Message);
+        }
+    }
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/script.js");
+    //        await module.InvokeVoidAsync("MultiSelect", "Connection Name", "sharewithConnections");
+    //    }
+    //}
+
+    protected async Task SharingRecentActivity(string description)
+    {
+        //UserActivity userActivity = new UserActivity();
+        //Activity Module = new Activity();
+        //Module.CreateActivity(ObjectName, Model.Core.Id, Model.Core.Name, description);
+        //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+        //userActivity.Activities.Add(Module);
+        //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+    }
+
+
+    public async void FindSharedUserData(IModel Model)
+    {
+        //List<string> keyList = new List<string>(Model.DataProperty.Permissions.Keys);
+
+        //SharedUser = await UserService.GetUserAndProfileForListOfUserIds(keyList);
+        //foreach (var user in SharedUser)
+        //{
+        //    if (user.UserModel.Id != UXUtility.LoggedInUser.Id)
+        //    {
+        //        if (!ConnectedUsers.Any(us => us.Id == user.UserModel.Id))
+        //        {
+        //            ConnectedUsers.Add(user.UserModel);
+        //        }
+        //    }
+
+        //}
+        StateHasChanged();
+    }
+
+    public void DropDownClick(User user, string role)
+    {
+        //SingleRoleStatus = (Role)Enum.Parse(typeof(Role), role, true);
+        //permission = Model.DataProperty.GetPermission(user.Core);
+        //if (Model.DataProperty.GetPermission(user.Core) == null)
+        //{
+        //    permission = new Permission(rolestatus);
+        //    Model.DataProperty.SetPermission(permission, Model.DataProperty, user.Id);
+        //}
+        //else
+        //{
+        //    permission = Model.DataProperty.GetPermission(user.Core);
+        //    if (permission.Admin == true || permission.Share == true)
+        //    {
+        //        permission = new Permission(rolestatus);
+        //        Model.DataProperty.Permissions[user.Id] = permission;
+        //    }
+        //}
+        //var response = Model_ClientService.PutAsync(Model);
+
+    }
+
+    public string InputElementStyle { get; set; } = "form-control form-control-lg form-control-solid";
+    public string LabelStyle { get; set; } = "";
+    public string ElementWrapperStyle { get; set; } = "";
+    public string FormElementStyle { get; set; } = "";
+}

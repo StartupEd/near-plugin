@@ -1,0 +1,103 @@
+﻿@page "/blog/{Id}/{Name}/insight"
+
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="blog" class="text-muted">Blogs</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="blog/@Model.Id/@Model.Name" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="blog/@Model.Id/@Model.Name/insight" class="text-muted">Insights</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">People who viewed</h3>
+                            <a href="" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+                                <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
+                                <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">@Date</span>
+                            </a>
+                            @*<a href="#" @onclick="ShowDropdown" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+                                     <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
+                                     <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 16</span>
+                                 </a>
+                                @if (dp)
+                                 {
+                                     <div class="daterangepicker ltr show-ranges opensleft" style="top: 109.141px; left: auto; right: 64.0309px;">
+                                         <div class="ranges">
+                                             <ul>
+                                                 <li data-range-key="Today" class="active">Today</li>
+                                                 <li data-range-key="Yesterday" class="">Yesterday</li>
+                                                 <li data-range-key="Last 7 Days">Last 7 Days</li>
+                                                 <li data-range-key="Last 30 Days">Last 30 Days</li>
+                                                 <li data-range-key="This Month">This Month</li>
+                                                 <li data-range-key="Last Month">Last Month</li>
+                                             </ul>
+                                         </div>
+                                     </div>
+                                 }*@
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        @if (BlogVisitors != null && BlogVisitors.Count > 0)
+                        {
+                            @foreach (var user in BlogVisitors)
+                            {
+                                <OneUX_UserListCard UserModel="user.UserModel" ProfileModel="user.ProfileModel" />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">People who bookmarked it</h3>
+                            @*<a href="" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+                                <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
+                                <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">@Date</span>
+                            </a>*@
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        @if (BookmarkedByUserIds != null && BookmarkedByUserIds.Count > 0)
+                        {
+                            @foreach (var user in BookmarkedByUserIds)
+                            {
+                                <OneUX_UserListCard UserModel="user.UserModel" ProfileModel="user.ProfileModel" />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

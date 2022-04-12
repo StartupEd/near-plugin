@@ -1,0 +1,60 @@
+﻿@page "/businesspage"
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Business Pages">
+</Head>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (BusinessPages != null && BusinessPages.Count > 0)
+            {
+                <OneUX_AlpHeader HeaderId="newBPage" Route="businesspage/create" Name="BusinessPage" Count="BusinessPages.Count" ReturnSearchedQuery="GetSearchedString">
+                    @if (BusinessPages.Count > 4)
+                    {
+                        @*<OneUX_ToggleViewsEvent ReturnView="ToggleView" />*@
+                    }
+                    <a href="businesspage/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                    </a>
+                </OneUX_AlpHeader>
+                @if (ProgramView == "Flix")
+                {
+
+                    @*<Virtualize Items="AllEvent" Context="Events">*@
+                    @foreach (var Page in BusinessPages)
+                    {
+                        if (!IsVisible(Page)) continue;
+                        <BusinessPageCard Page="Page" GetId="ShowSweetAlert"/>
+                    }
+                    @*</Virtualize>*@
+                }
+                else
+                {
+                    <!--<Virtualize Items="AllEvent" Context="Events">-->
+                    @*<OneUX_Flix Model="Events" />*@
+                    <!--</Virtualize>
+
+                    <Virtualize Items="AllEvent" Context="Events">-->
+                    @*<OneUX_CollapseItem Model="Events" />*@
+                    <!--</Virtualize>-->
+                }
+            }
+            else
+            {
+                <OneUX_AlpHeader HeaderId="newBPage" Route="/businesspage/create" Name="Business Page" />
+            }
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeletePage" />
+

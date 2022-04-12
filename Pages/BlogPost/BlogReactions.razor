@@ -1,0 +1,97 @@
+﻿@using StartupEd.Lib.Engine
+@inject NavigationManager Navigation
+
+<div class="d-flex align-items-center pt-1">
+    @if (Model.Reactions.Any(item => item.AuthorId == UXUtility.LoggedInUser.Id && item.IsLiked == true && item.Value == ReactionType.Love))
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-danger btn-hover-text-danger rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Love"))" @onclick:preventDefault style="background-color:lightpink">
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                        <path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"></path>
+                    </g>
+                </svg>
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Love).Count()}
+        </a>
+    }
+    else
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-danger btn-hover-text-danger rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Love"))" @onclick:preventDefault>
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                        <path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"></path>
+                    </g>
+                </svg>
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Love).Count()}
+        </a>
+    }
+    @if (Model.Reactions.Any(item => item.AuthorId == UXUtility.LoggedInUser.Id && item.IsLiked == true && item.Value == ReactionType.Insight))
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-primary btn-hover-text-primary rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Insight"))" @onclick:preventDefault style="background-color:#FFFDD0">
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/insight.svg" alt="insight-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Insight).Count()}
+        </a>
+    }
+    else
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-primary btn-hover-text-primary rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Insight"))" @onclick:preventDefault>
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/insight.svg" alt="insight-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Insight).Count()}
+        </a>
+    }
+
+    @if (Model.Reactions.Any(item => item.AuthorId == UXUtility.LoggedInUser.Id && item.IsLiked == true && item.Value == ReactionType.Dollar))
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-warning btn-hover-text-warning rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Dollar"))" @onclick:preventDefault style="background-color:lightgoldenrodyellow">
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/dollar.svg" alt="dollar-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Dollar).Count()}
+        </a>
+    }
+    else
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-warning btn-hover-text-warning rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Dollar"))" @onclick:preventDefault>
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/dollar.svg" alt="dollar-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Dollar).Count()}
+        </a>
+    }
+    @if (Model.Reactions.Any(item => item.AuthorId == UXUtility.LoggedInUser.Id && item.IsLiked == true && item.Value == ReactionType.Rocket))
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-danger btn-hover-text-danger rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Rocket"))" @onclick:preventDefault style="background-color:lightpink">
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/rocket.svg" alt="rocket-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Rocket).Count()}
+        </a>
+    }
+    else
+    {
+        <a href="#" class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-danger btn-hover-text-danger rounded font-weight-bolder font-size-sm p-2" @onclick="@(()=>OnReactionChanged("Rocket"))" @onclick:preventDefault>
+            <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                <img src="_content/OneUX/assets/imgs/reactions/rocket.svg" alt="rocket-icon" class="reaction-icon_img" width="24px" height="24px" />
+            </span>@if (Model.Reactions != null)
+            {@Model.Reactions.Where(x => x.IsLiked == true && x.Value == ReactionType.Rocket).Count()}
+        </a>
+    }
+
+    @if (Model.Reactions.Count() > 0)
+    {
+        <button class="btn btn-icon-danger btn-sm btn-text-dark-50 bg-hover-light-success btn-hover-text-success rounded font-weight-bolder font-size-sm p-2" data-toggle="modal" data-target="#RId" @onclick="@(()=>OnReactionCount())" @onclick:preventDefault>
+            @Model.Reactions.Where(x => x.IsLiked == true).Count()
+        </button>
+
+    }
+
+</div>

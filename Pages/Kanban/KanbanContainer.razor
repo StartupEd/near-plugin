@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+<div class="card card-custom gutter-b">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between flex-lg-wrap flex-xl-nowrap">
+            <h4 class="text-dark">
+                @PModel.Name
+            </h4>
+            <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0">
+               
+                    @if (PModel.Id != null && PModel.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                    {
+                        <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    }
+                
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kanbanModal" id="createtask">
+                    Create Task
+                </button>
+                <OneUX_DotToolbar>
+                    <ul class="navi navi-hover" id="edit">
+                        @if (PModel.TeamId.Admins.Contains(UXUtility.LoggedInUser.Id))
+                        {
+                            <li class="navi-item">
+                                <a href="project/@PModel.Id/@PModel.Name.ToLower()/settings" class="navi-link">
+                                    <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                    <span class="navi-text">Board Settings</span>
+                                </a>
+
+                            </li>
+                        }
+
+                        <li class="navi-item">
+                            <a href="project/@PModel.Id/@PModel.Name.ToLower()/teammembers" class="navi-link">
+                                <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                <span class="navi-text">Team Members</span>
+                            </a>
+                        </li>
+                    </ul>
+                </OneUX_DotToolbar>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b">
+    <div class="card-body">
+        <div id="kt_kanban_1">
+            <div class="kanban-container" style="width: 1000px;">
+                <CascadingValue Value="this">
+                    @ChildContent
+                </CascadingValue>
+            </div>
+        </div>
+    </div>
+</div>
+@if (PModel.Id != null && PModel.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+{
+    <ShareModal SharedModel="PModel" ObjectName="Project" />
+}
+<KanbanModal OnTaskUpdate="OnTaskListUpdate" TeamMembers="TeamMembers" ProjectId="@PModel.Core.Id" ProjectName="@PModel.Core.Name" />
+@code {
+   
+}

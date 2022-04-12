@@ -1,0 +1,180 @@
+﻿@page "/invite"
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="false" />
+<Head Title="Invite" />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom">
+            <div class="card-header border-0">
+                <h5 class="card-title text-Dark font-size-h2 font-weight-bold">Invite Your Friend(s)</h5>
+            </div>
+            <div class="card-body px-8 pt-1">
+                <div class="d-flex align-items-center w-100">
+                    <div class="d-flex align-items-center w-100 mb-0 bg-secondary-o-10 rounded px-2 py-3">
+                        <h5 class="m-0">Get $10 in credit for every person who signup with your invite</h5>
+                    </div>
+                </div>
+                <div class="row py-5">
+                    <div class=" col-xl-8">
+                        <div class="card-body p-0">
+                            <div class="m-0 px-2">
+                                <p>Get on a journey to explore our Apps, Incubation Programs & network with Startup Ecosystems to bring your ideas to life.</p>
+                                <b>Why StartupEd?</b><br />
+                                <p>
+                                    <b>Connect with like-minded people:</b><br />Now you can connect with entrepreneurs who want to build their own empire (& that too in cloud!)<br />
+                                    <b>Real-Time Collaboration:</b><br />Collaborate with your connections over apps to discuss your ideas in real-time.<br />
+                                    <b>Personalised Dashboard:</b><br />Have a look at your profile insights anytime.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-10 mb-5">
+                            <div class="col-lg-9">
+                                <label class="font-weight-bold">Your Referal Link</label>
+                                <input id="referalLink" class="form-control form-control-solid" @bind="@UserReferalInvites.UserModel.ReferalLink" disabled placeholder="Referal Link" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-10">
+                            <div class="col-lg-9">
+                                <label class="font-weight-bold">Enter Email Address</label>
+                                <input id="referalInviteTagging" class="form-control tagify" name='invitetags' @bind-value="@EmailAddresses" />
+                                <span class="form-text text-muted">You can enter multiple e-mail to invite.</span>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="font-weight-bold">&nbsp;</label><br />
+                                @if (IsInviting)
+                                {
+                                    <button type="submit" id="directInviteBtn" class="btn btn-primary font-weight-bold" @onclick="NetworkInviteAsync" disabled><i class="fas fa-spinner fa-spin"></i>Inviting..</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" id="directInviteBtn" class="btn btn-primary font-weight-bold" @onclick="NetworkInviteAsync">Invite</button>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class=" col-xl-4">
+                        @*<h5>Invite Via Social Media</h5>
+                        <div class="d-flex w-50 py-2">
+                            <a href="" target="_blank" class="btn btn-icon btn-circle btn-light-facebook mr-2" data-toggle="tooltip" title="facebook">
+                                <i class="socicon-facebook"></i>
+                            </a>
+                            <a href="" target="_blank" class="btn btn-icon btn-circle btn-light-twitter mr-2" data-toggle="tooltip" title="twitter">
+                                <i class="socicon-twitter"></i>
+                            </a>
+                            <a href="" target="_blank" class="btn btn-icon btn-circle btn-light-linkedin mr-2" data-toggle="tooltip" title="linkedin">
+                                <i class="socicon-linkedin"></i>
+                            </a>
+                            <a href="" target="_blank" class="btn btn-icon btn-circle btn-light-instagram mr-2" data-toggle="tooltip" title="instagram">
+                                <i class="socicon-instagram"></i>
+                            </a>
+                        </div>*@
+                        <div class="d-flex w-50 mt-10">
+                            <h5 class="text-capitalize">Your Credits</h5>
+                        </div>
+                        <div class="d-flex w-50 py-2">
+                            @if (UserReferalInvites.UserModel.ReferalCredits > 0)
+                            {
+                                <div class="symbol symbol-35 symbol-2by3 mr-3">
+                                    <span class="symbol-label font-size-h5"><text>$&nbsp;</text>@UserReferalInvites.UserModel.ReferalCredits</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-dark-50 m-0">No Credits Awarded Yet.</p>
+                            }
+                        </div>
+                        <div class="d-flex w-50 py-2 d-none">
+                            <a href="" class="btn btn-block btn-primary font-weight-bold d-none mr-5">
+                                <i class="icon-lg fab fa-instagram-square"></i>&nbsp;&nbsp;&nbsp;Instagram
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="card-title text-Dark font-size-h2 font-weight-bold">Recent Invitations And Credits</h5>
+            </div>
+            <div class="card-body px-8 pt-1">
+                @if (State == LoadingContainerState.Loading)
+                {
+                    <OneUX_Spinner />
+                }
+                else if (State == LoadingContainerState.Error)
+                {
+                    <p>Oops something went wrong...</p>
+                }
+                else if (State == LoadingContainerState.Loaded)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-separate table-head-custom" id="referalInviteData">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Invited Email</th>
+                                    <th>Invite Status</th>
+                                    <th>InvitedAt</th>
+                                    <th>AcceptedAt</th>
+                                    <th>Credit ($)</th>
+                                    <th class="d-none">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (UserReferalInvites.AllInvites != null)
+                                {
+                                    int SrNo = 1;
+                                    @foreach (var data in UserReferalInvites.AllInvites)
+                                    {
+                                        <tr>
+                                            <th scope="row">@SrNo</th>
+
+                                            <td>@data.ToEmailId</td>
+                                            <td>@data.Status.ToString()</td>
+                                            <td>@data.Core.CreatedAt.ToString("dd MMMM yy")</td>
+                                            @if (data.Core.UpdatedAt == new DateTime(0001, 01, 01))
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@data.Core.UpdatedAt.ToString("dd MMMM yy")</td>
+                                            }
+                                            @if (data.Bonus > 0)
+                                            {
+                                                <td><text>$</text>@data.Bonus</td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+                                            <td class="d-none"><a href="invite">Ping</a></td>
+                                        </tr>
+                                        SrNo = SrNo + 1;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+   
+}

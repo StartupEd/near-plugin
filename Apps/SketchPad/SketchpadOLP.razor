@@ -1,0 +1,324 @@
+@page "/sketchpad/create"
+@page "/sketchpad/{SketchId}/{SketchName}"
+@using StartupEd.Engine.MarketNetwork
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <!--begin::Row-->
+            <div class="canvas-container d-flex flex-column">
+                <div class="canvas-toolbar_1">
+                    <div class="canvas-toolbar_items" data-command="undo" title="Undo">
+                        <i class="fas fa-undo icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-command="redo" title="Redo">
+                        <i class="fas fa-redo icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="text" title="Text">
+                        <i class="fas fa-text-height icon-xl"></i>
+                    </div>
+
+                    <div class="canvas-toolbar_items" data-tool="screenGrab" title="Download">
+                        <i class="far fa-hand-paper icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="line" title="Line">
+                        <i class="fas fa-minus icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="rectangle" title="Rectangle">
+                        <i class="fas fa-square icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="circle" title="Circle">
+                        <i class="fas fa-circle icon-xl"></i>
+                    </div>
+                    @*<div class="canvas-toolbar_items" data-tool="eraser" title="Eraser">
+                            <i class="fas fa-eraser icon-xl "></i>
+                        </div>*@
+                    <div class="canvas-toolbar_items" data-tool="objectGrab" title="Drag/Resize">
+                        <i class="fas fa-arrows-alt icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items selectedTool" data-tool="pencilBrush" title="Pencil">
+                        <i class="fas fa-pen icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="sprayBrush" title="Spray">
+                        <i class="fas fa-spray-can icon-xl"></i>
+                    </div>
+                    <div class="canvas-toolbar_items" data-tool="clear" title="Clear All">
+                        <i class="far fa-trash-alt icon-xl"></i>
+                    </div>
+                    <button id="maxBtn" class="btn" title="Expand">
+                        <i class="fas fa-expand-alt icon-xl"></i>
+                    </button>
+
+                </div>
+                <div class="canvas-toolbar_2">
+                    <input type="text" class="form-control ml-3 w-300px" @bind="@Title" placeholder="Title" />
+                    @*<div class="font-family">
+                            Font-family:
+                            <select id="font-family">
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Pacifico">Pacifico</option>
+                            <option value="VT323">VT323</option>
+                            <option value="Quicksand">Quicksand</option>
+                            <option value="Inconsolata">Inconsolata</option>
+                            </select>
+                        </div>*@
+
+                    @*<div>
+                            <label>Font Size:</label>
+                            <select id="fontSize">
+                                <option>5</option>
+                                <option>8</option>
+                                <option selected>12</option>
+                                <option>15</option>
+                                <option>18</option>
+                                <option>22</option>
+                                <option>24</option>
+                                <option>48</option>
+                            </select>
+                        </div>*@
+                    <div class="canvas-toolbar_items" data-tool="uploadImage" title="Image Uploader">
+                        <label for="fileInput">
+                            <i class="fas fa-file-upload icon-xl"></i>
+                        </label>
+                        <input type="file" id="fileInput" style="display:none" accept="image/*">
+                    </div>
+
+                    <div class="slidercontainer d-flex justify-content-center">
+                        <label class=" font-size-h5 mb-0">Width: <span id="label-width">2</span></label>&nbsp;
+                        <input type="range" value="2" min="0" max="150" id="line-width" title="Width" />
+                    </div>
+                    <input type="color" value="#000000" id="myColor" title="Color Palette" />
+
+                    <button type="submit" id="saveBtn" class="btn submitFormBtn" title="Save" @onclick="SubmitModel">
+                        <i class="fas fa-save icon-xl"></i>
+                    </button>
+                </div>
+                <canvas id="mycanvas"></canvas>
+            </div>
+            <!--end::Row-->
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+    [Parameter]
+    public string SketchId { get; set; }
+    [Parameter]
+    public string SketchName { get; set; }
+    private Sketch Model = new Sketch();
+    private CS_Sketch ClientService { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+    public string Title { get; set; }
+
+    IJSObjectReference module;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OneUX/assets/js/sketchpad.js");
+                await module.InvokeVoidAsync("sketch");
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+        }
+    }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            ClientService = new CS_Sketch(ClientExchange, EngineServices.MarketNetwork);
+            if (SketchId != null)
+            {
+                Model = await ClientService.GetSketchById(SketchId);
+                Title = Model.Name;
+                await JSRuntime.InvokeVoidAsync("setSketchpadValue", Model);
+            }
+        }
+        catch (NullReferenceException e)
+        { SLog.Write(e.Message); }
+    }
+
+
+    private async void SubmitModel()
+    {
+        try
+        {
+            HttpResponseMessage response;
+            Model.CanvasImage = await JSRuntime.InvokeAsync<string>("getSketchpadValue");
+            Model.Name = Title;
+            if (Model.CanvasImage == null)
+            {
+                return;
+            }
+            if (SketchId != null && SketchId != "new" && Title != null)
+            {
+                Model.Id = SketchId;
+                response = await ClientService.PutAsync(Model);
+                if (response.IsSuccessStatusCode)
+                {
+                    await SketchpadRecentActivity(response.Content.ReadAsStringAsync().Result, Model.Name, "You have recently created new sketch " + Model.Name);
+                    ToastService.ShowSuccess("Sketch Updated Successfully!", "");
+                    navigationManager.NavigateTo("/sketchpad");
+                }
+                else
+                {
+                    ToastService.ShowError("Title can't be empty", "");
+                }
+            }
+            else
+            {
+                if (Title != null)
+                {
+                    response = await ClientService.PostAsync(Model);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        await SketchpadRecentActivity(response.Content.ReadAsStringAsync().Result, Model.Name, "You have recently made changes in sketch " + Model.Name);
+                        ToastService.ShowSuccess("Sketch Created Successfully!", ":)");
+                        navigationManager.NavigateTo("/sketchpad");
+
+                    }
+                }
+                else
+                {
+                    ToastService.ShowError("Title can't be empty", "");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+        }
+
+    }
+
+    protected async Task SketchpadRecentActivity(string Id, string Title, string description)
+    {
+        //UserActivity userActivity = new UserActivity();
+        //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+        //userActivity.Activities.Add(new ActivityModule { FeatureId = Id, Feature = Title, SubModuleId = "", Description = description });
+        //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+       { "Sketchpad","/sketchpad" }
+    };
+}
+
+
+
+
+<!--<div class="card card-custom gutter-b">
+    <!--begin::Row-->
+<!--<div class="canvas-container d-flex flex-column">
+    <div class="canvas-toolbar_1">
+        <div class="d-flex flex-row justify-content-between">
+            <div class="canvas-toolbar_items" data-command="undo" title="Undo">
+                <i class="fas fa-undo icon-xl"></i>
+            </div>
+            <div class="canvas-toolbar_items" data-command="redo" title="Redo">
+                <i class="fas fa-redo icon-xl"></i>
+            </div>
+            <div class="canvas-toolbar_items" data-tool="clear" title="Clear All">
+                <i class="far fa-trash-alt icon-xl"></i>
+            </div>
+            <button id="maxBtn" class="btn" title="Expand">
+                <i class="fas fa-expand-alt icon-xl"></i>
+            </button>
+        </div>
+        <div class="canvas-toolbar_items" data-tool="text" title="Text">
+            <i class="fas fa-text-height icon-xl"></i>
+        </div>
+
+        <div class="canvas-toolbar_items" data-tool="screenGrab" title="Download">
+            <i class="far fa-hand-paper icon-xl"></i>
+        </div>
+        <div class="d-flex flex-row justify-content-between">
+            <div class="canvas-toolbar_items" data-tool="line" title="Line">
+                <i class="fas fa-minus icon-xl"></i>
+            </div>
+            <div class="canvas-toolbar_items" data-tool="arrow" title="Arrow">
+                <i class="fas fa-minus icon-xl"></i>
+            </div>
+            <div class="canvas-toolbar_items" data-tool="dottedLine" title="Dotted Line">
+                <i class="fas fa-minus icon-xl"></i>
+            </div>
+        </div>
+
+        <div class="canvas-toolbar_items" data-tool="rectangle" title="Rectangle">
+            <i class="fas fa-square icon-xl"></i>
+        </div>
+        <div class="canvas-toolbar_items" data-tool="circle" title="Circle">
+            <i class="fas fa-circle icon-xl"></i>
+        </div>-->
+@*<div class="canvas-toolbar_items" data-tool="eraser" title="Eraser">
+        <i class="fas fa-eraser icon-xl "></i>
+    </div>*@
+<!--<div class="canvas-toolbar_items" data-tool="objectGrab" title="Drag/Resize">
+        <i class="fas fa-arrows-alt icon-xl"></i>
+    </div>
+    <div class="canvas-toolbar_items selectedTool" data-tool="pencilBrush" title="Pencil">
+        <i class="fas fa-pen icon-xl"></i>
+    </div>
+    <div class="canvas-toolbar_items" data-tool="sprayBrush" title="Spray">
+        <i class="fas fa-spray-can icon-xl"></i>
+    </div>
+
+
+</div>
+<div class="canvas-toolbar_2">-->
+@*<div class="font-family">
+        Font-family:
+        <select id="font-family">
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Pacifico">Pacifico</option>
+        <option value="VT323">VT323</option>
+        <option value="Quicksand">Quicksand</option>
+        <option value="Inconsolata">Inconsolata</option>
+        </select>
+    </div>*@
+
+@*<div>
+        <label>Font Size:</label>
+        <select id="fontSize">
+            <option>5</option>
+            <option>8</option>
+            <option selected>12</option>
+            <option>15</option>
+            <option>18</option>
+            <option>22</option>
+            <option>24</option>
+            <option>48</option>
+        </select>
+    </div>*@
+@*<div class="canvas-toolbar_items" data-tool="uploadImage" title="Image Uploader">
+                <label for="fileInput">
+                    <i class="fas fa-file-upload icon-xl"></i>
+                </label>
+                <input type="file" id="fileInput" style="display:none" accept="image/*">
+            </div>
+
+            <div class="slidercontainer d-flex justify-content-center">
+                <label class=" font-size-h5 mb-0">Width: <span id="label-width">2</span></label>&nbsp;
+                <input type="range" value="2" min="0" max="150" id="line-width" title="Width" />
+            </div>
+            <input type="color" value="#000000" id="myColor" title="Color Palette" />
+
+            <button id="saveBtn" class="btn" title="Save" @onclick="SubmitModel">
+                <i class="fas fa-save icon-xl"></i>
+            </button>
+        </div>
+        <canvas id="mycanvas"></canvas>
+    </div>-->*@
+<!--end::Row-->
+<!--</div>-->

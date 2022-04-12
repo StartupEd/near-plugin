@@ -1,0 +1,72 @@
+﻿
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 px-2">
+    <!--begin::Card-->
+    <div class="card card-custom gutter-b card-stretch">
+        <div class="card-body text-center p-4 ribbon ribbon-left">
+            @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+            {
+            <div class="d-flex justify-content-end">
+                @if (UserModel.IsClaimedUser == true)
+                {
+                    @if (ProfileModel.Core.IsActive == false && UserModel.Core.IsActive == false)
+                    {
+                        <div class="ribbon-target bg-secondary" style="top: 10px; left: -2px;">Deactivated</div>
+                    }
+                }
+                else
+                {
+                    <div class="ribbon-target bg-secondary" style="top: 10px; left: -2px;">Not Claimed</div>
+                }
+            <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-ver">
+                @if (ProfileModel.Core.IsActive == false && ProfileModel.Core.IsDeleted == true && UserModel.Core.IsActive == false)
+                {
+                    <a class="dropdown-item" href="#" @onclick:preventDefault>Inactive</a>
+                }
+                else
+                {
+                    <a class="dropdown-item" href="" @onclick="EditUserProfile" @onclick:preventDefault>Edit Profile</a>
+                    <a class="dropdown-item" href="#" @onclick="@(() => DeactivateUserAccountAsync(UserModel.Core.Id))" @onclick:preventDefault>Deactivate Account</a>
+                }
+            </OneUX_DotToolbar>
+            </div>
+            }
+            <div class="mt-2">
+                <div class="symbol symbol-100">
+                    @if (!string.IsNullOrEmpty(ProfileModel.AvatarImageUrl))
+                    {
+                        <div class="symbol-label" style="background-image: url('@ProfileModel.AvatarImageUrl')"></div>
+                    }
+                    else
+                    {
+                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                    }
+                </div>
+            </div>
+            <div class="my-2">
+                @if (ProfileModel.Core.IsActive == false && ProfileModel.Core.IsDeleted == true && UserModel.Core.IsActive == false)
+                {
+                    <span class="text-dark font-weight-bold text-hover-primary font-size-h5">@UserModel.Name</span>
+                }
+                else
+                {
+                    <a href="@("profile/" + UserModel.Id)" class="text-dark font-weight-bold text-hover-primary font-size-h5">@UserModel.Name</a>
+                }
+            </div>
+            <div class="mx-2">
+                <span class="label label-light-success label-inline font-weight-bolder px-2">@UserModel.Persona</span>
+            </div>
+            <div class="px-2 my-3 text-muted">
+                <span></span>
+            </div>
+            <div class="mx-5">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+    <!--end::Card-->
+</div>
+
+@code {
+   
+
+}

@@ -1,0 +1,159 @@
+﻿@page "/network/user/pending-requests"
+@using Microsoft.AspNetCore.SignalR.Client
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <div class="card-header card-header-tabs-line">
+                <div class="card-title">
+
+                    <ul class="nav nav-light-primary nav-pills nav-bold">
+                        <li class="nav-item">
+                            <a class="nav-link py-5 mr-5" href="network/connections">
+                                <span class="nav-text">Find New Connections</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-5 mr-5" href="network/user/connections">
+                                <span class="nav-text">My Connections</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active py-5 mr-5 ml-0" data-toggle="tab" href="#kt_tab_pending_requests">
+                                <span class="nav-text">Pending Incoming Request</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-5 mr-5" href="network/user/sent-requests">
+                                <span class="nav-text">View Sent Requests</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <OneUX_FeatureFlag FlagValue="MyFeatureFlags.ConnectionSearch">
+                    <div class="pt-3">
+                        <!--begin:Search-->
+                        <div class="input-group input-group-solid">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <span class="svg-icon svg-icon-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control py-4 h-auto" @bind="@SearchString" @bind:event="oninput" placeholder="Name\Designation" />
+                        </div>
+                        <!--end:Search-->
+                    </div>
+                </OneUX_FeatureFlag>
+            </div>
+            @if (State == LoadingContainerState.Loading)
+            {
+                <div class="d-flex justify-content-center">
+                    <div class="fa-5x">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+            }
+            else if (State == LoadingContainerState.Error)
+            {
+                <p>Oops something went wrong ...</p>
+            }
+            else if (State == LoadingContainerState.Loaded)
+            {
+                <div class="card-body px-5 pt-3">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="kt_tab_pending_requests" role="tabpanel" aria-labelledby="kt_tab_pending_requests">
+                            <div class="pt-2">
+                                <div class="row">
+                                    @if (PendingRequests != null && PendingRequests.Count != 0)
+                                    {
+                                        @if (VirtualizeItem)
+                                        {
+                                            <Virtualize ItemsProvider="LoadPendingConnectionData" Context="Request" ItemSize="19">
+                                                @if (MyDetails != null)
+                                                {
+                                                    try
+                                                    {
+                                                        IEnumerable<string> CountIds = MyDetails.ConnectionIds.Intersect(Request.UserModel.ConnectionIds);
+                                                        MutualConnections = CountIds.ToList().Count;                                                       
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Console.WriteLine(e.Message);
+                                                    }
+                                                }
+                                                <OneUX_ConnectionCard ProfileUrl="@("profile/" + Request.UserModel.Id)" Name="@Request.UserModel.Name" ProfileAvatar="@Request.ProfileModel.AvatarImageUrl" Designation="@Request.UserModel.Persona">
+                                                    <div class="px-2 my-3">
+                                                        <div class="btn-group">
+                                                            <a href="#" class="text-dark-50 text-hover-primary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@(MutualConnections+" Mutual Connections")</a>
+                                                            <div class="dropdown-menu dropdown-menu-sm px-5 py-5">
+                                                                @foreach (var item in MutualIds)
+                                                                {
+                                                                    <div class="mb-1"><a class="text-dark-75" href="@("profile/" + item)">@MyConnections.Find(usr => usr.Core.Id == item).Name</a></div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mx-5">
+                                                        <button type="submit" class="btn btn-primary btn-sm mr-5" @onclick="@(()=>AcceptRequestAsync(Request.UserModel.Id))">Accept Request</button>
+                                                        <button type="submit" class="btn btn-light btn-sm " @onclick="@(()=>RejectConnectionRequest(Request.UserModel.Id))">Delete</button>
+                                                    </div>                                                    
+                                                </OneUX_ConnectionCard>
+                                            </Virtualize>
+                                        }
+                                        else
+                                        {
+                                            <Virtualize ItemsProvider="LoadPendingConnectionData" Context="Request" ItemSize="19">
+                                                @if (MyDetails != null)
+                                                {
+                                                    try
+                                                    {
+                                                        IEnumerable<string> CountIds = MyDetails.ConnectionIds.Intersect(Request.UserModel.ConnectionIds);
+                                                        MutualIds = CountIds.ToList();
+                                                        MutualConnections = CountIds.ToList().Count;
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Console.WriteLine(e.Message);
+                                                    }
+                                                }
+                                                <OneUX_ConnectionCard ProfileUrl="@("profile/" + Request.UserModel.Id)" Name="@Request.UserModel.Name" ProfileAvatar="@Request.ProfileModel.AvatarImageUrl" Designation="@Request.UserModel.Persona">
+                                                    <div class="px-2 my-3">
+                                                        <div class="btn-group">
+                                                            <a href="#" class="text-dark-50 text-hover-primary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@(MutualConnections+" Mutual Connections")</a>
+                                                            <div class="dropdown-menu dropdown-menu-sm px-5 py-5">
+                                                                @foreach (var item in MutualIds)
+                                                                {
+                                                                    <div class="mb-1"><a class="text-dark-75" href="@("profile/" + item)">@MyConnections.Find(usr => usr.Core.Id == item).Name</a></div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mx-5">
+                                                        <button type="submit" class="btn btn-primary btn-sm mr-5" @onclick="@(()=>AcceptRequestAsync(Request.UserModel.Id))">Accept Request</button>
+                                                        <button type="submit" class="btn btn-light btn-sm " @onclick="@(()=>RejectConnectionRequest(Request.UserModel.Id))">Delete</button>
+                                                    </div>                                                    
+                                                </OneUX_ConnectionCard>
+                                            </Virtualize>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@code {
+   
+}

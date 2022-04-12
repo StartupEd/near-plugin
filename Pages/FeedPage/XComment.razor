@@ -1,0 +1,72 @@
+﻿@using StartupEd.Engine.MarketNetwork
+
+@if (cachedUser!=null)
+{
+    <div class="d-flex align-items-center justify-content-between px-5 mb-3">
+        <div class="d-flex w-100">
+            <a href="profile/@cachedUser.UserId" class="symbol symbol-circle symbol-100 symbol-light-success mr-3">
+                <div class="symbol symbol-40 symbol-lg-40 symbol-circle mr-3">
+                    <img src=@cachedUser.AvatarImageUrl class=" rounded-circle h-100 align-self-end" alt="">
+                </div>
+            </a>
+            @if (IsCommentEdit)
+            {
+                <div class="d-flex flex-column flex-row-fluid">
+                    <div class="d-flex align-items-center">
+                        @*<EditForm Context=MyCurrentEditContext>*@
+                        <div class="input-group">
+                            @*<InputTextArea onkeypress="@(() => await myKeyPress(MyCurrentEditContext))" @bind-Value="@Model.Value" />*@
+                            <input type="text" class="form-control" placeholder="Comment Here..." @bind="@CommentValue" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-light-primary" @onclick="UpdateCommentAsync">Save</button>
+                            </div>
+                        </div>
+                        @*</EditForm>*@
+                    </div>
+                    <span class="text-dark-75 font-size-sm font-weight-normal pt-1">
+                        Click here to
+                        <a href="#" class="btn btn-link-primary" @onclick="CancelEditing" @onclick:preventDefault>cancel</a>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column flex-row-fluid">
+                    <div class="d-flex align-items-center flex-wrap">
+                        <a href="profile/@cachedUser.UserId" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder pr-6">@cachedUser.FullName</a>
+                        @if (DateTime.UtcNow.Date != CommentModel.CommentedAt.Date)
+                        {
+                            <span class="text-muted font-weight-normal flex-grow-1 font-size-sm">@Utility.ConvertUTCDateTimeToLocal(CommentModel.CommentedAt)</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted font-weight-normal flex-grow-1 font-size-sm">@Utility.ConvertUTCDateTimeToLocal(CommentModel.CommentedAt).ToString("hh:mm tt")</span>
+                        }
+                        @*<span class="text-muted font-weight-normal  font-size-sm">Reply</span>*@
+                    </div>
+                    <span class="text-dark-75 font-size-sm font-weight-normal pt-1">
+                        @((MarkupString)CommentModel.Value)
+                    </span>
+                </div>
+            }
+
+        </div>
+        @if (!IsCommentEdit)
+        {
+            @if (CommentModel.AuthorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+            {
+                <div class="d-flex flex-column align-items-end">
+                    <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-hor">
+                        <a class="dropdown-item" href="" @onclick="EditPostComment" @onclick:preventDefault><i class="fas fa-pencil-alt icon-nm pt-1"></i>&nbsp;&nbsp;Edit</a>
+                        <a class="dropdown-item" href="" @onclick="DeletePostComment" @onclick:preventDefault><i class="far fa-trash-alt icon-nm pt-1"></i>&nbsp;&nbsp;Delete</a>
+                    </OneUX_DotToolbar>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column align-items-end"></div>
+            }
+        }
+    </div>
+}
+

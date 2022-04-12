@@ -1,0 +1,103 @@
+﻿
+.kanban-container {
+    position: relative;
+    box-sizing: border-box;
+    width: auto
+}
+
+    .kanban-container * {
+        box-sizing: border-box
+    }
+
+    .kanban-container:after {
+        clear: both;
+        display: block;
+        content: ""
+    }
+
+.kanban-board {
+    position: relative;
+    float: left;
+    background: #e2e4e6;
+    transition: all .3s cubic-bezier(.23,1,.32,1)
+}
+
+    .kanban-board.disabled-board {
+        opacity: .3
+    }
+
+    .kanban-board header {
+        font-size: 16px;
+        padding: 15px
+    }
+
+        .kanban-board header .kanban-title-board {
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            display: inline
+        }
+
+        .kanban-board header .kanban-title-button {
+            float: right
+        }
+
+    .kanban-board .kanban-drag {
+        min-height: 200px;
+        padding: 20px
+    }
+
+    .kanban-board:after {
+        clear: both;
+        display: block;
+        content: ""
+    }
+
+.kanban-item {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    transition: all .3s cubic-bezier(.23,1,.32,1)
+}
+
+
+.no-drop {
+    border: 2px dashed red;
+}
+
+.can-drop {
+    border: 2px dashed green;
+}
+
+.item-draggable {
+    margin-bottom: 10px;
+    padding: 10px 25px;
+    border: 1px solid #424d5c;
+    cursor: grab;
+    background: #5c6b7f;
+    color: #ffffff;
+    border-radius: 5px;
+    width: 250px;
+}
+
+    .item-draggable:active {
+        cursor: grabbing;
+    }
+
+.item-dragging {
+    cursor: grabbing;
+}
+
+/*.show {
+    display:initial;
+    animation-name:show-animation;
+    animation-duration: 1s;
+}
+@keyframes show-animation {
+    from { opacity:0
+    }
+    to{opacity:1}
+}
+.hide {
+    display:none;
+}*/

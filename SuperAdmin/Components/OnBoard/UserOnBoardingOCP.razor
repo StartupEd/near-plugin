@@ -1,0 +1,102 @@
+﻿@page "/root/user-onboard/create"
+
+@using System.Text.RegularExpressions;
+<Head Title="User Onboard">
+</Head>
+<OneUX_SubHeader />
+<AdminPageHeader Title="User Onboarding" MutedText="Create User Account To Onboard.">   
+        <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="()=>OnviewCreatedUserAccounts(true)" @onclick:preventDefault>
+            <i class="far fa-user"></i>&nbsp;User Accounts
+        </a>   
+</AdminPageHeader>
+
+ <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <EditForm class="form" id="userOnboardForm" Model="@AccountInfo" OnSubmit="SubmitUserAccount">
+                <div class="card card-custom">
+                    <div class="card-body pb-1">
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <OneUX_ImageInputBox ReturnImgbase64="Imagebase64" ImageDataUrl="@AccountInfo.ProfileModel.Core.ImageUrl" Label="Avatar" />
+                            </div>
+                            <div class="col-xl-8">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label class="text-dark-75">First Name&nbsp;<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" @bind-value="@AccountInfo.AuthModel.FirstName" />
+                                            @if (Validation.IsEmpty)
+                                            {
+                                                <span class="form-text text-danger">@Validation.Message</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label class="text-dark-75">Last Name&nbsp;<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" @bind-value="@AccountInfo.AuthModel.LastName" @onblur="@(()=>GetEmailAddress(AccountInfo.AuthModel.FirstName,AccountInfo.AuthModel.LastName))" />
+                                            @if (Validation.IsEmpty)
+                                            {
+                                                <span class="form-text text-danger">@Validation.Message</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="text-dark-75">Email&nbsp;<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" @bind-value="@AccountInfo.AuthModel.UserName" @oninput="@(()=>Validation.InputTextChanged(false,string.Empty))" />
+                                            @if (Validation.IsEmpty)
+                                            {
+                                                <span class="form-text text-danger">@Validation.Message</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="text-dark-75">Password&nbsp;<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" disabled @bind-value="@AccountInfo.AuthModel.Password" />
+                                        </div>
+                                    </div>
+                                    @*<div class="col-lg-6">
+                                        <OneUX_InputSelect @bind-Value="AccountInfo.AuthModel.Persona" Id="OnboardpersonaList" Label="Persona" StarValidation="true" Title="Select Persona">
+                                            <option value="1" selected disabled>What is your role?</option>
+                                            @foreach (var persona in Persona)
+                                            {
+                                                <option value="@persona">@persona</option>
+                                            }
+                                        </OneUX_InputSelect>
+                                    </div>*@
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="text-dark-75">LinkedIn Url</label>
+                                            <input type="text" class="form-control" @bind-value="@AccountInfo.AuthModel.SocialNetwork" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-custom gutter-b">
+                    <div class="card-title my-5 px-10">
+                        <h5 class="card-label">About</h5>
+                    </div>
+                    <div class="card-body py-0">
+                        <OneUX_QuillEditor ElementId="aboutUser" PlaceholderText="Write about community" Summary="@AccountInfo.ProfileModel.Core.Description" />
+                    </div>
+                    <div class="card-footer border-0 pt-0">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-9 text-lg-right">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+
+@code {   
+
+    
+}

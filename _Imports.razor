@@ -1,0 +1,79 @@
+@attribute [Authorize]
+@inherits BaseComponent
+
+@inject HttpClient http
+
+@inject IServiceProvider MyServiceProvider
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+@inject IToastService ToastService
+@inject IVersionInfoService VersionService
+
+
+@using System
+@using System.Net.Http
+@using System.Text.Json;
+@using System.Net.Http.Json
+@using Newtonsoft.Json
+@using StartupEd.Lib.Engine
+@using Microsoft.Extensions.DependencyInjection
+@using StartupEd.Lib.Engine
+@using StartupEd.Lib.Core
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+@using StartupEd.UX.Incubation
+@using StartupEd.UX.Incubation.Shared
+@using StartupEd.UX.Incubation.Shared.Layouts
+@using StartupEd.UX.Incubation.Shared.Pages
+
+@using StartupEd.UX.Incubation.Pages
+@using StartupEd.UX.Incubation.Pages.Grouping
+@using StartupEd.UX.Incubation.Pages.Connections
+@using StartupEd.UX.Incubation.Pages.BPage
+@using StartupEd.UX.Incubation.Pages.Others
+@using StartupEd.UX.Incubation.Pages.InProgress
+@using StartupEd.UX.Incubation.Pages.Settings
+@using StartupEd.UX.Incubation.Pages.Invite
+@using StartupEd.UX.Incubation.Pages.FeedPage
+@using StartupEd.UX.Incubation.Pages.Chatting
+@using StartupEd.UX.Incubation.Pages.Sidebar
+@using StartupEd.UX.Incubation.Pages.Milestone
+@using StartupEd.UX.Incubation.Pages.Authentication
+@using StartupEd.UX.Incubation.Pages.ProfileTemplates
+
+@using StartupEd.UX.One
+@using StartupEd.UX.One.Services
+
+@using StartupEd.UX.One.Components
+@using StartupEd.UX.One.Components.Shared
+@using StartupEd.UX.One.Components.Shared.Charts
+@using StartupEd.UX.One.Components.Shared.Maps
+@using StartupEd.UX.One.Components.Shared.Post
+@using StartupEd.UX.One.Components.Shared.Views.Card
+@using StartupEd.UX.One.Components.Shared.Views.Flix
+@using StartupEd.UX.One.Components.Shared.Views.Grid
+@using StartupEd.UX.One.Components.Shared.Views.List
+@using StartupEd.UX.One.Components.Shared.Toast
+@using StartupEd.UX.One.Components.Shared.Composer
+@using StartupEd.UX.One.Components.Shared.Reactions
+@using StartupEd.UX.One.Components.Shared.Modal
+@using StartupEd.UX.One.Components.Shared.PdfViewer
+
+@using StartupEd.UX.One.Components.Layout
+@using StartupEd.UX.One.Components.Layout.Base
+@using StartupEd.UX.One.Components.Layout.Aside
+@using StartupEd.UX.One.Components.Layout.Footer
+@using StartupEd.UX.One.Components.Layout.Header
+@using StartupEd.UX.One.Components.Layout.Header.TopBar
+
+
+@*Admin Panel*@
+@using StartupEd.UX.Incubation.SuperAdmin.Components.Feeds
+@using StartupEd.UX.Incubation.SuperAdmin.Components.Cards

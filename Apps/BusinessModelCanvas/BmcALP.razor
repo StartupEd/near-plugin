@@ -1,0 +1,156 @@
+﻿@page "/businessmodelcanvas"
+@using StartupEd.UX.Incubation;
+@inherits BMCALPBase
+<Head Title="Business Models">
+</Head>
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="d-flex flex-row">
+            <!--begin::Aside-->
+            <div class="flex-column offcanvas-mobile w-300px w-xl-325px" id="kt_profile_aside">
+                <!--begin::Forms Widget 15-->
+                <div class="card card-custom gutter-b">
+                    <!--begin::Body-->
+                    <div class="card-body">
+                        <label class="font-size-h3 font-weight-bolder text-dark">Why Use Business Model Canvas?</label>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-light-borderless accordion-svg-toggle" id="accordionExample7">
+                            <!--begin::Item-->
+                            <div class="card">
+                                <!--begin::Header-->
+                                <div class="card-header" id="headingOne7">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne7" aria-expanded="true" role="button">
+                                        <span class="svg-icon svg-icon-primary">
+                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Angle-double-right.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path d="M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) " />
+                                                </g>
+                                            </svg><!--end::Svg Icon-->
+                                        </span>
+                                        <div class="card-label text-dark pl-4">Map Existing Business Models</div>
+                                    </div>
+                                </div>
+                                <!--end::Header-->
+                                <!--begin::Body-->
+                                <div id="collapseOne7" class="collapse" aria-labelledby="headingOne7" data-parent="#accordionExample7">
+                                    <div class="card-body text-dark-50 font-size-lg pl-12">
+                                        Business Model Canvas, a tool for visionaries, game changers, and challengers.Visualize and communicate a simple story of your business model.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo7">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo7" aria-expanded="true" role="button">
+                                        <span class="svg-icon svg-icon-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path d="M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) " />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <div class="card-label text-dark pl-4">Design New Business Models</div>
+                                    </div>
+                                </div>
+                                <div id="collapseTwo7" class="collapse" aria-labelledby="headingTwo7" data-parent="#accordionExample7">
+                                    <div class="card-body text-dark-50 font-size-lg pl-12">
+                                        Use the canvas to explore new business models whether you are a start-up or an existing business.Use a systematic approach to testing your business ideas.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree7">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree7" aria-expanded="true" role="button">
+                                        <span class="svg-icon svg-icon-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path d="M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) " />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <div class="card-label text-dark pl-4">Manage a Portfolio of Business Models</div>
+                                    </div>
+                                </div>
+                                <div id="collapseThree7" class="collapse" aria-labelledby="headingThree7" data-parent="#accordionExample7">
+                                    <div class="card-body text-dark-50 font-size-lg pl-12">
+                                        Using this canvas will lead to insights about the customers you serve, what value propositions are offered through what channels, and how your company makes money. You can also use the business model canvas to understand your own business model or that of a competitor!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Forms Widget 15-->
+            </div>
+            <div class="flex-row-fluid ml-lg-8">
+                <div class="card card-custom gutter-b">
+                    <div class="card-body d-flex rounded bg-secondary p-12 flex-column flex-md-row flex-lg-column flex-xxl-row">
+                        <div class="card card-custom w-auto w-lg-auto m-0">
+                            <div class="card-body px-12 py-10">
+                                <h3 class="font-weight-bolder font-size-h2 mb-1">
+                                    <a class="text-dark-75">Business Model Canvas</a>
+                                </h3>
+                                <div class="font-size-h5 mt-3">
+                                    Got a new business idea, but don’t know how to put it to work? Want to improve your existing business model? Overwhelmed by writing your business plan? There is a one-page technique that can provide you the solution you are looking for, and that’s the business model canvas. The business model canvas is a strategic management tool that lets you visualize and assess your business idea or concept. It’s a one-page document containing nine boxes that represent different fundamental elements of a business.
+                                </div>
+                                <!--begin::Info-->
+                                <!--end::Info-->
+                            </div>
+                            <!--end::Card Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end::Card Body-->
+                </div>
+            </div>
+        </div>
+
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (BMC != null && BMC.Count > 0)
+            {
+                <OneUX_AlpHeader HeaderId="newBmc" Route="businessmodelcanvas/create" Name="Business Model Canvas" Count="BMC.Count" ReturnSearchedQuery="GetSearchedString">
+                    <OneUX_ToggleViewsApp ReturnView="ToggleView" Route="businessmodelcanvas/create" />
+                </OneUX_AlpHeader>
+                @if (ProgramView == "List")
+                {
+                    <div class="row">
+                        @foreach (var BusinessModel in BMC)
+                        {
+                            if (!IsVisible(BusinessModel)) continue;
+                            <OneUX_GridView DeleteCallback="CallDeleteBMCAlert" EditCallback="EditBusinessModelAsync" Title="@BusinessModel.Name" Creator="@BusinessModel.Core.CreatorId" IsDeleted="@BusinessModel.Core.IsDeleted" CreatedAt="@BusinessModel.Core.CreatedAt" Route="businessmodelcanvas" ComponentId="@BusinessModel.Id" ThumbnailImg="_content/OneUX/assets/imgs/BMC1.png" />
+                        }
+                    </div>
+                }
+                else
+                {
+                    <OneUX_ListView Data="BMC" Route="businessmodelcanvas" ListDivId="businessModal" />
+                }
+            }
+            else
+            {
+                <div id="newbmc">
+                    <OneUX_AlpHeader HeaderId="newBmc" Route="businessmodelcanvas/create" Name="Business Model Canvas" />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" OnButtonClickk="DeleteBMCAsync" />

@@ -1,0 +1,124 @@
+﻿@layout FullPageLayout
+@page "/success/{SessionId}"
+
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Page Layout-->
+        <div class="flex-row-fluid ml-lg-8">
+            <!--begin::Card-->
+            <div class="card card-custom gutter-b">
+                <div class="card-body p-0">
+                    <!-- begin: Invoice-->
+                    <!-- begin: Invoice header-->
+                    <div class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
+                        <div class="col-md-10">
+                            <div class="d-flex justify-content-between pb-10 flex-column flex-md-row">
+                                <h1 class="display-4 font-weight-boldest">ORDER DETAILS</h1>
+                                <div class="d-flex flex-column align-items-md-end px-0">
+                                    <!--begin::Logo-->
+                                    <a href="home" class="mb-5">
+                                        <img alt="Logo" src="_content/OneUX/assets/imgs/StartupEd_Logo.png" class="w-150px" />
+                                    </a>
+                                    <!--end::Logo-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end: Invoice header-->
+                    <!-- begin: Invoice body-->
+                    <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+                        <div class="col-md-10">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="pl-0 font-weight-bold text-muted text-uppercase">Subscription Plan</th>
+                                            <th class="text-right font-weight-bold text-muted text-uppercase">Validity</th>
+                                            <th class="text-right font-weight-bold text-muted text-uppercase">Expiration date</th>
+                                            <th class="text-right pr-0 font-weight-bold text-muted text-uppercase">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="font-weight-boldest">
+                                            <td class="border-0 pl-0 pt-7 d-flex align-items-center">
+                                                @AuthModel.Plan
+                                            </td>
+                                            @if (AuthModel.Duration == "Monthly")
+                                            {
+                                                <td class="text-right pt-7 align-middle">30 days</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-right pt-7 align-middle">365 days</td>
+                                            }
+                                            <td class="text-right pt-7 align-middle">@AuthModel.PlanExpirationDate.ToLocalTime().ToString("dd MMM yyyy")</td>
+                                            @if (AuthModel.Currency == "USD")
+                                            {
+                                                <td class="text-right pt-7 align-middle">$@AuthModel.PlanPrice</td>
+                                            }
+                                            else
+                                            {
+
+                                                <td class="text-right pt-7 align-middle">&#8377;@AuthModel.PlanPrice</td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end: Invoice body-->
+                    <!-- begin: Invoice footer-->
+                    <div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0 mx-0">
+                        <div class="col-md-10">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="font-weight-bold text-muted text-uppercase">PAYMENT TYPE</th>
+                                            <th class="font-weight-bold text-muted text-uppercase">PAYMENT STATUS</th>
+                                            <th class="font-weight-bold text-muted text-uppercase">PAYMENT DATE</th>
+                                            <th class="font-weight-bold text-muted text-uppercase text-right">TOTAL PAID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="font-weight-bolder">
+                                            <td>Credit Card</td>
+                                            <td>Success</td>
+                                            <td>@AuthModel.Core.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                                            @if (AuthModel.Currency == "USD")
+                                            {
+
+                                                <td class="text-primary font-size-h3 font-weight-boldest text-right">$@AuthModel.PlanPrice</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-primary font-size-h3 font-weight-boldest text-right">&#8377;@AuthModel.PlanPrice</td>
+                                            }
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end: Invoice footer-->
+                    <!-- begin: Invoice action-->
+                    <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+                        <div class="col-md-10">
+                            <div class="d-flex justify-content-between">
+                                <a href="home" class="btn btn-light-primary font-weight-bold">Go Back</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end: Invoice action-->
+                    <!-- end: Invoice-->
+                </div>
+            </div>
+            <!--end::Card-->
+        </div>
+        <!--end::Page Layout-->
+    </div>
+    <!--end::Container-->
+</div>

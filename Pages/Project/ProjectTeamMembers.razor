@@ -1,0 +1,158 @@
+﻿@page "/project/{ProjectId}/{ProjectName}/teammembers"
+
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="project/create" class="text-muted">Project</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="project/@ProjectId/@ProjectName/kanban" class="text-muted">Task</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="project/@ProjectId/@ProjectName/teammembers" class="text-muted">Team Members</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <!--begin::Header-->
+            <div class="card-header border-0 py-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label font-weight-bolder text-dark">Project Team Members</span>
+                    <span class="text-muted mt-3 font-weight-bold font-size-sm">@Model.TeamId.Members.Count members</span>
+                </h3>
+                @if (Model.TeamId.Admins.Contains(UXUtility.LoggedInUser.Id))
+                {
+                    <div class="card-toolbar">
+                        <button class="btn btn-secondary font-weight-bolder font-size-sm" data-toggle="modal" data-target="#newMemberModal">
+                            <span class="svg-icon svg-icon-md svg-icon-white">
+                                <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Communication/Add-user.svg-->
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                        <path d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span> Add New Members
+                        </button>
+                    </div>
+                }
+            </div>
+            <!--end::Header-->
+            <!--begin::Body-->
+            <div class="card-body pt-0 pb-3">
+                <!--begin::Table-->
+                <div class="table-responsive">
+                    <table class="table table-head-custom table-head-bg table-vertical-center table-borderless">
+                        <tbody>
+                            @foreach (var item in TeamMembers)
+                            {
+                                <tr>
+                                    <td class="pl-0 py-8">
+                                        <div class="d-flex align-items-center">
+                                            <div class="symbol symbol-50 flex-shrink-0 mr-4">
+                                                <div class="symbol-label" style="background-image: url(https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                            </div>
+                                            <div>
+                                                <a href="/profile/@item.Core.Id" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">@item.Name</a>
+                                                <span class="text-muted font-weight-bold d-block">@item.Persona</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @if (Model.TeamId.Admins.Contains(item.Core.Id))
+                                    {
+                                        <td>
+                                            <span class="label label-lg label-light-primary label-inline">Admin</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="label label-lg label-light-primary label-inline">Team Member</span>
+                                        </td>
+                                    }
+                                    <td>
+                                        @if (Model.TeamId.Admins.Contains(UXUtility.LoggedInUser.Id))
+                                        {
+                                            <OneUX_DotToolbar>
+                                                <ul class="navi navi-hover">
+
+                                                    @if (Model.TeamId.Admins.Contains(item.Id))
+                                                    {
+                                                        <li class="navi-item">
+                                                            <a class="navi-link" @onclick="(()=>ExitTeam(item.Id,item))">
+
+                                                                <span class="navi-text">remove from team</span>
+                                                            </a>
+                                                        </li>
+                                                        if (Model.TeamId.Admins.Contains(item.Id) && item.Id != UXUtility.LoggedInUser.Id)
+                                                        {
+                                                            <li class="navi-item">
+                                                                <a class="navi-link" @onclick="(()=>DismissTeamAdmin(item.Id))">
+                                                                    <span class="navi-text">Dismiss as Project Admin</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (Model.TeamId.Admins.Contains(UXUtility.LoggedInUser.Id))
+                                                        {
+                                                            <li class="navi-item">
+                                                                <a class="navi-link" @onclick="(()=>ExitTeam(item.Id,item))">
+                                                                    <span class="navi-text">remove from team</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="navi-item">
+                                                                <a class="navi-link" @onclick="(()=>MakeTeamAdmin(item.Id))">
+                                                                    <span class="navi-text">Make Project Admin</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </OneUX_DotToolbar>
+                                        }
+                                        else if (UXUtility.LoggedInUser.Id == item.Id)
+                                        {
+                                            <OneUX_DotToolbar>
+                                                <ul class="navi navi-hover">
+                                                    <li class="navi-item">
+                                                        <a class="navi-link" @onclick="(()=>ExitTeam(item.Id,item))">
+                                                            <span class="navi-text">Exit Team</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </OneUX_DotToolbar>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!--end::Table-->
+            </div>
+            <!--end::Body-->
+        </div>
+        <AddNewTeamMemberModal Model="Model" LoadData="LoadData"></AddNewTeamMemberModal>
+    </div>
+</div>
+
+@code {
+   
+}

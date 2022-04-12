@@ -1,0 +1,25 @@
+﻿<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3>Column Management</h3>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                Add Column
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="kt_kanban_1">
+            <div class="kanban-container" style="width: 1000px;">
+                <CascadingValue Value="this">
+                    @ChildContent
+                </CascadingValue>
+            </div>
+        </div>
+    </div>
+</div>
+<AddColumnModal Modal="PModel" OnStatusUpdated="OnStatusUpdated"></AddColumnModal>
+@code {
+   
+}

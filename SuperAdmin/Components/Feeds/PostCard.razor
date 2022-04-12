@@ -1,0 +1,79 @@
+﻿@inject IRelativeDateTime RelativeDateTime
+
+<div class="card card-custom gutter-b">
+    <div class="card-header pt-5 mb-0 border-0">
+        <div class="card-title align-items-start">
+            <a href="profile/@Model.Core.CreatorId" class="symbol symbol-45 symbol-light-success mr-3">
+                <span class="symbol-label">
+                    <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" class="h-100 align-self-end" alt="">
+                </span>
+            </a>
+            <div class="d-flex flex-column flex-grow-1">
+                <a href="profile/@Model.Core.CreatorId" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">@Model.Name</a>
+                <span class="text-muted font-size-sm">@RelativeDateTime.SetRelativeDate(Model.Core.CreatedAt)</span>
+            </div>
+        </div>
+        <div class="card-toolbar">
+            <OneUX_DotToolbar MenuDirection="dropdown-menu-left">
+                <a class="dropdown-item" href="" @onclick="ShowSweetAlertModal" @onclick:preventDefault>
+                <i class="far fa-trash-alt icon-nm pt-1"></i>&nbsp;&nbsp;Delete</a>
+            </OneUX_DotToolbar>
+        </div>
+    </div>
+
+    <div class="card-body pt-0 pb-5">
+        <div class="mb-0 p-0">
+            <OneUX_QuillInlineEditor EditIcon="true" Value="@Model.Summary" Id="@Model.Id" Placeholder="Edit your idea" UpdateData="UpdatePostAsync" T="Post" Object="Model" Attribute="Summary" />
+        </div>
+    </div>
+
+    <div class="separator separator-solid mt-0 mb-0"></div>
+    <div class="d-flex flex-column-fluid justify-content-between">
+        <div class="text-center px-5 ml-3">
+            @if (Model != null)
+            {
+                //<button class="btn btn-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary btn-hover-text-primary rounded font-weight-bolder font-size-sm p-2" data-toggle="modal" data-target="#PostReactionsModal">
+                    <button class="btn btn-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary btn-hover-text-primary rounded font-weight-bolder font-size-sm p-2" @onclick="CallReactionListModel">
+                        <span class="svg-icon svg-icon-primary svg-icon-2x">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <path d="M9,10 L9,19 L10.1525987,19.3841996 C11.3761964,19.7920655 12.6575468,20 13.9473319,20 L17.5405883,20 C18.9706314,20 20.2018758,18.990621 20.4823303,17.5883484 L21.231529,13.8423552 C21.5564648,12.217676 20.5028146,10.6372006 18.8781353,10.3122648 C18.6189212,10.260422 18.353992,10.2430672 18.0902299,10.2606513 L14.5,10.5 L14.8641964,6.49383981 C14.9326895,5.74041495 14.3774427,5.07411874 13.6240179,5.00562558 C13.5827848,5.00187712 13.5414031,5 13.5,5 L13.5,5 C12.5694044,5 11.7070439,5.48826024 11.2282564,6.28623939 L9,10 Z" fill="#000000" />
+                                    <rect fill="#000000" opacity="0.3" x="2" y="9" width="5" height="11" rx="1" />
+                                </g>
+                            </svg>
+                        </span>
+                        @Model.Reactions.Where(x => x.IsLiked == true).Count()
+                    </button>
+                    }
+            </div>
+        <div class="text-center mr-15">
+            <a href="#" class="btn btn-hover-text-warning btn-sm bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2" @onclick="ShowComments" @onclick:preventDefault>
+                <span class="svg-icon svg-icon-md svg-icon-dark-25 pr-2">
+                    <img src="_content/OneUX/assets/imgs/reactions/comments.svg" alt="startuped-icon" class="reaction-icon_img" width="24" />
+                </span>@Model.Comments.Count()
+            </a>
+        </div>
+    </div>
+
+    <div class="card-footer py-5">
+        @if (IsCommentsShow)
+        {
+            @if (Model.Comments != null)
+            {
+                foreach (var Comment in Model.Comments)
+                {
+                    <XComment CommentModel="@Comment" OnCommentChange="PostCommentUpdateAsync" OnDeleteComment="PostCommentDeleteAsync" />
+                }
+            }
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="SweetAlertConfirmation" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeletePostAsync" />   
+   
+@code {
+   
+
+
+}

@@ -1,0 +1,28 @@
+﻿@page "/certificates"
+
+    <OneUX_SubHeader />
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            @if (AllCertificates != null && AllCertificates.Count > 0)
+            {
+                <div class="row">
+                    <Virtualize Items="@AllCertificates" Context="certificate">
+                        <div class="col-xl-6">
+                            <CertificateCard Certificate="@certificate" ViewDetailClick="DisplayCertificateModal" />
+                        </div>
+                    </Virtualize>
+                </div>
+            }
+            else
+            {
+                <OneUX_EmptyArea  BodyContent="You Have Not Claimed Any Certificates Yet!" />
+            }
+        </div>
+    </div>
+
+<StartupEdCertificate @ref="ConfirmDisplayCertificate" Certificate="@MyCertificate" />
+
+    @code {
+       
+    }

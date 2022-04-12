@@ -1,0 +1,19 @@
+﻿@layout MainLayout
+@inherits LayoutComponentBase
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="d-flex flex-row">
+            @Body
+
+        </div>
+    </div>
+</div>
+@code{
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+    {
+        { "Inbox","/inbox/message" }
+    };
+}

@@ -1,0 +1,390 @@
+﻿@page "/mydashboard"
+@using StartupEd.Lib.Core
+@using Microsoft.AspNetCore.SignalR.Client
+
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-lg-6 draggable-zone">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Profile Views</h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <span class="symbol symbol-light-secondary symbol-2by3 symbol-35">
+                                <span class="symbol-label font-weight-bolder font-size-h6">
+                                    @ProfileModel.ProfileViews.Values.Sum(x => x.Count)
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body py-5">
+                        @if (State == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (State == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (State == LoadingContainerState.Loaded)
+                        {
+                            @if (Last7Days != null && ChartData != null)
+                            {
+                                <OneUX_LineChart Id="profileViews" Height="300" XAxisItems="@Last7Days" Data="@ChartData" Title="Visitor Chart" />
+                            }
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Profile Visitors</h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <span class="symbol symbol-light-secondary symbol-2by3 symbol-35">
+                                <span class="symbol-label font-weight-bolder font-size-h6">
+                                    @if (VisitorsId != null)
+                                    {
+                                        @VisitorsId.Count
+                                    }
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body py-5">
+                        @if (State == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (State == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (State == LoadingContainerState.Loaded)
+                        {
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;height:300px;">
+                                <Virtualize Context="Info" Items="ProfileVisitors" ItemSize="9">
+                                    <OneUX_CardView LabelText="@Info.UserModel.Name" MutedText="@Info.UserModel.Persona" ImageUrl="@Info.ProfileModel.AvatarImageUrl" Route="@("profile/" + Info.UserModel.Id)" SymbolCss="symbol-45">
+                                        <a href="root/user-profile/@Info.UserModel.Id" class="navi-item d-none">
+                                            <div class="symbol symbol-35 bg-light mr-3 d-none">
+                                                <div class="symbol-label"><i class="far fa-edit text-primary icon-lg"></i></div>
+                                            </div>
+                                        </a>
+                                    </OneUX_CardView>
+                                </Virtualize>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">To Do</h3>
+                        </div>
+                        <div class="card-toolbar">
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="accordion accordion-solid accordion-toggle-plus mb-3" id="personalToDo">
+                            <div class="card">
+                                <div class="card-header" id="headingOne3">
+                                    <div class="card-title text-hover-primary collapsed" data-toggle="collapse" data-target="#collapseTodoForm">
+                                        Create Personal To Do
+                                    </div>
+                                </div>
+                                <div id="collapseTodoForm" class="collapse" data-parent="#personalToDo">
+                                    <div class="card-body">
+                                        <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@TaskModel" OnValidSubmit="SubmitPersonalToDoAsync">
+                                            <OneUX_InputBox @bind-Value="TaskModel.TaskTitle" Label="Title" PlaceholderText="Title of task" />
+
+                                            <OneUX_TextArea PlaceholderText="Description" Label="Description" ElementId="taskDescription" @bind-Value="@TaskModel.TaskDescription" />
+                                            <OneUX_DatePicker ElementId="taskCompleteOnDate" Label="To Be Done By" PlaceholderText="Select date" DateValue="@TaskModel.TaskCompleteOn" />
+
+                                            <div class="form-group">
+                                                <label class="text-dark-75">Priority</label>
+                                                <div class="radio-inline">
+                                                    <label class="radio radio-solid">
+                                                        <input type="radio" name="priority" checked="@(PriorityCode == Priority.High.ToString())" @onchange="@(() => PriorityCode = Priority.High.ToString())" />
+                                                        <span></span>High
+                                                    </label>
+                                                    <label class="radio radio-solid">
+                                                        <input type="radio" name="priority" checked="@(PriorityCode == Priority.Medium.ToString())" @onchange="@(() => PriorityCode = Priority.Medium.ToString())" />
+                                                        <span></span>Medium
+                                                    </label>
+                                                    <label class="radio radio-solid">
+                                                        <input type="radio" name="priority" checked="@(PriorityCode == Priority.Low.ToString())" @onchange="@(() => PriorityCode = Priority.Low.ToString())" />
+                                                        <span></span>Low
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-default font-weight-bold mr-10" @onclick="DiscardToDo">Discard</button>
+                                                <button type="submit" class="btn btn-primary font-weight-bold">Submit</button>
+                                            </div>
+                                        </EditForm>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (TodoState == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (TodoState == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (TodoState == LoadingContainerState.Loaded)
+                        {
+                            <div class="d-flex">
+                                <p class=" text-dark-50 mb-4">To dos will disappear within 12 hrs from time of marked as Done (Checked).</p>
+                            </div>
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;height:300px;">
+                                <Virtualize Items="ToDoTasks" Context="Task" ItemSize="9">
+                                    <div class="mb-1">
+                                        @if (string.IsNullOrEmpty(Task.ProjectId))
+                                        {
+                                            <OneUX_CheckboxActionCard Id="@Task.Core.Id" CheckboxText="@Task.TaskTitle" Status="@Task.Status" HrefRoute="" MutedText="@Task.TaskCompleteOn.ToString("dd-MMMM")" OnCheckChanged="()=>UpdateToDoStatusOnCheckChanged(Task.Core.Id)">
+                                                @if (Task.Status != "Done")
+                                                {
+                                                    <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-hor">
+                                                        <a class="dropdown-item" href="" @onclick="() => EditToDoAsync(Task.Core.Id)" @onclick:preventDefault>Edit</a>
+                                                        <a class="dropdown-item" href="" @onclick="() => DeleteToDoAsync(Task.Core.Id)" @onclick:preventDefault>Delete</a>
+                                                    </OneUX_DotToolbar>
+                                                }
+                                            </OneUX_CheckboxActionCard>
+                                        }
+                                        else
+                                        {
+                                            <OneUX_CheckboxActionCard Id="@Task.Core.Id" CheckboxText="@Task.TaskTitle" HrefRoute="@("project/kanban/" + Task.Core.Id)" MutedText="@Task.TaskPriority" OnCheckChanged="()=>UpdateToDoStatusOnCheckChanged(Task.Core.Id)" />
+                                        }
+                                    </div>
+                                </Virtualize>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable d-none">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 4</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">body</div>
+                </div>
+                <!--end::Card-->
+            </div>
+
+            <div class="col-lg-6 draggable-zone">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Connections</h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <span class="symbol symbol-light-secondary symbol-2by3 symbol-35">
+                                <span class="symbol-label font-weight-bolder font-size-h6">
+                                    @UserModel.ConnectionIds.Count
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-1 pb-5">
+                        <div class="d-flex flex-wrap align-items-centerp-0 mb-1">
+                            <div class="d-flex flex-column flex-grow-1 justify-content-start my-2 mr-2">
+                                <span class="mr-5"></span>
+                            </div>
+                            <div class="d-flex flex-column flex-grow justify-content-end my-2 mr-10">
+                                <a href="network/user/sent-requests" class="text-dark-75 text-hover-primary font-size-h6">
+                                    <span class="mr-2">Sent</span>
+                                    <span class="font-weight-bolder font-size-h6">@SentConnectionRequests</span>
+                                </a>
+                            </div>
+                            <div class="d-flex flex-column flex-grow justify-content-end my-2 mr-2">
+                                <a href="network/user/pending-requests" class="text-dark-75 text-hover-primary font-size-h6">
+                                    <span class="mr-2">Received</span>
+                                    <span class="font-weight-bolder font-size-h6">@ReceivedConnectionRequests</span>
+                                </a>
+                            </div>
+                        </div>
+                        @if (ConnState == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (ConnState == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (ConnState == LoadingContainerState.Loaded)
+                        {
+                            @if (ConnectionLocations != null && ConnectionLocations.Count != 0)
+                            {
+                                <OneUX_LocationMap Height="300px" Id="connection_map" Data="@ConnectionLocations" />
+                            }
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Recent Activity</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body py-5">
+                        @if (ActivityState == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (ActivityState == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (ActivityState == LoadingContainerState.Loaded)
+                        {
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;height:300px;">
+                                @*@if(UserActivities.Activities!=null && UserActivities.Activities.Count != 0)
+                                {
+                                    var Data = UserActivities.Activities.GroupBy(x => x.ActionedAt);
+                                    Console.WriteLine(Data.Count());
+                                }*@
+                                <Virtualize Context="activity" Items="UserActivities.Activities" ItemSize="9">
+                                    
+                                    @if (activity.ActionedAt.ToLocalTime().ToString("dd-MMM-yyyy") == DateTime.UtcNow.ToLocalTime().ToString("dd-MMM-yyyy"))
+                                    {
+                                        <ActivityCard Description="@activity.Description" ActivityAt="@activity.ActionedAt.ToLocalTime().ToString("hh:mm tt")" />
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-start mt-4">
+                                            <div class="timeline-label font-weight-bolder text-dark-50 font-size-lg">@activity.ActionedAt.ToLocalTime().ToString("dd-MMM-yyyy")</div>
+                                        </div>
+                                        @if (activity.ActionedAt.ToLocalTime().ToString("dd-MMM-yyyy") != DateTime.UtcNow.ToLocalTime().ToString("dd-MMM-yyyy"))
+                                        {
+                                            <ActivityCard Description="@activity.Description" ActivityAt="@activity.ActionedAt.ToLocalTime().ToString("hh:mm tt")" />
+                                        }
+                                    }
+
+                                </Virtualize>                                
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Events</h3>
+                        </div>
+                        <div class="card-toolbar">
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        @if (EventState == LoadingContainerState.Loading)
+                        {
+                            <OneUX_Spinner />
+                        }
+                        else if (EventState == LoadingContainerState.Error)
+                        {
+                            <p>Oops something went wrong ...</p>
+                        }
+                        else if (EventState == LoadingContainerState.Loaded)
+                        {
+                            <div style="position: relative; overflow-y: auto; overflow-x:hidden;max-height:300px;">
+                                @if (AppliedEvents != null && AppliedEvents.Count != 0)
+                                {
+                                    <div class="d-flex">
+                                        <p class=" text-dark-75 font-weight-bold mb-4">Applied By Me</p>
+                                    </div>
+                                    <Virtualize Context="appliedEvent" Items="AppliedEvents" ItemSize="9">
+                                        @if (appliedEvent != null)
+                                        {
+                                            string startEndDate = appliedEvent.Deadlines.EventStart.ToLocalTime().ToString("dd MMM yyyy") + " - " + appliedEvent.Deadlines.EventEnd.ToLocalTime().ToString("dd MMM yyyy");
+                                            <div class="mb-1">
+                                                <WidgetObjectCard Route="@("event/detail/" + appliedEvent.Id)" PrimaryText="@appliedEvent.Name" MutedText="@startEndDate" ImageUrl="@appliedEvent.CoverImage" />
+                                            </div>
+                                        }
+                                    </Virtualize>
+                                }
+                                @if (UserEvents != null && UserEvents.Count != 0)
+                                {
+                                    <div class="d-flex">
+                                        <p class=" text-dark-75 font-weight-bold mb-4">Created By Me</p>
+                                    </div>
+                                    <Virtualize Context="MyEvent" Items="UserEvents" ItemSize="9">
+                                        @if (MyEvent != null)
+                                        {
+                                            string startEndDate = MyEvent.Deadlines.EventStart.ToLocalTime().ToString("dd MMM yyyy") + " - " + MyEvent.Deadlines.EventEnd.ToLocalTime().ToString("dd MMM yyyy");
+                                            <div class="mb-1">
+                                                <WidgetObjectCard Route="@("event/detail/" + MyEvent.Id)" PrimaryText="@MyEvent.Name" MutedText="@startEndDate" ImageUrl="@MyEvent.CoverImage" />
+                                            </div>
+                                        }
+                                    </Virtualize>
+                                }
+                            </div>
+                            @if (UserEvents != null && UserEvents.Count != 0)
+                            {
+                                <div class="d-flex mt-5">
+                                    <p class=" text-dark-75 font-weight-bold mb-1">Select Event Name To View Registration On Chart</p>
+                                </div>
+                                <div class="d-flex">
+                                    @if (UserEvents != null && UserEvents.Count != 0)
+                                    {
+                                        <select class="form-control kt-selectpicker" id="myEventId" data-size="5" data-live-search="true" @onchange="@EventDataChangeAsync">
+                                            @foreach (var myevent in UserEvents)
+                                            {
+                                                <option value=@myevent.Id>@myevent.Name</option>
+                                            }
+                                        </select>
+                                    }
+                                </div>
+                                @if (RegistrationPeriod != null && RegistrationData != null)
+                                {
+                                    <OneUX_LineChart Id="registrationChart" Height="300" XAxisItems="@RegistrationPeriod" Data="@RegistrationData" Title="" />
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <!--end::Card-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b draggable d-none">
+                    <div class="card-header border-bottom-0 draggable-handle">
+                        <div class="card-title">
+                            <h3 class="card-label">Card 6</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">body</div>
+                </div>
+                <!--end::Card-->
+            </div>
+        </div>
+
+    </div>
+    <!--end:: Row-->
+</div>
+

@@ -1,0 +1,80 @@
+﻿@page "/assessment/create"
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<!--begin::Body-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+
+        <!--All the content goes here-->
+        <div class="card card-custom">
+            <div class="card-header">
+                <div class="card-title align-items-start flex-column justify-content-center">
+                    <h3 class="card-label font-weight-bolder text-dark">Assessments</h3>
+                    <span class="text-muted font-weight-bold font-size-sm mt-1">Create a new assessment</span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                    <div class="col-xl-12 col-xxl-10">
+                        <!--begin: Wizard Form-->
+                        <EditForm class="form" id="assessmenttForm" Model="@Model" OnValidSubmit="SubmitModel">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <!--begin: Wizard Step 1-->
+                            <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+                                <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                                    <CascadingValue Value="@LabelStyle" Name="Label Class">
+                                        <CascadingValue Value="@ElementWrapperStyle" Name="Wrapper Class">
+                                            <!--begin: Wizard Step 1-->
+                                            <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                                <OneUX_InputBox @bind-Value="@Model.Name" PlaceholderText="Assessment Name" Label="Title" StarValidation="@Validation" ElementId="assessmentTitle"/>
+                                                <OneUX_TextArea @bind-Value="@Model.Description" Label="Description" PlaceholderText="Short Description..." ElementId="assessmentDesp"/>
+                                                <OneUX_DateRangePicker Style="row col-xl-9"  Label1="Registration Dates" Label2="Assessment Dates" ElementId_3="startRegId" ElementId_4="endRegId" ElementId_5="startAssessmentId" ElementId_6="endAssessmentId" />
+
+                                            </div>
+                                            <div class="pb-5" data-wizard-type="step-content">
+                                                @if (RoundContainer == "d-none")
+                                                {
+                                                    <button class="btn btn-secondary" @onclick="AddQuestion" id="addAssessmentQuestBtn">Add Question</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-light-secondary" disabled>Add Question</button>
+                                                }
+
+                                                <div class="@RoundContainer mt-10">
+                                                    @if (Question != null)
+                                                    {
+                                                        <QuestionCard QuestionData="@Question" OnClickCallback1="SaveQuestion" OnClickCallback2="CancelQuestion" />
+                                                    }
+                                                </div>
+
+
+                                            </div>
+                                            <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                                                <button type="submit" class="btn btn-secondary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto submitFormBtn" data-wizard-type="action-submit">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </CascadingValue>
+                                    </CascadingValue>
+                                </CascadingValue>
+                            </CascadingValue>
+                            <!--end: Wizard Step 4-->
+                        </EditForm>
+                        <!--end: Wizard Form-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+@if (Model.Questions != null && Model.Questions.Count > 0)
+{
+    <QuestionCardList QuestionList="@Model.Questions" />
+}
+<!--end::Body-->

@@ -1,0 +1,49 @@
+﻿@page "/CRM/Kanban/{CRMId}"
+
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between flex-lg-wrap flex-xl-nowrap">
+                        <h4 class="text-dark">
+                            @Model.Name
+                        </h4>
+                        <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logModal" id="createtask">
+                                Create Logs
+                            </button>
+                            <OneUX_DotToolbar>
+                                <ul class="navi navi-hover" id="edit">
+                                    <li class="navi-item">
+                                        <a href="/CRM/boardSettings/@Model.Id" class="navi-link">
+                                            <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                            <span class="navi-text">Board Settings</span>
+                                        </a>
+                                    </li>
+                                    @*<li class="navi-item">
+                                            <a href="project/TeamMembers/@PModel.Id" class="navi-link">
+                                                <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                                <span class="navi-text">Team Members</span>
+                                            </a>
+                                        </li>*@
+                                </ul>
+                            </OneUX_DotToolbar>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <CRMKanbanContainer>
+                @foreach (var item in Model.Boards)
+                {
+                    <CRMKanbanItemList BoardObject="item">
+
+                    </CRMKanbanItemList>
+                }
+            </CRMKanbanContainer>
+        </div>
+    </div>
+
+    <LogModal></LogModal>
+
+    

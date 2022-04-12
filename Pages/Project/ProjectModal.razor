@@ -1,0 +1,48 @@
+﻿<!-- Modal-->
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectModalLabel">Create Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@Model" OnValidSubmit="SubmitModel">
+                    <DataAnnotationsValidator />
+                    <OneUX_InputBox @bind-Value="@Model.Core.Name" Label="Project Title" PlaceholderText="Project Title" />
+                    <OneUX_InputSelect @bind-Value="@Model.ProjectType" Id="priorityList" ValidationFor="@(() => Model.ProjectType)" Label="Project Type" Title="Select Type">
+                        @foreach (var type in ProjectType)
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </OneUX_InputSelect>
+
+                    @*@if (AllEvents != null && AllEvents.Count > 0)
+                    {
+                        <OneUX_InputSelect @bind-Value="Model.EventId" Label="Event" Id="eventList" Title="Select Event" class="form-control">
+                            <option value="" selected="selected">none</option>
+                            @foreach (var Event in AllEvents)
+                                {
+                                <option value="@Event.Id">@Event.Name</option>
+                                }
+                        </OneUX_InputSelect>
+                    }*@
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold submitFormBtn">Submit</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+   
+
+}

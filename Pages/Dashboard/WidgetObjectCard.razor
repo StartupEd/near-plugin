@@ -1,0 +1,32 @@
+﻿<div class="d-flex align-items-center justify-content-between  p-2">
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-45 mr-3">
+            @if (!string.IsNullOrEmpty(ImageUrl))
+            {
+                <div class="symbol-label" style="background-image: url('@ImageUrl')"></div>
+            }
+            else
+            {
+                <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+            }
+        </div>
+        @if (!string.IsNullOrEmpty(Route))
+        {
+            <div class="d-flex flex-column">
+                <a href="@Route" class="text-dark-75 text-hover-primary font-weight-bold font-size-h6">@PrimaryText</a>
+                <span class="text-muted font-weight-bold font-size-sm">@MutedText</span>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column">
+                <label class="text-dark-75 navi-text font-weight-bold font-size-h5">@PrimaryText</label>
+                <span class="text-muted font-weight-bold font-size-sm">MutedText</span>
+            </div>
+        }
+    </div>
+    <div class="d-flex flex-column align-items-center">
+        @ChildContent
+    </div>
+</div>
+

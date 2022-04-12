@@ -1,0 +1,102 @@
+﻿@page "/root/recovery-index"
+
+<OneUX_SubHeader />
+
+<AdminPageHeader Title="Global Search" MutedText="Search Index Recovery">
+    <h5 class="card-label font-weight-bold text-dark-50 pt-2 mx-5">Recover Indexes</h5>
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="RecoverEventSearchIndex" @onclick:preventDefault>
+        <i class="far fa-check-circle"></i>&nbsp;Event
+    </a>
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="RecoverUserSearchIndex" @onclick:preventDefault>
+        <i class="far fa-user"></i>&nbsp;User
+    </a>
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="RecoverGroupSearchIndex" @onclick:preventDefault>
+        <i class="far fa-users"></i>&nbsp;Group
+    </a>
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="RecoverIncubationProgramSearchIndex" @onclick:preventDefault>
+        <i class="far fa-tasks"></i>&nbsp;Incubation Program
+    </a>
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="RecoverBusinessPageSearchIndex" @onclick:preventDefault>
+        <i class="far fa-tasks"></i>&nbsp;Business Page
+    </a>
+</AdminPageHeader>
+
+<div class="d-flex flex-column-fluid my-3">
+    <div class="container">
+        @if (EventInfos != null && EventInfos.Count > 0)
+        {
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Event Search Index Data</h3>
+                        <span class="text-muted font-weight-bold font-size-sm mt-1"></span>
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <OneUX_ListView Data="EventInfos" Route="root/recovery-index" ListDivId="EventsList" />
+                </div>
+            </div>
+        }
+
+        @if (UserInfos != null && UserInfos.Count > 0)
+        {
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">User Search Index Data</h3>
+                        <span class="text-muted font-weight-bold font-size-sm mt-1"></span>
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <OneUX_ListView Data="UserInfos" Route="root/recovery-index" ListDivId="UsersList" />
+                </div>
+            </div>
+        }
+        @if (BusinessPageInfos != null && BusinessPageInfos.Count > 0)
+        {
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Business Page Search Index Data</h3>
+                        <span class="text-muted font-weight-bold font-size-sm mt-1"></span>
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <OneUX_ListView Data="BusinessPageInfos" Route="root/recovery-index" ListDivId="BusinessPageList" />
+                </div>
+            </div>
+        }@if (IncubationProgramInfos != null && IncubationProgramInfos.Count > 0)
+        {
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Incubation Program Search Index Data</h3>
+                        <span class="text-muted font-weight-bold font-size-sm mt-1"></span>
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <OneUX_ListView Data="IncubationProgramInfos" Route="root/recovery-index" ListDivId="IncubationProgramList" />
+                </div>
+            </div>
+        }@if (GroupInfos != null && GroupInfos.Count > 0)
+        {
+            <div class="card card-custom">
+                <div class="card-header py-3">
+                    <div class="card-title align-items-start flex-column">
+                        <h3 class="card-label font-weight-bolder text-dark">Group Search Index Data</h3>
+                        <span class="text-muted font-weight-bold font-size-sm mt-1"></span>
+                    </div>
+                </div>
+                <div class="card-body p-0 m-0">
+                    <OneUX_ListView Data="GroupInfos" Route="root/recovery-index" ListDivId="GroupList" />
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@code {
+   
+
+}

@@ -1,0 +1,85 @@
+﻿@page "/incubationprogram"
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Incubation Programs">
+</Head>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (IPList != null && IPList.Count > 0)
+            {
+                <OneUX_AlpHeader HeaderId="newProgram" Route="incubationprogram/create" Name="Incubation Program" Count="IPList.Count" ReturnSearchedQuery="GetSearchedString">
+                    @if (IPList.Count > 0)
+                    {
+                        <OneUX_ToggleViewsEvent ReturnView="ToggleView" />
+                    }
+                    @if (UXUtility.LoggedInUserRole != Roles.Root_SuperAdmin.ToString())
+                    {
+                        <a href="incubationprogram/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                            <i class="far fa-plus-square"></i>&nbsp;Create New
+                        </a>
+                    }
+                </OneUX_AlpHeader>
+                <div class="card card-custom">
+                    <div class="d-flex justify-content-center">
+                        <ul class="step-menu">
+                            <li role="button" class="current" id="all" @onclick="LoadData">All</li>
+                            <li role="button" class="" id="upcoming" @onclick="UpcomingPrograms">Upcoming</li>
+                            <li role="button" class="" id="registration" @onclick="ProgramRegistration">Resgistrtaion Started</li>
+                            <li role="button" class="" id="started" @onclick="ProgramsStarted">Program Started</li>
+                            <li role="button" id="over" @onclick="ProgramsOver">Over</li>
+                        </ul>
+                    </div>
+                </div>
+                if (Programs != null && Programs.Count > 0)
+                {
+                    @if (ProgramView == "Flix")
+                    {
+
+                        @foreach (var IncubationProgram in IPList)
+                        {
+                            if (!IsVisible(IncubationProgram)) continue;
+                            <IncubationCard Model="IncubationProgram" GetId="@ShowSweetAlert" />
+                        }
+                    }
+                    else
+                    {
+
+                        <OneUX_Flix Programs="Programs" FlixId="programFlix"/>
+
+
+                        @*<Virtualize Items="Programs" Context="IncubationProgram">
+
+                        </Virtualize>*@
+                        @foreach (var Program in IPList)
+                        {
+                            <OneUX_CollapseItem Model="Program" />
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+
+                <OneUX_AlpHeader HeaderId="newProgram" Route="incubationprogram/create" Name="Incubation Program" Count="0" />
+            }
+        }
+    </div>
+</div>
+
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteProgram" />
+
+@code{
+
+}

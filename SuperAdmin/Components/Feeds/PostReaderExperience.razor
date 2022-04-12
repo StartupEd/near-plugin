@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+
+
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    @if (UserPosts != null)
+    {
+        <Virtualize Items="UserPosts" Context="Post">
+            <PostCard Model="@Post" PostCallBack="LoadData" ShowReactionModel="@(()=>CallReactionListModel(Post.Id))" />
+        </Virtualize>
+    }
+    else
+    {
+        <OneUX_EmptyArea BodyContent="User Posts Not Available!" />
+    }
+}
+@if (PostModel != null)
+{
+    <ReactionListModel @ref="OpenReactionList" Model="PostModel" />
+}
+

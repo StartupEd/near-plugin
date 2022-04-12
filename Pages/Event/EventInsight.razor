@@ -1,0 +1,122 @@
+﻿@page "/event/{Id}/{EventName}/insight"
+<Head Title="Events">
+</Head>
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <!--begin::Page Heading-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Page Title-->
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <!--end::Page Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/events" class="text-muted">Events</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="event/@Id/@EventName" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="event/@Id/@EventName/insight" class="text-muted">Insight</a>
+                    </li>
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page Heading-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <!--end::Toolbar-->
+    </div>
+</div>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom gutter-b">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">Registered Users for @Model.Name</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <!--begin::Example-->
+                @*<OneUX_List Data="Model.Users" Route="businessmodelcanvas" GridDivId="event_insight" />*@
+                <div class="example mb-10">
+                    <div class="example-preview">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">S.No</th>
+                                        <th scope="col">User Name</th>
+                                        <th scope="col">User Email</th>
+                                        <th scope="col">Apply Date</th>
+                                        @if (Model.Rounds != null)
+                                        {
+                                            @foreach (var item in Model.Rounds)
+                                            {
+                                                <th scope="col">@item.Title/@item.BusinessApp</th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*<Virtualize Items="RegisteredUser" Context="user">*@
+                                    @if (RegisteredUser != null)
+                                    {
+                                        @foreach (var user in RegisteredUser)
+                                        {
+                                            <tr>
+                                                <th scope="row">@y</th>
+                                                <td>
+                                                    <a href="profile/@user.Core.CreatorId">@user.Name</a>
+                                                </td>
+                                                <td>@user.EmailId</td>
+                                                <td>@user.ApplyDate.ToString("dd MMMM yy")</td>
+                                                @foreach (var item in Model.Rounds)
+                                                {
+                                                    if (item.BusinessApp == "BusinessModel")
+                                                    {
+                                                        @if (BmcModels.Any(bm => bm.Core.CreatorId == user.Core.CreatorId))
+                                                        {
+                                                            <a href="businessmodelcanvas/@BmcModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).Id/@BmcModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).Name/{@Model.Name}">
+                                                                <td>@BmcModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).Name</td>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>Not Submitted Yet</td>
+                                                        }
+                                                    }
+                                                    else if (item.BusinessApp == "BusinessPlan")
+                                                    {
+                                                        @if (BpModels.Any(bm => bm.Core.CreatorId == user.Core.CreatorId))
+                                                        {
+                                                            <a href="businessplan/@BpModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).Id/@BpModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).VentureName">
+                                                                <td>@BpModels.Find(bm => bm.Core.CreatorId == user.Core.CreatorId).Name</td>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>Not Submitted Yet</td>
+                                                        }
+                                                    }
+                                                }
+                                            </tr>
+                                            y = y + 1;
+                                        }
+                                    }
+                                    @*</Virtualize>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

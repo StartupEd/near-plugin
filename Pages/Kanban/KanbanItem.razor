@@ -1,0 +1,35 @@
+﻿<div draggable="true" @ondragstart="@(()=>HandleDragStart(Model))">
+    <div class="btn btn-light-success d-inline-flex align-items-center btn-lg mr-5" @onclick="() => Modal.Open()">
+        <div class="d-flex flex-column text-right pr-3">
+            <span class="font-weight-bolder font-size-sm">@Model.TaskAssignUserName</span>
+            <span class="font-weight-bolder font-size-sm">@Model.TaskTitle</span>
+        </div>
+        <span class="symbol symbol-40">
+            @if (Profiles.Find(pf => pf.Core.CreatorId == Model.TaskAssignUserId).AvatarImageUrl!=null)
+            {
+                <img alt="Pic" src=@Profiles.Find(pf => pf.Core.CreatorId == Model.TaskAssignUserId).AvatarImageUrl />
+            }
+            else
+            {
+                <img alt="Pic" src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" />
+            }
+        </span>
+    </div>
+</div>
+
+<TaskViewModal @ref="Modal" Model="Model" TeamMembers="TeamMembers" OnTaskUpdate="OnTaskUpdate"></TaskViewModal>
+
+
+
+
+
+
+
+
+@code {
+  
+
+
+
+
+}

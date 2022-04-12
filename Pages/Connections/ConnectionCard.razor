@@ -1,0 +1,49 @@
+﻿@using StartupEd.Engine.MarketNetwork
+
+
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <!--begin::Card-->
+    <div class="card card-custom gutter-b card-stretch">
+        <div class="card-body text-center p-4">           
+            <div class="d-flex justify-content-end">               
+                    <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-hor">
+                        <a class="dropdown-item" href="#" @onclick="RemoveConnectionAsync" @onclick:preventDefault>Remove Connection</a>
+                        <a class="dropdown-item" href="" @onclick="SubmitBlockUserOnNetwork" @onclick:preventDefault>Block</a>
+                        <a class="dropdown-item" href="#" @onclick="CallUserReportModal" @onclick:preventDefault>Report</a>
+                    </OneUX_DotToolbar>                
+            </div>
+            <!--begin::User Image-->
+            <div class="mt-0">
+                <a href="profile/@Profile.Core.CreatorId" h class="symbol symbol-circle symbol-90">
+                    @if (Profile.AvatarImageUrl != null)
+                    {
+                        <img src="@Profile.AvatarImageUrl" alt="img" />
+                    }
+                    else
+                    {
+                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                    }
+                </a>
+            </div>
+            <div class="my-2">
+                <a href="profile/@Profile.Core.CreatorId" class="text-dark font-weight-bold text-hover-primary font-size-h5">@Connection.Name</a>
+            </div>
+            <div class="mx-2">
+                @if (Connection.Persona != null)
+                {
+                    <span class="label label-light-success label-inline font-weight-bolder px-2">@Connection.Persona</span>
+                }
+            </div>
+            @ChildContent
+            <div class="mx-5 mb-3">
+                <button class="btn btn-block btn-sm btn-primary font-weight-bolder py-2" @onclick="()=>SubmitChatThreadModel(Connection.Id)">Message</button>
+            </div>
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Card-->
+</div>
+
+<!--start::Connection Note Section-->
+<ReportModal @ref="ConfirmReportRequest" ReportClickCallBack="SubmitProfileReport" />
+<!--end::Connection Note Section-->

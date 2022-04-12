@@ -1,0 +1,28 @@
+﻿@page "/anyupload"
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="File">
+</Head>
+<div class="flex-row-fluid ml-lg-8">
+    <div class="card card-custom">
+        <div class="card-header py-3">
+            <div class="card-title align-items-start flex-column">
+                <h3 class="card-label font-weight-bolder text-dark">Files</h3>
+                <span class="text-muted font-weight-bold font-size-sm mt-1">Upload Your File here</span>
+            </div>
+            <div class="card-toolbar">
+            </div>
+        </div>
+        <EditForm class="form" novalidate="novalidate" Model="@Model" OnValidSubmit="SubmitModel">
+            <div class="card-body">
+                <OneUX_InputBox @bind-Value="Model.Name" Label="First Name" ElementId="firstName" />
+                <OneUX_TextArea PlaceholderText="File Description" Label="File Description" ElementId="FileDescription" @bind-Value="@Model.Description" />
+                <InputFile name="profile_avatar" accept=".pdf, .ppt, .doc" OnChange="@OnInputFileChange" />
+                <span class="form-text text-muted">Max file size is 5MB.</span>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary font-weight-bold">Submit</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+

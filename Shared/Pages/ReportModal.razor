@@ -1,0 +1,141 @@
+﻿<!--Report Modal-->
+@if (IsVisibleModal)
+{
+    <div class="modal fade show d-block" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="reportModalLabel">Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="() => OnReportButtonClick(false)">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center">
+                        <span class="bullet bullet-bar bg-dark align-self-stretch"></span>
+                        <label class="checkbox checkbox-lg checkbox-light-dark checkbox-inline flex-shrink-0 m-0 mx-4">
+                            <input type="checkbox" @bind="@Check1" />
+                            <span></span>
+                        </label>
+                        <div class="d-flex flex-column flex-grow-1">
+                            <p href="#" class="text-dark-75 font-weight-bold mb-0">Pretending To Be Someone</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center my-2">
+                        <span class="bullet bullet-bar bg-dark align-self-stretch"></span>
+                        <label class="checkbox checkbox-lg checkbox-light-dark checkbox-inline flex-shrink-0 m-0 mx-4">
+                            <input type="checkbox" @bind="@Check2" />
+                            <span></span>
+                        </label>
+                        <div class="d-flex flex-column flex-grow-1">
+                            <p href="#" class="text-dark-75 font-weight-bold mb-0">Fake Account</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center my-2">
+                        <span class="bullet bullet-bar bg-dark align-self-stretch"></span>
+                        <label class="checkbox checkbox-lg checkbox-light-dark checkbox-inline flex-shrink-0 m-0 mx-4">
+                            <input type="checkbox" @bind="@Check3" />
+                            <span></span>
+                        </label>
+                        <div class="d-flex flex-column flex-grow-1">
+                            <p href="#" class="text-dark-75 font-weight-bold mb-0">Posting Inappropriate Things</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center my-2">
+                        <span class="bullet bullet-bar bg-dark align-self-stretch"></span>
+                        <label class="checkbox checkbox-lg checkbox-light-dark checkbox-inline flex-shrink-0 m-0 mx-4">
+                            <input type="checkbox" @bind="@Check4" />
+                            <span></span>
+                        </label>
+                        <div class="d-flex flex-column flex-grow-1">
+                            <p href="#" class="text-dark-75 font-weight-bold mb-0">Harassment Or Bullying</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center my-2">
+                        <div class="form-group mb-1">
+                            <label class="text-dark-75 font-weight-bold mb-0">Something Else</label>
+                            <textarea class="form-control" @bind="@MessageValue" rows="3" />
+                            <span class="form-text text-muted">maximum character 200</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal" @onclick="() => OnReportButtonClick(false)">Close</button>
+                    <button type="button" class="btn btn-primary font-weight-bold" @onclick="@(() => OnReportSubmitClick(ReportContent))">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    protected bool IsVisibleModal { get; set; }
+    [Parameter] public EventCallback<string> ReportClickCallBack { get; set; }
+
+    private bool Check1 { get; set; }
+    private bool Check2 { get; set; }
+    private bool Check3 { get; set; }
+    private bool Check4 { get; set; }
+    private string MessageValue { get; set; }
+    private string ReportContent { get; set; } = "";
+
+    protected void OnReportButtonClick(bool value)
+    {
+        if (!value)
+        {
+            IsVisibleModal = false;
+        }
+    }
+
+    protected async Task OnReportSubmitClick(string value)
+    {
+        if (value == "Close")
+        {
+            IsVisibleModal = false;
+        }
+        else if (Check1 | Check2 | Check3 | Check4 | !string.IsNullOrEmpty(MessageValue))
+        {
+            if (Check1 == true)
+            {
+                ReportContent += "Pretending To Be Someone ;";
+            }
+            if (Check2 == true)
+            {
+                ReportContent += "Fake Account ;";
+            }
+            if (Check3 == true)
+            {
+                ReportContent += "Posting Inappropriate Things ;";
+            }
+            if (Check4 == true)
+            {
+                ReportContent += "Harassment Or Bullying ;";
+            }
+            if (!string.IsNullOrEmpty(MessageValue))
+            {
+                ReportContent += MessageValue;
+            }
+            value = ReportContent.TrimEnd(';');
+        }
+        else
+        {
+            ToastService.ShowInfo("Please Select Option(s) to Report.", "Empty Option!");
+        }
+        await ReportClickCallBack.InvokeAsync(value);
+    }
+
+    public void ShowReportModal()
+    {
+        IsVisibleModal = true;
+        StateHasChanged();
+    }
+
+
+
+}

@@ -1,0 +1,28 @@
+﻿
+<div data-order="1" class="kanban-board item-dropzone @dropclass"
+     ondragover="event.preventDefault();"
+     ondragstart="event.dataTransfer.setData('', event.target.id);"
+     @ondrop="HandleDrop"
+     @ondragenter="HandleDragEnter"
+     @ondragleave="HandleDragLeave"
+     style="width: 250px; margin-left: 0px; margin-right: 0px;">
+    <header class="kanban-board-header">
+        <div class="kanban-title-board">@TaskStatus</div>
+    </header>
+    <main class="kanban-drag">
+        @foreach (var task in Model)
+        {
+            <KanbanItem Model="task" Value="i" TeamMembers="TeamMembers" Profiles="Profiles" OnTaskUpdate="OnTaskUpdate"/>
+            <br />
+            i++;
+        }
+    </main>
+    <footer></footer>
+</div>
+
+
+
+
+@code {
+   
+}

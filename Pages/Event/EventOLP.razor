@@ -1,0 +1,428 @@
+﻿@page "/event/{Id}/{EventName}"
+@using Microsoft.AspNetCore.SignalR.Client
+<Head Title="Events" />
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/events" class="text-muted">Events</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="event/@Id/@EventName" class="text-muted">Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            <div class="card card-custom gutter-b ribbon ribbon-top">
+                @if (Model.IncubationProgramId != null)
+                {
+                    <a href="/incubation-program/detail/@Incubation_Model.Id" class="ribbon-target bg-danger" style="top: -2px; right: 125px;">@Incubation_Model.Name Program</a>
+                }
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                            <a href="event/detail/@Model.Id" class="symbol symbol-100">
+                                @if (Model.CoverImage != null)
+                                {
+                                    <img src="@Model.CoverImage" alt="coverImg">
+                                }
+                                else
+                                {
+                                    <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+
+                                }
+                            </a>
+                        </div>
+                        <div class="d-flex flex-column justify-content-between flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="d-flex mr-3">
+                                    <a href="event/@Id/@EventName" class="text-dark-75 text-hover-primary font-size-h5 font-weight-bold mr-3">@Model.Name</a>
+                                    <span class="label label-light-success label-inline font-weight-bolder mr-1">@Model.Type</span>
+                                </div>
+                                <div class="my-lg-0 my-3">
+
+                                </div>
+                                <div class="my-lg-0">
+                                    @if (Id != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                                    {
+                                        <button type="button" class="btn btn-icon btn-light-secondary btn-hover-light-secondary mr-3" data-toggle="modal" data-target="#ShareWithConnections">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                    }
+                                    @if (Model.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString() || Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+                                    {
+                                        <a href="event/@Model.Id/@Model.Name/insight" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" id="insightLink">Insight</a>
+                                        <OneUX_DotToolbar MenuDirection="dropdown-menu-right">
+                                            <a class="dropdown-item" href="event/@Model.Id/@Model.Name/edit"><i class="fas fa-pen"></i>&nbsp;Edit</a>
+                                            <a class="dropdown-item" href="" @onclick="CallShowSweetAlertDeleteEvent" @onclick:preventDefault><i class="fas fa-trash"></i>&nbsp;Delete</a>
+                                        </OneUX_DotToolbar>
+                                    }
+                                    else
+                                    {
+                                        @if (Model.Deadlines.RegistrationStart.Date <= LocalDate.Date && LocalDate.Date <= Model.Deadlines.RegistrationEnd.Date)
+                                        {
+                                            @if (Model.IncubationProgramId != null)
+                                            {
+                                                @if (IsIPRegistered)
+                                                {
+                                                    @if (ButtonClick == false)
+                                                    {
+                                                        <button type="button" id="eventRegisterbtn" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" @onclick="ApplyButtonClick">Register</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" disabled>Registered</button>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <button id="eventRegisterbtn" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" @onclick="ShowSweetAlert2">
+                                                        Register
+                                                    </button>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (ButtonClick == false)
+                                                {
+                                                    <button id="eventRegisterbtn" type="button" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" @onclick="ApplyButtonClick">Register</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" disabled>Registered</button>
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" disabled>Register</button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-start flex-wrap">
+                                @*<p class="text-primary-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0">
+                                        <i class="flaticon2-new-email mr-2 font-size-lg text-primary-50"></i>@Model.Detail.EmailId
+                                    </p>*@
+                                <p class="text-primary-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0">
+                                    <i class="flaticon2-calendar-3 mr-2 font-size-lg text-primary-50"></i>
+                                    @Model.Organisation
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <p class="text-primary-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-primary-50"></i>
+                                    @Model.Deadlines.EventStart.ToLocalTime().ToString("dd MMM yyyy") - @Model.Deadlines.EventEnd.ToLocalTime().ToString("dd MMM yyyy")
+                                </p>
+                                @if (Model.Deadlines.EventStart.Date <= LocalDate.Date && LocalDate.Date <= Model.Deadlines.EventEnd.Date)
+                                {
+                                    Model.Core.IsActive = true;
+
+                                    <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">Event Started</span>
+                                }
+                                else if (LocalDate.Date >= Model.Deadlines.EventEnd.Date)
+                                {
+                                    Model.Core.IsActive = false;
+                                    <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">Event Over</span>
+                                }
+                                else if (Model.Deadlines.RegistrationStart.Date <= LocalDate.Date && LocalDate.Date <= Model.Deadlines.RegistrationEnd.Date)
+                                {
+                                    <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">Registration Started</span>
+                                }
+                                else if (LocalDate.Date >= Model.Deadlines.RegistrationEnd.Date)
+                                {
+                                    <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">Registration Over</span>
+                                }
+                                else if (LocalDate.Date <= Model.Deadlines.RegistrationStart.Date)
+                                {
+                                    <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">Coming Soon</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-solid my-7"></div>
+                    <!--begin: Items-->
+                    <div class="d-flex align-items-center flex-wrap">
+                        <!--begin: Item-->
+                        <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                            <span class="mr-4">
+                                <i class="icon-2x text-dark-50 far fa-calendar-alt"></i>
+                            </span>
+                            <div class="d-flex flex-column text-dark-75">
+                                <span class="font-weight-bolder font-size-sm">Days Left</span>
+                                <span class="font-weight-bolder font-size-h5">
+                                    @if (Model.Deadlines.EventStart.Date > DateTime.UtcNow.Date)
+                                    {
+                                        EventStatus = Model.Deadlines.EventStart.Subtract(DateTime.UtcNow).ToString("dd");
+                                    }
+                                    else if (Model.Deadlines.EventStart.Date <= DateTime.UtcNow.Date && Model.Deadlines.EventEnd.Date >= DateTime.UtcNow.Date)
+                                    {
+                                        EventStatus = "Event Started";
+                                    }
+                                    else
+                                    {
+                                        EventStatus = "Event Ended";
+                                    }
+                                    @EventStatus
+                                </span>
+                            </div>
+                        </div>
+                        <!--end: Item-->
+                        <!--begin: Item-->
+                        <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                            <span class="mr-4"><i class="icon-2x text-dark-50 fas fa-users"></i></span>
+                            <div class="d-flex flex-column text-dark-75">
+                                <span class="font-weight-bolder font-size-sm">Registered Users</span>
+                                <span class="font-weight-bolder font-size-h5">
+                                    @RModel.Count
+                                </span>
+                            </div>
+                        </div>
+                        <!--end: Item-->
+                        <!--begin: Item-->
+                        @if (Model.Prizes != null)
+                        {
+                            <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                <div class="d-flex flex-column text-dark-75">
+                                    <span class="font-weight-bolder font-size-sm">Prize</span>
+                                    <span class="font-weight-bolder font-size-h5">
+                                        @Model.Prizes/-
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!--begin: Items-->
+                </div>
+            </div>
+
+            @if (Model.Rounds != null && Model.Rounds.Count > 0)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">Timeline</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--begin::Example-->
+                        <div class="example example-basic">
+                            <div class="example-preview">
+                                <!--begin::Timeline-->
+                                <div class="timeline timeline-3">
+                                    <div class="timeline-items">
+                                        @foreach (var item in Model.Rounds)
+                                        {
+                                            <div class="timeline-item">
+                                                <div class="timeline-media">
+                                                    <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-12-10-081610/theme/html/demo1/dist/../src/media/svg/icons/Cooking/Dish.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24" height="24" />
+                                                                <path d="M12,21 C7.02943725,21 3,16.9705627 3,12 C3,7.02943725 7.02943725,3 12,3 C16.9705627,3 21,7.02943725 21,12 C21,16.9705627 16.9705627,21 12,21 Z M12,18 C15.3137085,18 18,15.3137085 18,12 C18,8.6862915 15.3137085,6 12,6 C8.6862915,6 6,8.6862915 6,12 C6,15.3137085 8.6862915,18 12,18 Z" fill="#000000" />
+                                                                <path d="M12,16 C14.209139,16 16,14.209139 16,12 C16,9.790861 14.209139,8 12,8 C9.790861,8 8,9.790861 8,12 C8,14.209139 9.790861,16 12,16 Z" fill="#000000" opacity="0.3" />
+                                                            </g>
+                                                        </svg><!--end::Svg Icon-->
+                                                    </span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <div class="mr-2">
+                                                            <a class="text-dark-75 text-hover-primary font-weight-bold">@item.Title</a>
+
+                                                            <span class="label label-light-danger font-weight-bolder label-inline ml-2">
+                                                                @if (item.StartDate.Date > DateTime.UtcNow.Date)
+                                                                {
+                                                                    RoundStatus = "Not Started Yet";
+                                                                }
+                                                                else if (item.StartDate.Date <= DateTime.UtcNow.Date && item.EndDate.Date >= DateTime.UtcNow.Date)
+                                                                {
+                                                                    RoundStatus = "Live";
+                                                                }
+                                                                else
+                                                                {
+                                                                    RoundStatus = "End";
+                                                                }
+                                                                @RoundStatus
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <p class="p-0">@item.Description</p>
+                                                    <div class="d-flex flex-wrap align-items-center py-2">
+                                                        <div class="d-flex align-items-center mr-10">
+                                                            <div class="mr-2">
+                                                                <div class="font-weight-bold mb-2"></div>
+                                                                <i class="icon-2x text-dark-50 ki ki-calendar"></i>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <div class="font-weight-bold mb-2">Start Date</div>
+                                                                <span class="btn btn-sm btn-text btn-light-primary text-uppercase font-weight-bold">@item.StartDate.ToString("dd MMMM yy")</span>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <div class="font-weight-bold mb-2">Due Date</div>
+                                                                <span class="btn btn-sm btn-text btn-light-danger text-uppercase font-weight-bold">@item.EndDate.ToString("dd MMMM yy")</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <!--end::Timeline-->
+                            </div>
+                        </div>
+                        <!--end::Example-->
+                    </div>
+                </div>
+
+            }
+
+            <!--<div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">Description about Event</h3>
+                    </div>
+                </div>-->
+            <!--begin::Body-->
+            <!--<div class="card-body">-->
+            <!--begin::Text-->
+            <!--<p>@((MarkupString)Model.Description)</p>-->
+            <!--end::Text-->
+            <!--</div>-->
+            <!--end::Body-->
+            <!--</div>-->
+
+            <StartupEd.UX.One.Components.Widgets.OneUX_DescriptionBox T="Model_Events" />
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <!--begin::Header-->
+                        <div class="card-header py-5">
+                            <h3 class="card-title font-weight-bolder text-dark">Important Dates and Deadlines</h3>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body d-flex flex-column p-0">
+                            <div class="card-spacer bg-white flex-grow-1">
+                                <!--begin::Row-->
+                                <div class="row m-0">
+                                    <div class="col px-8 py-6 mr-8">
+                                        <div class="font-size-sm text-muted font-weight-bold">Registration Starts</div>
+                                        <div class="font-size-h4 font-weight-bolder">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-primary-50"></i>
+                                            @Model.Deadlines.RegistrationStart.ToLocalTime().ToString("dd MMM yy")
+
+                                        </div>
+                                    </div>
+                                    <div class="col px-8 py-6">
+                                        <div class="font-size-sm text-muted font-weight-bold">Registration Ends</div>
+                                        <div class="font-size-h4 font-weight-bolder">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-primary-50"></i>
+                                            @Model.Deadlines.RegistrationEnd.ToLocalTime().ToString("dd MMM yy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Row-->
+                                <!--begin::Row-->
+                                <div class="row m-0">
+                                    <div class="col px-8 py-6 mr-8">
+                                        <div class="font-size-sm text-muted font-weight-bold">Event Starts</div>
+                                        <div class="font-size-h4 font-weight-bolder">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-primary-50"></i>
+                                            @Model.Deadlines.EventStart.ToLocalTime().ToString("dd MMM yy")
+                                        </div>
+                                    </div>
+                                    <div class="col px-8 py-6">
+                                        <div class="font-size-sm text-muted font-weight-bold">Event Ends</div>
+                                        <div class="font-size-h4 font-weight-bolder">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools mr-2 font-size-lg text-primary-50"></i>
+                                            @Model.Deadlines.EventEnd.ToLocalTime().ToString("dd MMM yy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Row-->
+                            </div>
+                            <!--end::Stats-->
+                            <div class="resize-triggers">
+                                <div class="expand-trigger">
+                                    <div style="width: 560px; height: 199px;"></div>
+                                </div>
+                                <div class="contract-trigger"></div>
+                            </div>
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                </div>
+                @if (Model.ContactInfo != null)
+                {
+                    <div class="col-lg-6">
+                        <div class="card card-custom gutter-b">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Contact the Organisers</h3>
+                                </div>
+                            </div>
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                                        <span class="mr-4">
+                                            <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-12-10-081610/theme/html/demo1/dist/../src/media/svg/icons/Communication/Add-user.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        <path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
+                                                    </g>
+                                                </svg><!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                        <div class="d-flex flex-column text-dark-75">
+                                            <span class="font-weight-bolder font-size-sm">@Model.ContactInfo.Name</span>
+                                            <span class="font-weight-bolder font-size-sm">@Model.ContactInfo.Email</span>
+                                            <span class="font-weight-bolder font-size-h5">
+                                                @Model.ContactInfo.PhoneNo
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+@if (Model.Id != null && Model.DataProperty.Permissions.ContainsKey(UXUtility.LoggedInUser.Id))
+{
+    <ShareModal SharedModel="Model" ObjectName="Event" />
+}
+
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteEventAsync" />
+
+<OneUX_SweetAlertBox @ref="ConfirmGoToProgram" Header="Oops!" Text="Register to Incubation Program First" Type="info" ButtonName="Go To Program" OnButtonClickk="GoToProgram" />

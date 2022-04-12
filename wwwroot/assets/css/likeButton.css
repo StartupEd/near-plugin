@@ -1,0 +1,53 @@
+/******************LIKE BUTTON COMPONENT*******************/
+.like-btn {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	cursor: pointer;
+}
+
+.like-btn::before {
+	content: ".";
+	opacity: 0;
+	display: block;
+	width: 44px;
+	height: 10px;
+	position: absolute;
+	top: -10px;
+	left: 0;
+}
+
+.like-btn .reaction-box {
+	position: absolute;
+	width: 312px;
+	height: 55px;
+	border-radius: 28px;
+	left: -25px;
+	bottom: 35px;
+	display: none;
+}
+
+.like-btn .reaction-box .reaction-icon {
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+	border-radius: 20px;
+	margin: 8px -1px 0 8px;
+	text-align: center;
+	transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	opacity: 0;
+	transform: translate(0, 100px) scale(0);
+}
+
+.like-btn:hover .reaction-box {
+	display: block;
+}
+
+.like-btn:hover .reaction-box .reaction-icon.show {
+	opacity: 1;
+	transform: translate(0, 0) scale(1);
+}
+
+.like-btn:hover .reaction-box .reaction-icon:hover {
+	transform: scale(1.4);
+}

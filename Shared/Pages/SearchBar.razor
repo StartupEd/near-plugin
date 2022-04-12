@@ -1,0 +1,303 @@
+@using Microsoft.AspNetCore.SignalR.Client
+@using StartupEd.Engine.MarketNetwork
+
+
+<!--begin::Toggle-->
+<!--<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="searchitems">
+    <div class="btn btn-icon btn-clean btn-lg btn-dropdown mr-1" data-toggle="tooltip" data-theme="dark" data-placement="bottom" title="Search">
+        <span class="svg-icon svg-icon-xl svg-icon-primary">-->
+            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Search.svg--><!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect x="0" y="0" width="24" height="24" />
+                    <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                    <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                </g>
+            </svg>--><!--end::Svg Icon-->
+        <!--</span>
+    </div>
+</div>-->
+<!--end::Toggle-->
+
+<!--begin::Dropdown-->
+<!--<div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
+    <div class="quick-search quick-search-dropdown" id="kt_quick_search_dropdown">
+        <form class="quick-search-form">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <span class="svg-icon svg-icon-lg">-->
+                            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Search.svg--><!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                    <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                                </g>
+                            </svg>--><!--end::Svg Icon-->
+                        <!--</span>
+                    </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Search..." @bind="QueryString" @oninput="Search" @onkeypress="@HandlePress" />
+                @if (SearchResults != null && SearchResults.Count > 0)
+                {
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="quick-search-close ki ki-close icon-sm text-muted" style="display:@Display" @onclick="CloseSearchBar"></i>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    if (QueryString != null)
+                    {
+                        <div class="input-group-append spinner spinner-sm spinner-primary">
+                            <span class="input-group-text">
+                                <i class="quick-search-close ki ki-close icon-sm text-muted"></i>
+                            </span>
+                        </div>
+                    }
+
+                }
+            </div>
+        </form>-->
+        <!--end::Form-->
+        <!--begin::Scroll-->
+        <!--@if (QueryString != null)
+        {
+            @if (SearchResults != null && SearchResults.Count > 0)
+            {
+                <div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200"></div>
+                <div class="quick-search-result">
+                    @if (SearchResultsUser != null && SearchResultsUser.Count != 0)
+                    {
+                        <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                            Members
+                        </div>
+                        <div class="mb-10">
+                            @foreach (var result in SearchResultsUser)
+                            {
+                                <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                    @if (cachedUsers.Where(cu => cu.UserId == result._source.Id).FirstOrDefault() != null)
+                                    {
+                                        <div class="symbol symbol-30  flex-shrink-0">
+                                            <div class="symbol-label" style=" background-image: url('@cachedUsers.Where(cu=>cu.UserId==result._source.Id).FirstOrDefault().AvatarImageUrl')"></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="symbol symbol-30  flex-shrink-0">
+                                            <div class="symbol-label" style=" background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                                        </div>
+                                    }
+                                    <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                        <a href="profile/@result._source.Id" class="font-weight-bold text-dark text-hover-primary">
+                                            @result._source.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if (SearchResultsEvents != null && SearchResultsEvents.Count != 0)
+                    {
+                        <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                            Events
+                        </div>
+                        <div class="mb-10">
+                            @foreach (var result in SearchResultsEvents)
+                            {
+                                <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                    <div class="symbol symbol-30  flex-shrink-0">
+                                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                                    </div>
+                                    <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                        <a href="event/detail/@result._source.Id" class="font-weight-bold text-dark text-hover-primary">
+                                            @result._source.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if (SearchResultsBusinessPage != null && SearchResultsBusinessPage.Count != 0)
+                    {
+                        <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                            Business Pages
+                        </div>
+                        <div class="mb-10">
+                            @foreach (var result in SearchResultsBusinessPage)
+                            {
+                                <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                    <div class="symbol symbol-30  flex-shrink-0">
+                                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                                    </div>
+                                    <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                        <a href="event/detail/@result._source.Id" class="font-weight-bold text-dark text-hover-primary">
+                                            @result._source.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if (SearchResultsCommunities != null && SearchResultsCommunities.Count != 0)
+                    {
+                        <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                            Communities
+                        </div>
+                        <div class="mb-10">
+                            @foreach (var result in SearchResultsCommunities)
+                            {
+                                <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                    <div class="symbol symbol-30  flex-shrink-0">
+                                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                                    </div>
+                                    <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                        <a href="event/detail/@result._source.Id" class="font-weight-bold text-dark text-hover-primary">
+                                            @result._source.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if (SearchResultsIncubationPrograms != null && SearchResultsIncubationPrograms.Count != 0)
+                    {
+                        <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                            Incubation Programs
+                        </div>
+                        <div class="mb-10">
+                            @foreach (var result in SearchResultsIncubationPrograms)
+                            {
+                                <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                    <div class="symbol symbol-30  flex-shrink-0">
+                                        <div class="symbol-label" style="background-image: url('https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg')"></div>
+                                    </div>
+                                    <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                        <a href="event/detail/@result._source.Id" class="font-weight-bold text-dark text-hover-primary">
+                                            @result._source.Name
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200" style="height: 325px; overflow: hidden; display:@Display">
+                    <div class="quick-search-result">
+                        <div class="text-muted">
+                            No record found
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>-->
+<!--end::Dropdown-->
+
+
+@code {
+    private string QueryString { get; set; }
+    private string Display { get; set; } = "block";
+    private string DropdownDisplay { get; set; }
+    public CS_User ClientService { get; set; }
+    //public List<Hits2<Searcher>> SearchResultsUser { get; set; }
+    //public List<Hits2<Searcher>> SearchResultsEvents { get; set; }
+    //public List<Hits2<Searcher>> SearchResultsBusinessPage { get; set; }
+    //public List<Hits2<Searcher>> SearchResultsCommunities { get; set; }
+    //public List<Hits2<Searcher>> SearchResultsIncubationPrograms { get; set; }
+    //public List<Hits2<Searcher>> SearchResults { get; set; }
+    public List<CachedUser> cachedUsers { get; set; }
+    private HubConnection hubConnection;
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            ClientService = new CS_User(ClientExchange, EngineServices.MarketNetwork);
+            cachedUsers = new List<CachedUser>();
+        }
+        catch (NullReferenceException e)
+        {
+            SLog.Write(e.Message);
+        }
+
+    }
+
+
+    Task SendMessage() => hubConnection.SendAsync("Search");
+
+    public bool IsConnected =>
+       hubConnection.State == HubConnectionState.Connected;
+
+    public async Task Search(ChangeEventArgs args)
+    {
+
+        try
+        {
+            QueryString = args.Value.ToString();
+            //SearchResults = await ClientService.GlobalSearch(QueryString);
+            //if (SearchResults != null)
+            //{
+            //    SearchResultsUser = SearchResults.Where(s => s._index.Contains("user")).ToList();
+            //    SearchResultsEvents = SearchResults.Where(s => s._index.Contains("events")).ToList();
+            //    SearchResultsBusinessPage = SearchResults.Where(s => s._index.Contains("businesspage")).ToList();
+            //    SearchResultsCommunities = SearchResults.Where(s => s._index.Contains("groups")).ToList();
+            //    SearchResultsIncubationPrograms = SearchResults.Where(s => s._index.Contains("incubationprogram")).ToList();
+            //    if (SearchResultsUser != null)
+            //    {
+            //        foreach (var user in SearchResultsUser)
+            //        {
+            //            if (!cachedUsers.Any(cu => cu.UserId == user._source.Id))
+            //            {
+            //                CachedUser cachedUser = await ClientService.CacheUser(user._source.Id);
+            //                cachedUsers.Add(cachedUser);
+            //            }
+            //        }
+            //    }
+            //}
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex.Message);
+        }
+    }
+
+    public async Task HandlePress(KeyboardEventArgs args)
+
+    {
+        if (args.Key == "Enter")
+        {
+            hubConnection = new HubConnectionBuilder()
+               .WithUrl(EngineServices.MarketNetwork.SystemEndpoint.Host + "/searchhub")
+               .Build();
+
+            await hubConnection.StartAsync();
+            navigationManager.NavigateTo("/search/results/all/Keyword/" + QueryString);
+            DropdownDisplay = "d-none";
+            if (IsConnected) await SendMessage();
+            QueryString = string.Empty;
+            Display = "block";
+            StateHasChanged();
+        }
+    }
+
+    public void CloseSearchBar()
+    {
+        QueryString = string.Empty;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _ = hubConnection.DisposeAsync();
+    }
+}
+
+
+

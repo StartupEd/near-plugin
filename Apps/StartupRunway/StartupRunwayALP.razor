@@ -1,0 +1,241 @@
+﻿@page "/startuprunway"
+@using StartupEd.Engine.MarketNetwork;
+
+    <OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+    <Head Title="Startup Runway">
+    </Head>
+
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class=" container ">
+            <!--begin::Page Layout-->
+            <div class="d-flex flex-row">
+                <!--begin::Aside-->
+                <div class="flex-column offcanvas-mobile w-300px w-xl-325px" id="kt_profile_aside">
+                    <!--begin::Forms Widget 15-->
+                    <div class="card card-custom gutter-b">
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <label class="font-size-h3 font-weight-bolder text-dark">Ideal Runway</label>
+                            <br />
+                            Calculating the ideal runway length is crucial to ensure all planes are able to take off and land safely. If the runway is too short, it won’t be safe for planes to take off or land. If the runway is too long, you wasted resources without providing additional benefit. In the startup world, you will often hear entrepreneurs talk about a startup or funding runway. This refers to how many months your company can operate before it runs out of money.
+                            @*<div class="form-group mb-11 mt-3">
+                                    <label class="font-size-h3 font-weight-bolder text-dark mb-7">Bridging Valuation Gaps</label>
+                                    <br />
+
+                                    Since the value of a company can be intensely debated, and since founders typically have very optimistic expectations for the business, Venture Capital (VC) firms will typically use preferred shares to “bridge the valuation gap.
+
+                                </div>*@
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Forms Widget 15-->
+                </div>
+                <!--end::Aside-->
+                <!--begin::Layout-->
+                <div class="flex-row-fluid ml-lg-8">
+                    <!--begin::Section-->
+                    <!--begin::Engage Widget 13-->
+                    <!--begin::Card-->
+                    <div class="card card-custom gutter-b">
+                        <!--begin::Card Body-->
+                        <div class="card-body d-flex rounded bg-secondary p-12 flex-column flex-md-row flex-lg-column flex-xxl-row">
+
+                            <div class="card card-custom w-auto w-md-300px w-lg-auto m-0">
+                                <!--begin::Card Body-->
+
+                                <div class="card-body px-12 py-10">
+                                    <h3 class="font-weight-bolder font-size-h2 mb-1">
+                                        <a class="text-dark-75">Startup Runway</a>
+                                    </h3>
+
+                                    <div class="font-size-h5 mt-3">
+                                        A startup runway is similar to how an actual runway allows airplanes to take off and land. It refers to how long your company can survive in the market if the income and expenses remain constant. If a startup doesn’t have enough runway, they risk going out of business before they understand the market they’re looking to serve.It is crucial for early-stage startup founders to remain aware of their startup runway, and being able to calculate runway accurately is critical for success.
+                                    </div>
+                                    <!--begin::Info-->
+                                    <!--end::Info-->
+                                </div>
+                                <!--end::Card Body-->
+                            </div>
+                            <!--end::Card-->
+                        </div>
+                        <!--end::Card Body-->
+                    </div>
+                </div>
+            </div>
+
+
+            @if (State == LoadingContainerState.Loading)
+            {
+                <OneUX_Spinner />
+            }
+            else if (State == LoadingContainerState.Error)
+            {
+                <p>Oops something went wrong ...</p>
+            }
+            else if (State == LoadingContainerState.Loaded)
+            {
+                @if (RunwayList != null && RunwayList.Count > 0)
+                {
+                    <OneUX_AlpHeader HeaderId="newRunway" Route="startuprunway/create" Name="Ruway" Count="RunwayList.Count" ReturnSearchedQuery="GetSearchedString">
+                        <OneUX_ToggleViewsApp ReturnView="ToggleView" Route="startuprunway/create" />
+                    </OneUX_AlpHeader>
+                    @if (ProgramView == "List")
+                    {
+                        <div class="d-flex flex-column-fluid">
+                            <div class="container">
+                                <div class="row">
+                                    @*  <Virtualize Items="SimulatorList" Context="Simulator">*@
+                                    @foreach (var Runway in RunwayList)
+                                    {
+                                        if (!IsVisible(Runway)) continue;
+                                        <OneUX_GridView Title="@Runway.Title" Creator="@Runway.Core.CreatorId" CreatedAt="@Runway.Core.CreatedAt" Route="startuprunway" IsDeleted="@Runway.Core.IsDeleted" DeleteCallback="CallDeleteStartupRunway" EditCallback="EditStartupRunway" ComponentId="@Runway.Id" ThumbnailImg="_content/OneUX/assets/imgs/BPlan1.png" />
+                                    }
+                                    @* </Virtualize>*@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <OneUX_ListView Data="RunwayList" Route="startuprunway" ListDivId="runway" />
+                    }
+                }
+                else
+                {
+                    <OneUX_AlpHeader HeaderId="newRunway" Route="startuprunway/create" Name="Startup Runway" />
+                }
+            }
+        </div>
+    </div>
+
+
+    <OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" OnButtonClickk="DeleteRunwayAsync" />
+
+
+    @code {
+        private OneUX_SweetAlertBox ShowSweetAlertBox { get; set; }
+        private CS_Runway ClientService { get; set; }
+        //private UserActivity_ClientService Activity_ClientService { get; set; }
+        private List<Runway> RunwayList { get; set; }
+        public string ProgramView { get; set; }
+        public enum LoadingContainerState { Loading, Loaded, Error }
+        public LoadingContainerState State;
+        private string SearchString { get; set; }
+        private string DeleteRunwayId { get; set; }
+
+        public void ToggleView(string view)
+        {
+            ProgramView = view;
+            StateHasChanged();
+        }
+
+        protected void CallDeleteStartupRunway(string Id)
+        {
+            if (Id != null)
+            {
+                DeleteRunwayId = Id;
+            }
+            ShowSweetAlertBox.ShowSweetAlert();
+        }
+        protected void DeleteRunwayAsync(bool Value)
+        {
+            if (Value)
+            {
+                DeleteRunway(DeleteRunwayId);
+            }
+        }
+
+        protected void EditStartupRunway(string Id)
+        {
+            if (!string.IsNullOrEmpty(Id))
+            {
+                string RunwayName = RunwayList.Find(sr => sr.Id == Id).Title;
+                navigationManager.NavigateTo($"startuprunway/{Id}/{RunwayName}/edit");
+            }
+        }
+
+        protected async override Task OnInitializedAsync()
+        {
+            State = LoadingContainerState.Loading;
+            try
+            {
+                //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+                ClientService = new CS_Runway(ClientExchange, EngineServices.MarketNetwork);
+                await LoadData();
+
+            }
+            catch (NullReferenceException e)
+            {
+                SLog.Write(e.Message);
+                State = LoadingContainerState.Error;
+            }
+        }
+
+        protected async Task LoadData()
+        {
+            if (UXUtility.LoggedInUserRole == ApiRoles.SuperAdmin.ToString())
+            {
+                RunwayList = await ClientService.GetNetworkStartuRunwaysFromServer(UXUtility.LoggedInUserRole);
+            }
+            else
+            {
+                RunwayList = await ClientService.GetRunwayByUserId(UXUtility.LoggedInUser.Id);
+            }
+            State = LoadingContainerState.Loaded;
+            StateHasChanged();
+        }
+
+        protected bool IsVisible(Runway RunwayList)
+        {
+            if (string.IsNullOrEmpty(SearchString))
+                return true;
+
+            if (RunwayList.Name.ToUpper().StartsWith(SearchString) || RunwayList.Name.ToLower().StartsWith(SearchString))
+                return true;
+
+
+
+            return false;
+        }
+
+        public async void DeleteRunway(string RunwayId)
+        {
+            try
+            {
+                //User Activity code should Here before delete operation
+                if (RunwayList != null)
+                {
+                    //string runwayTitle = RunwayList.Find(r => r.Id == RunwayId).Title;
+                    //UserActivity userActivity = new UserActivity();
+                    //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+                    //userActivity.Activities.Add(new ActivityModule { FeatureId = RunwayId, Feature = runwayTitle, SubModuleId = "", Description = "You have deleted runway titled " + runwayTitle });
+                    //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+                }
+                RunwayList = await ClientService.DeleteObject(RunwayList, RunwayId);
+                if (RunwayList != null)
+                {
+                    StateHasChanged();
+                    ToastService.ShowSuccess("Runway Deleted Successfuly");
+                }
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowError(ex.Message, "Deletion Failed");
+            }
+        }
+
+
+        public void GetSearchedString(string str)
+        {
+            SearchString = str;
+            StateHasChanged();
+        }
+
+        public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Startup Runway","/startuprunway" }
+    };
+    }
+
+

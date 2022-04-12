@@ -1,0 +1,40 @@
+﻿
+@page "/assessments"
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (AllAssessment != null && AllAssessment.Count > 0)
+            {
+                <OneUX_AlpHeader Route="assessment/create" Name="Assessment" Count="AllAssessment.Count" ReturnSearchedQuery="GetSearchedString" HeaderId="newAssessment">
+                    <a href="assessment/create" class="btn btn-sm btn-secondary btn-hover-secondary">
+                        <i class="far fa-plus-square"></i>&nbsp;Create New
+                    </a>
+                </OneUX_AlpHeader>
+
+                @if (ProgramView == "Flix")
+                {
+                    @foreach (var Assessments in AllAssessment)
+                    {
+                        if (!IsVisible(Assessments)) continue;
+                        <AssessmentCard Model="@Assessments" />
+                    }
+
+                }
+            }
+            else
+            {
+                <OneUX_AlpHeader Route="assessment/create" Name="Assessment" Count="0" HeaderId="newAssessment" />
+            }
+        }
+    </div>
+</div>

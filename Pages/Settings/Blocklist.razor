@@ -1,0 +1,34 @@
+﻿@page "/settings/blocking/{LoggedinUserId}"
+
+<div class="flex-row-fluid ml-lg-8">
+    <div class="card card-custom">
+        <div class="card-header py-3">
+            <div class="card-title align-items-start flex-column">
+                <h3 class="card-label font-weight-bolder text-dark">Blocked User On Network</h3>
+                <span class="text-muted font-weight-bold font-size-sm mt-1">Unblock User Who Blocked By You</span>
+            </div>
+            <div class="card-toolbar">
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="text-left flex-grow">
+                <p class="text-muted">
+                    Once ypu blocked someone they can't see your profile and post on the network.
+                </p>
+            </div>
+            <div class="text-left px-5 py-2">
+                <Virtualize Context="user" Items="BlockedUsers">
+                    <OneUX_CardView LabelText="@user.Name" MutedText="@user.Persona" ImageUrl="@BlockedProfiles.Find(pr=>pr.Core.CreatorId==user.Core.Id).AvatarImageUrl" SymbolCss="symbol-45">
+                        <a href="settings/blocking/@LoggedinUserId" class="navi-link font-weight-bolder" @onclick="@(() => UnblockPeopleOnClick(user.Core.Id))"><u>Unblock</u></a>
+                    </OneUX_CardView>
+                </Virtualize>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+   
+}

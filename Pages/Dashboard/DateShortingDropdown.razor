@@ -1,0 +1,16 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<div class="d-flex mx-2">
+    <select class="form-control kt-selectpicker form-control-md" value="@filterOption" id="sortingDropDown" data-style="btn-light-primary" @onchange="@OnChangeForNetworkusers">
+        @foreach (var option in Enum.GetValues(typeof(FilterOption)))
+        {
+            <option value=@option>@Utility.GetDisplayName((Enum)option)</option>
+        }
+    </select>
+</div>
+
+
+@*<a href="#" class="btn btn-bg-white font-weight-bold mr-3 my-2 my-lg-0" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+        <span class="text-muted font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
+        <span class="text-primary font-weight-bolder" id="kt_dashboard_daterangepicker_date">@DateTime.UtcNow.ToLocalTime().ToString("MMM dd")</span>
+    </a>*@

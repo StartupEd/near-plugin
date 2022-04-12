@@ -1,0 +1,235 @@
+﻿@page "/captable"
+@using StartupEd.Engine.MarketNetwork
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<Head Title="Cap Table">
+</Head>
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class=" container ">
+        <!--begin::Page Layout-->
+        <div class="d-flex flex-row">
+            <!--begin::Aside-->
+            <div class="flex-column offcanvas-mobile w-300px w-xl-325px" id="kt_profile_aside">
+                <!--begin::Forms Widget 15-->
+                <div class="card card-custom gutter-b">
+                    <!--begin::Body-->
+                    <div class="card-body">
+                        <label class="font-size-h3 font-weight-bolder text-dark">Valuation Methods</label>
+                        <br /> <br />
+                        When valuing a company as a going concern, there are three main valuation methods used by industry practitioners.
+                        <br />The most common methods of valuation are used in investment banking, equity research, private equity, corporate development, mergers & acquisitions (M&A), leveraged buyouts (LBO), and most areas of finance.
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Forms Widget 15-->
+            </div>
+            <!--end::Aside-->
+            <!--begin::Layout-->
+            <div class="flex-row-fluid ml-lg-8">
+                <!--begin::Section-->
+                <!--begin::Engage Widget 13-->
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b">
+                    <!--begin::Card Body-->
+                    <div class="card-body d-flex rounded bg-secondary p-12 flex-column flex-md-row flex-lg-column flex-xxl-row">
+
+                        <div class="card card-custom w-auto w-md-300px w-lg-auto m-0">
+                            <!--begin::Card Body-->
+
+                            <div class="card-body px-12 py-10">
+                                <h3 class="font-weight-bolder font-size-h2 mb-1">
+                                    <a class="text-dark-75">Cap Table</a>
+                                </h3>
+
+                                <div class="font-size-h5 mt-3">
+                                    Cap table helps to answer a simple question of what will be the effect of financing on my ownership.The cap table takes care of calculating the founder's
+                                    ownership at every round. It will give an idea about your valuation before and after investment to help you get an idea about the premoney and post money evaluation. Apart from
+                                    that , the Cap table will be able to predict as well regarding the probable outcome of meeting the venture capitalist.
+
+                                </div>
+                                <!--begin::Info-->
+                                <!--end::Info-->
+                            </div>
+                            <!--end::Card Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end::Card Body-->
+                </div>
+            </div>
+        </div>
+
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (SimulatorList != null && SimulatorList.Count > 0)
+            {
+
+                <OneUX_AlpHeader HeaderId="newCapTable" Route="captable/create" Name="Cap table" Count="SimulatorList.Count" ReturnSearchedQuery="GetSearchedString">
+                    <OneUX_ToggleViewsApp ReturnView="ToggleView" Route="captable/create" />
+                </OneUX_AlpHeader>
+
+                @if (ProgramView == "List")
+                {
+                    <div class="row">
+                        @foreach (var Simulator in SimulatorList)
+                        {
+                            if (!IsVisible(Simulator)) continue;
+                            <OneUX_GridView Title="@Simulator.Title" Creator="@Simulator.Core.CreatorId" CreatedAt="@Simulator.Core.CreatedAt" IsDeleted="@Simulator.Core.IsDeleted" DeleteCallback="CallDeleteVenture" EditCallback="EditCapTable" Route="capTable" ComponentId="@Simulator.Id" ThumbnailImg="_content/OneUX/assets/imgs/BPlan1.png" />
+                        }
+                    </div>
+                }
+                else
+                {
+                    <OneUX_ListView Data="SimulatorList" Route="captable/create" ListDivId="simulator" />
+                }
+
+            }
+            else
+            {
+              
+                    <OneUX_AlpHeader HeaderId="newCapTable" Route="captable/create" Name="Cap table" Count="0" />
+               
+            }
+
+        }
+
+    </div>
+</div>
+<OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" OnButtonClickk="DeleteSimulationAsync" />
+
+
+@code {
+    private OneUX_SweetAlertBox ShowSweetAlertBox { get; set; }
+    private CS_Simulator ClientService { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+    private List<Simulator> SimulatorList { get; set; }
+    public string ProgramView { get; set; }
+    public enum LoadingContainerState { Loading, Loaded, Error }
+    public LoadingContainerState State;
+    private string SearchString { get; set; }
+    private string DeleteRunwayId { get; set; }
+
+    public void ToggleView(string view)
+    {
+        ProgramView = view;
+        StateHasChanged();
+    }
+    protected void CallDeleteVenture(string Id)
+    {
+        if (Id != null)
+        {
+            DeleteRunwayId = Id;
+        }
+        ShowSweetAlertBox.ShowSweetAlert();
+    }
+    protected void DeleteSimulationAsync(bool Value)
+    {
+        if (Value)
+        {
+            DeleteSimulation(DeleteRunwayId);
+        }
+    }
+
+    protected void EditCapTable(string Id)
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            string Title = SimulatorList.Find(cap => cap.Id == Id).Title;
+            navigationManager.NavigateTo($"captable/{Id}/{Title}/edit");
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await SyncLoggedInUserStatus();
+        State = LoadingContainerState.Loading;
+        try
+        {
+            //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            ClientService = new CS_Simulator(ClientExchange, EngineServices.MarketNetwork);
+            await LoadData();
+
+        }
+        catch (NullReferenceException e)
+        {
+            SLog.Write(e.Message);
+            State = LoadingContainerState.Error;
+        }
+    }
+
+    protected async Task LoadData()
+    {
+        if (UXUtility.LoggedInUserRole == ApiRoles.SuperAdmin.ToString())
+        {
+            SimulatorList = await ClientService.GetNetworkSimulatorsFromServer(UXUtility.LoggedInUserRole);
+        }
+        else
+        {
+            SimulatorList = await ClientService.GetSimulatorByUserId(UXUtility.LoggedInUser.Id);
+        }
+
+        State = LoadingContainerState.Loaded;
+        StateHasChanged();
+    }
+
+    protected bool IsVisible(Simulator SimulatorList)
+    {
+        if (string.IsNullOrEmpty(SearchString))
+            return true;
+
+        if (SimulatorList.Name.ToUpper().StartsWith(SearchString) || SimulatorList.Name.ToLower().StartsWith(SearchString))
+            return true;
+
+
+
+        return false;
+    }
+
+    public async void DeleteSimulation(string SimulationId)
+    {
+        try
+        {
+
+            //string simulatorTitle = SimulatorList.Find(r => r.Id == SimulationId).Title;
+            //UserActivity userActivity = new UserActivity();
+            //Activity Module = new Activity();
+            //Module.CreateActivity("Cap Table", SimulationId, simulatorTitle, "You have deleted Business Plan " + simulatorTitle);
+            //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+            //userActivity.Activities.Add(Module);
+            //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+
+            SimulatorList = await ClientService.DeleteObject(SimulatorList, SimulationId);
+            if (SimulatorList != null)
+            {
+
+                StateHasChanged();
+                ToastService.ShowSuccess("Cap table Deleted Successfuly");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message, "Deletion Failed");
+        }
+    }
+
+    public void GetSearchedString(string str)
+    {
+        SearchString = str;
+        StateHasChanged();
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Cap Table","/capTable" }
+    };
+}

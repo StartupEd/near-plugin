@@ -1,0 +1,16 @@
+﻿
+<OneUX_InputBox @bind-Value="RoundData.Title" PlaceholderText="Title" Label="Round Title" />
+<OneUX_InputSelect @bind-Value="RoundData.BusinessApp" Label="Select App" Title="Select App">
+    <option>Select App</option>
+    @foreach (var type in ListofBusinessAppValue)
+    {
+        <option value="@type">@type</option>
+    }
+</OneUX_InputSelect>
+<OneUX_TextArea @bind-Value="RoundData.Description" PlaceholderText="Description" Label="Round Description" />
+
+<OneUX_DateRangePicker Label1="Round Dates" Style="@Style" ElementId_1="roundStartId" ElementId_2="roundEndId" Rounds="RoundData" />
+
+<button class="btn btn-light-secondary" @onclick="OnClickCallback2" @onclick:preventDefault>Cancel</button>
+<button class="btn btn-secondary" @onclick="OnClickCallback1" @onclick:preventDefault>Save and close</button>
+

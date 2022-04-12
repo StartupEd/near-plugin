@@ -1,0 +1,106 @@
+﻿@page "/assessment/{Id}/{name}/edit"
+@inject IStripHTMLTags StripHTMLTags
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <!--begin::Page Heading-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Page Title-->
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <!--end::Page Title-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/assessments" class="text-muted">Assessment</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="assessment/@Id/@name/edit" class="text-muted">Edit</a>
+                    </li>
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page Heading-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+
+        <!--All the content goes here-->
+        <div class="card card-custom">
+            <div class="card-header">
+                <div class="card-title align-items-start flex-column justify-content-center">
+                    <h3 class="card-label font-weight-bolder text-dark">Assessments</h3>
+                    <span class="text-muted font-weight-bold font-size-sm mt-1">Create a new assessment</span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                    <div class="col-xl-12 col-xxl-10">
+                        <!--begin: Wizard Form-->
+                        <EditForm class="form" id="assessmenttForm" Model="@Model" OnValidSubmit="SubmitModel">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <!--begin: Wizard Step 1-->
+                            <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+                                <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                                    <CascadingValue Value="@LabelStyle" Name="Label Class">
+                                        <CascadingValue Value="@ElementWrapperStyle" Name="Wrapper Class">
+                                            <!--begin: Wizard Step 1-->
+                                            <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                                <OneUX_InputBox @bind-Value="@Model.Name" PlaceholderText="Assessment Name" Label="Title" StarValidation="@Validation" />
+                                                <OneUX_TextArea @bind-Value="@Model.Core.Description" Label="Description" PlaceholderText="Short Description..." />
+                                                @*<OneUX_InputBox @bind-Value="@Model.Description" PlaceholderText="Assessment Description" Label="Description" StarValidation="@Validation" />*@
+                                                <OneUX_DateRangePicker Style="row col-xl-9" Label1="Registration Dates" Label2="Assessment Dates" ElementId_3="startRegId" ElementId_4="endRegId" ElementId_5="startAssessmentId" ElementId_6="endAssessmentId" AssessmentDates="Model.AssessmentDates" />
+
+                                            </div>
+                                            <div class="pb-5" data-wizard-type="step-content">
+                                                @if (RoundContainer == "d-none")
+                                                {
+                                                    <button class="btn btn-secondary" @onclick="AddQuestion">Add Question</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-light-secondary" disabled>Add Question</button>
+                                                }
+                                                <div class="@RoundContainer mt-10">
+                                                    @if (Question != null)
+                                                    {
+                                                        <QuestionCard QuestionData="@Question" OnClickCallback1="SaveQuestion" OnClickCallback2="CancelQuestion" />
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                                                <button type="submit" class="btn btn-secondary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto" data-wizard-type="action-submit">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </CascadingValue>
+                                    </CascadingValue>
+                                </CascadingValue>
+                            </CascadingValue>
+                            <!--end: Wizard Step 4-->
+                        </EditForm>
+                        <!--end: Wizard Form-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+@if (Model.Questions != null && Model.Questions.Count > 0)
+{
+    <QuestionCardListEdit QuestionList="@Model.Questions" />
+}
+

@@ -1,0 +1,22 @@
+﻿@page "/reset-login"
+
+<div class="d-flex flex-row-fluid flex-center">
+    <div class="login-forgot">
+        <div class="text-center mb-10 mb-lg-20">
+            <h3 class="">ResetPassword</h3>
+            <p class="text-muted font-weight-bold font-size-h4">
+               Your password is reset successfully.Click here for login.
+            </p>
+        </div>
+        <div class="form-group d-flex flex-wrap flex-center mt-10">
+            <button type="submit" class="btn btn-primary btn-pill font-weight-bold px-9 py-4 my-3 mx-2" @onclick="Login">Login</button>
+        </div>
+    </div>
+</div>
+
+@code{
+    public void Login()
+    {
+        navigationManager.NavigateTo("/login/");
+    }
+}

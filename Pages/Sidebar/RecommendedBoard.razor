@@ -1,0 +1,88 @@
+
+<div class="card card-custom gutter-b">
+    <div class="card-header pt-5" id="recommendedBoard">
+        <div class="text-left flex-grow">
+            <h3 class="card-title font-weight-bolder">Recommended</h3>
+        </div>
+        <div class="text-right flex-grow-1 d-none">
+            <button type="button" class="btn btn-sm btn-light" data-toggle="tooltip" data-theme="dark" data-placement="top" title="Add New">
+                <i class="far fa-plus-square"></i>&nbsp;Create
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-5 d-flex flex-column">
+        <!--begin:: Recommended Event Display-->
+        <div class="mb-5">
+            @if (EventList != null && EventList.Count != 0)
+            {
+                <div class="d-flex align-items-center justify-content-between border px-3 py-2 mb-3">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="font-weight-bold pt-2">Events</h5>
+                    </div>
+                </div>
+                <Virtualize Items="EventList" Context="data" ItemSize="9">
+                    <div class="d-flex align-items-center mb-5">
+                        <OneUX_CardView Route="@("event/"+data.Id+"/"+data.Name)" LabelText="@data.Name" MutedText="" ImageUrl="@data.CoverImage">
+                            <div class="font-size-sm text-muted font-weight-bold mt-1">
+                                @if (data.Deadlines.EventStart.Date > DateTime.UtcNow.Date)
+                                {
+                                    EventDaysLeft = data.Deadlines.EventStart.Subtract(DateTime.UtcNow).ToString("dd");
+                                    EventStatus = EventDaysLeft + " Days Left";
+                                }
+                                else if (data.Deadlines.EventStart.Date <= DateTime.UtcNow.Date && data.Deadlines.EventEnd.Date >= DateTime.UtcNow.Date)
+                                {
+                                    EventStatus = "Event Started";
+                                }
+                                else
+                                {
+                                    EventStatus = "Event is End";
+                                }
+
+                            </div>
+                        </OneUX_CardView>
+                    </div>
+                </Virtualize>
+            }
+        </div>
+        <!--end:: Recommended Event Display-->
+        <!--begin:: Recommended Public Groups-->
+        <div class="mb-5">
+            @if (GroupList != null && GroupList.Count > 0)
+            {
+                <div class="d-flex align-items-center justify-content-between border px-2 py-1 mb-3">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="font-weight-bold pt-2">Community</h5>
+                    </div>
+                    @*<div class="d-flex flex-column align-items-center">
+                            <a class="btn btn-sm btn-light-primary" @onclick="CallCreateNewGroupModal" data-toggle="tooltip" data-placement="top" title="New Group">
+                                <i class="far fa-plus-square"></i>&nbsp;Create
+                            </a>
+                        </div>*@
+                </div>
+
+                <Virtualize ItemsProvider="LoadGroupsData" Context="group" ItemSize="5">
+                    <OneUX_CardView Route="@("community/" + group.Id+"/"+group.Name)" LabelText="@group.Name" MutedText="@group.Privacy.ToString()" ImageUrl="@group.CoverImage">
+                        @if (group.MemberIds.Contains(UXUtility.LoggedInUser.Id))
+                        {
+                            <a class="btn btn-sm btn-primary py-1 px-3 disabled"><i class="fas fa-check icon-nm"></i>&nbsp;Joined</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-primary py-1 px-3" @onclick="@(()=>JoinPublicGroup(group.Id))"><i class="fas fa-plus icon-nm"></i>&nbsp;Join</a>
+                        }
+                    </OneUX_CardView>
+                </Virtualize>
+
+            }
+        </div>
+        <!--end:: Recommended Public Groups-->
+
+    </div>
+</div>
+
+
+@code{
+   
+
+
+}

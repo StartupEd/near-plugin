@@ -1,0 +1,31 @@
+﻿@using StartupEd.Engine.MarketNetwork
+<!-- Modal-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@Modal" OnValidSubmit="SubmitModel">
+                    <DataAnnotationsValidator />
+                    <OneUX_InputBox @bind-Value="@ColumnName" Label="New Column" Placeholder="Column Name" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal" @onclick="ClearColumnName">Close</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold" data-dismiss="@ModalClass">Create</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    
+
+}

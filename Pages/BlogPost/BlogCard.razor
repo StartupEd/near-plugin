@@ -1,0 +1,125 @@
+﻿
+<div class="card card-custom gutter-b ribbon ribbon-top">
+    <div class="ribbon-target bg-danger" style="top: -2px; right: 100px;">@Model.BlogViewCounter.Values.Sum(x => x.Count) Views</div>
+    <div class="card-body">
+        <!--begin::Top-->
+        <div class="d-flex align-items-center">
+            <!--begin::Symbol-->
+            <a href="profile/@Model.Core.CreatorId" class="symbol symbol-40 symbol-light-success mr-5">
+                <span class="symbol-label">
+                    @if (Profile.AvatarImageUrl != null)
+                    {
+                        <img src="@Profile.AvatarImageUrl" alt="" class="h-100 align-self-end w-40px">
+                    }
+                    else
+                    {
+                        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="" class="h-100 w-40px align-self-end">
+                    }
+                </span>
+            </a>
+
+            <!--end::Symbol-->
+            <!--begin::Info-->
+            <div class="d-flex flex-column flex-grow-1">
+                <a href="profile/@Model.Core.CreatorId" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">@Model.AuthorName</a>
+                <span class="text-muted font-weight-bold">@RelativeDateTime.SetRelativeDate(Model.Core.CreatedAt)</span>
+            </div>
+            <!--end::Info-->
+            @if (Model.BookmarkedByUserIds != null && Model.BookmarkedByUserIds.Contains(UXUtility.LoggedInUser.Id))
+            {
+                <a class="font-weight-bold" href="" @onclick="UnbookmarkBlog" @onclick:preventDefault>
+                    <i class="fas fa-star text-primary"></i>
+                </a>
+            }
+            else
+            {
+                <a class="font-weight-bold" href="" @onclick="BookmarkBlog" @onclick:preventDefault>
+                    <i class="fas fa-star"></i>
+                </a>
+            }
+            <!--begin::Dropdown-->
+            @if (Model.Core.CreatorId == UXUtility.LoggedInUser.Id)
+            {
+                <OneUX_DotToolbar>
+                    <ul class="navi navi-hover">
+                        <li class="navi-item">
+                            <a href="blog/@Model.Id/@Model.Name/edit" class="navi-link">
+                                <span class="navi-icon"><i class="far fa-edit"></i></span>
+                                <span class="navi-text">Edit</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a href="" class="navi-link" @onclick="(() => CallShowSweetAlertDeleteBlog(Model.Id))" @onclick:preventDefault>
+                                <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                <span class="navi-text">Delete</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a href="blog/@Model.Id/@Model.Name/insight" class="navi-link">
+                                <span class="navi-icon"><i class="fas fa-eye"></i></span>
+                                <span class="navi-text">Insights</span>
+                            </a>
+                        </li>
+                    </ul>
+                </OneUX_DotToolbar>
+            }
+            <!--end::Dropdown-->
+        </div>
+        <!--end::Top-->
+        <!--begin::Bottom-->
+        <div class="pt-4">
+            <!--begin::Image-->
+            <div class="bgi-no-repeat bgi-size-cover rounded min-h-250px" style="background-image: url(@Model.CoverImage)" @onclick="(() => HandleClick(Model.Name,Model.Id))"></div>
+            <!--end::Image-->
+            <h3 class="mt-5">@Model.Name</h3>
+            <p class="text-dark-75 font-size-lg font-weight-normal mt-5 mb-2">
+                @if (Model.BlogSummary != null && Model.BlogSummary.Length > 400)
+                {
+                    Post = Model.BlogSummary.Substring(0, 400) + "...";
+                }
+                else
+                {
+                    Post = Model.BlogSummary;
+                }
+                @((MarkupString)Post)
+            </p>
+            <a href="blog/@Model.Id/@Model.Name" class="btn btn-primary btn-hover-light-primary">Read More</a>
+            <!--end::Text-->
+        </div>
+        <!--end::Bottom-->
+        <div class="separator separator-solid mt-7 mb-4"></div>
+        <div class="d-flex flex-column-fluid justify-content-between">
+            @if (Model != null)
+            {
+                <BlogReactions Model="@Model" OnReactionClick="LikeMe" OnReactionCountClick="CallReactionListModal" />
+            }
+            <div class="text-center mr-30">
+                <a href="#" class="btn btn-hover-text-warning btn-hover-icon-warning btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2" @onclick="ShowComments" @onclick:preventDefault>
+                    <span class="svg-icon svg-icon-md svg-icon-dark-25 pr-2">
+                        <img src="_content/OneUX/assets/imgs/reactions/comments.svg" alt="startuped-icon" class="reaction-icon_img" width="24" />
+                    </span>@Model.Comments.Count()
+                </a>
+            </div>
+            @*<div class="text-center ml-10 px-10">
+                   <OneUX_ShareButton></OneUX_ShareButton>
+                </div>*@
+        </div>
+        <div class="card-footer">
+            @if (IsShow)
+            {
+                <OneUX_CommentBox OnClickCallback="@SubmitComment" />
+
+                @if (Model.Comments != null)
+                {
+                    foreach (var Comment in Model.Comments.OrderByDescending(x => x.CommentedAt))
+                    {
+                        <XComment CommentModel="@Comment" OnCommentChange="CommentUpdateAsync" OnDeleteComment="CommentDeleteAsync" />
+                    }
+                }
+            }
+
+        </div>
+        <!--end::Body-->
+    </div>
+</div>
+

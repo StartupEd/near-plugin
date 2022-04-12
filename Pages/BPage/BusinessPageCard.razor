@@ -1,0 +1,81 @@
+
+<div class="card card-custom gutter-b">
+    <div class="card-body">
+        <div class="d-flex">
+            <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                <a href="businesspage/@Page.Id/@Page.Name" class="symbol symbol-100">
+                    @if (Page.CoverImage != null)
+                    {
+                        <img src="@Page.CoverImage" alt="coverImg">
+                    }
+                    else
+                    {
+                        <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+                    }
+                </a>
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between flex-wrap mt-1">
+                    <div class="d-flex mr-3">
+                        <a href="businesspage/@Page.Id/@Page.Name" class="text-dark-75 font-size-h5 font-weight-bold mr-3">@Page.Name</a>
+                        <span class="label label-light-success label-inline font-weight-bolder mr-1">@Page.Category</span>
+                    </div>
+                    <div class="d-flex my-lg-0 my-0">
+                        @if (!Page.PageLikes.Any(pl => pl.AuthorId == UXUtility.LoggedInUser.Id && pl.IsLiked == true))
+                        {
+                            <button class="btn btn-light-primary" @onclick="@PageLikes">
+                                <i class="far fa-thumbs-up"></i> Like
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" @onclick="PageUnLike">
+                                <i class="fas fa-thumbs-up"></i> Unlike
+                            </button>
+                        }
+
+                        @if (Page.Core.CreatorId == UXUtility.LoggedInUser.Id)
+                        {
+                            <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-ver">
+                                <ul class="navi navi-hover">
+                                    <li class="navi-item">
+                                        <a href="businesspage/@Page.Id/@Page.Name/edit" class="navi-link">
+                                            <span class="navi-icon"><i class="far fa-edit"></i></span>
+                                            <span class="navi-text">Edit</span>
+                                        </a>
+                                    </li>
+                                    <li class="navi-item">
+                                        <a href="" class="navi-link" @onclick="(() => CallShowSweetAlertDeletePage(Page.Id))" @onclick:preventDefault>
+                                            <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                            <span class="navi-text">Delete</span>
+                                        </a>
+                                    </li>
+                                    <li class="navi-item">
+                                        <a href="businesspage/@Page.Id/@Page.Name/insight" class="navi-link">
+                                            <span class="navi-icon"><i class="fas fa-eye"></i></span>
+                                            <span class="navi-text">Insights</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </OneUX_DotToolbar>
+                        }
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="d-flex flex-column flex-grow-1 pr-8">
+                        <div class="d-flex flex-wrap mb-1">
+                            <a class="text-dark-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2"><i class="flaticon2-new-email mr-2 font-size-lg"></i>@Page.ContactInfo.Email</a>
+                            <a class="text-dark-50 font-weight-bold"><i class="fas fa-map-marker-alt mr-2 font-size-lg"></i>@Page.Address.Country</a>
+                        </div>
+                        <div class="d-flex flex-wrap my-1">
+                            <span class="text-dark-50 font-weight-bold">
+                                <i class="far fa-thumbs-up  mr-2 font-size-lg"></i>@Page.PageLikes.Where(pl => pl.IsLiked == true).ToList().Count&nbsp;Likes
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+<div class="modal fade" id="newMemberModal" tabindex="-1" role="dialog" aria-labelledby="newMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newMemberModalLabel">Add New Member</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@Model" OnValidSubmit="SubmitModel">
+                    <DataAnnotationsValidator />
+                    @*<OneUX_InputBox @bind-Value="@EmailId" Label="Email Id" Placeholder="Enter EmailId" />*@
+                    <OneUX_InputSelect @bind-Value="@UserId" Id="priority-list" ValidationFor="@(() => UserId)" Label="New Member" Title="Add Member">
+                        @foreach (var type in ConnectedUsers)
+                        {
+                            <option value="@type.Core.Id">@type.Name</option>
+                        }
+                    </OneUX_InputSelect>
+                    <OneUX_InputSelect @bind-Value="@Permission" Id="priority-list" ValidationFor="@(() => Permission)" Label="Permission" Title="Select Type">
+                        @foreach (var type in MemberStatus)
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </OneUX_InputSelect>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold" data-dismiss="">Submit</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+   
+
+}

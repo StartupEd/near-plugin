@@ -1,0 +1,66 @@
+﻿@page "/root/asidemenu"
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!--begin::Card-->
+                <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+                    <div class="card-header">
+                        <div class="card-title align-items-start flex-column">
+                            <h3 class="card-label font-weight-bolder text-dark">Create New Aside Menu</h3>
+                            <span class="text-muted font-weight-bold font-size-sm mt-1">You can Create your Own Group</span>
+                        </div>
+                    </div>
+                    <!--begin::Form-->
+                    <EditForm class="form text-left" id="signupForm" Model="@AsideMenu" OnValidSubmit="SubmitAsideMenuAsync">
+                        <DataAnnotationsValidator />
+                        <div class="card-body">
+                            <div class="row justify-content-center py-8 px-8 pb-md-10 px-md-0">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold text-dark-75">Menu Name</label>
+                                        <input type="text" class="form-control" @bind-value="@AsideMenu.Name" placeholder="Enter menu name" />
+                                        <span class="form-text text-muted">Enter menu name</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="font-weight-bold text-dark-75">FontAwesome Icon</label>
+                                        <input type="text" class="form-control" @bind-value="@AsideMenu.Icon" placeholder="FontAwesome css icon class" />
+                                        <span class="form-text text-muted">Enter fontawesome css icon class</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="font-weight-bold text-dark-75">Hypertext Route</label>
+                                        <input type="text" class="form-control" @bind-value="@AsideMenu.Route" placeholder="Route for menu" />
+                                        <span class="form-text text-muted">Enter hypertext route for menu</span>
+                                    </div>
+
+                                    <OneUX_InputSelect Id="asideMenuType" Label="Menu Type" @bind-Value="@AsideMenu.Type" Title="Select">
+                                        @foreach (var type in Enum.GetValues(typeof(MenuType)))
+                                        {
+                                            <option value="@type">@type</option>
+                                        }
+                                    </OneUX_InputSelect>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-9 text-lg-right">
+                                        <button id="createmenuBtn" class="btn btn-primary font-weight-bold">Submit</button>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </EditForm>
+                        <!--end::Form-->
+                </div>
+                <!--end::Card-->
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+  
+
+}

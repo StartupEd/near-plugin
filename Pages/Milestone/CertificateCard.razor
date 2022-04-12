@@ -1,0 +1,52 @@
+﻿<!--begin::Card-->
+ <div class="card card-custom gutter-b card-stretch">
+     
+     <div class="card-body">
+         <div class="d-flex justify-content-center align-items-center">
+             <img class="mw-425 w-350px" src="_content/OneUX/assets/imgs/StartupEd-Logo-Min.png" alt="logo">
+         </div>
+         <div class="d-flex justify-content-center mb-5 pt-0">
+             <span class="font-size-h3">INCUBATION CLOUD</span>
+         </div>
+         <div class="d-flex justify-content-between pt-2">
+             <div class="d-flex flex-column px-0">
+                 <span class="font-size-h5 pt-6">@Certificate.Core.CreatedAt.ToString("dd-MMMM-yyyy")</span>
+             </div>
+             <div class="d-flex flex-column px-0">
+                 <div class="text-right symbol symbol-70">
+                     @if (@Certificate.CoverImage != null)
+                     {
+                         <img src="@Certificate.CoverImage" alt="coverImg">
+                     }
+                     else
+                     {
+                         <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="coverImg">
+                     }
+                 </div>
+             </div>
+         </div>
+         <div class="d-flex justify-content-center mt-5 px-0">
+             <span class="font-size-h2">This certificate is proudly presented to</span>
+         </div>
+         <div class="d-flex justify-content-center align-items-center mt-5 px-0">
+             <span style="font-family:'Brush Script MT', cursive;font-size:40px">@Certificate.Name</span>
+         </div>
+         <hr class="border-2 m-0">         
+         <div class="d-flex flex-column border-2 align-items-center mt-5 px-0">
+             <span class="font-weight-bolder" style="font-size:24px">For exhibiting exemplary performance.</span>
+         </div>       
+     </div>
+   
+        <!--begin::Footer-->
+        <div class="card-footer d-flex justify-content-end align-items-center">         
+                <div class="d-flex align-items-center mr-7">
+                    <button type="button" class="btn btn-primary btn-sm text-uppercase" @onclick="@(()=>OnViewDetailClick(Certificate.EventId))">View detail</button>
+                </div>  
+        </div>
+        <!--end::Footer-->
+    </div>
+<!--end::Card-->
+
+@code {
+  
+}

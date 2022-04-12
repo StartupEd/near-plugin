@@ -1,0 +1,346 @@
+﻿@using StartupEd.Engine.MarketNetwork
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+
+<div class="row w-100">
+    <div class="col-lg-10">
+        <div class="card card-custom gutter-b">
+            <div class="card-body pb-3">
+                <!--begin::Details-->
+                <div class="d-flex mb-9">
+                    <!--begin: Pic-->
+                    <div class="flex-shrink-0 mt-lg-0 mt-3">
+                        <div class="symbol symbol-80 mr-5 align-self-start">
+                            @if (ProfileModel.AvatarImageUrl != null)
+                            {
+                                <img src="@ProfileModel.AvatarImageUrl" alt="image" />
+                            }
+                            else
+                            {
+                                <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="image" />
+                            }
+                        </div>
+                    </div>
+                    <!--end::Pic-->
+                    <!--begin::Info-->
+                    <div class="flex-grow-1">
+                        <!--begin::Title-->
+                        <div class="d-flex justify-content-between flex-wrap mt-1">
+                            <div class="d-flex mr-3">
+                                <a class="text-dark-75 font-size-h5 font-weight-bold mr-3">@UserModel.Name</a>
+                                <span class="label label-light-success label-inline font-weight-bolder mr-1">@UserModel.Persona</span>
+                            </div>
+                            @if (UserModel.Core.Id != UXUtility.LoggedInUser.Id)
+                            {
+                                <div class="d-flex my-lg-0 my-0">
+                                    @if (!UserModel.ConnectionIds.Contains(UXUtility.LoggedInUser.Id))
+                                    {
+                                        @if (ConnectButton == "Cancel Request")
+                                        {
+                                            <a href="" @onclick="CancelSentRequestAsync" @onclick:preventDefault class="btn btn-sm btn-primary font-weight-bolder mr-3">
+                                                <i class="fas fa-handshake"></i>
+                                                @ConnectButton
+                                            </a>
+                                        }
+                                        else if (ConnectButton == "Confirm Request")
+                                        {
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-primary font-weight-bolder mr-3 dropdown-toggle" type="button" id="connectionButtonDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @ConnectButton
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="connectionButtonDropdown">
+                                                    <a class="dropdown-item" href="" @onclick="AcceptRequestAsync" @onclick:preventDefault>Accept Request</a>
+                                                    <a class="dropdown-item" href="" @onclick="RejectConnectionRequest" @onclick:preventDefault>Delete Request</a>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a href="" @onclick="CallConnectionAlertModal" @onclick:preventDefault class="btn btn-sm btn-primary font-weight-bolder mr-3">
+                                                <i class="fas fa-handshake"></i>
+                                                @ConnectButton
+                                            </a>
+                                        }
+                                        <a href="#" class="btn btn-sm btn-primary font-weight-bolder disabled mr-3">
+                                            <i class="fa fa-envelope-open-text"></i> Message
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="" @onclick="GoToInboxPage" @onclick:preventDefault class="btn btn-sm btn-primary font-weight-bolder mr-3">
+                                            <i class="fa fa-envelope-open-text"></i> Message
+                                        </a>
+                                    }
+                                    @if (UXUtility.LoggedInUser.Id != null)
+                                    {
+                                        <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-ver">
+                                            @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                            {
+                                                <a class="dropdown-item" href="" @onclick="EditUserProfile" @onclick:preventDefault>Edit Profile</a>
+                                                <a class="dropdown-item" href="" @onclick="DeactivateUserAccount" @onclick:preventDefault>Deactivate Account</a>
+                                            }
+                                            else
+                                            {
+                                                @if (UserModel.ConnectionIds.Contains(UXUtility.LoggedInUser.Id))
+                                                {
+                                                    <a class="dropdown-item" href="" @onclick="RemoveConnectionAsync" @onclick:preventDefault>Remove Connection</a>
+                                                }
+                                                <a class="dropdown-item" href="" @onclick="SubmitBlockUserOnNetwork" @onclick:preventDefault>Block</a>
+                                                <a class="dropdown-item" href="" @onclick="CallUserReportModal" @onclick:preventDefault>Report</a>
+                                            }
+                                        </OneUX_DotToolbar>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <!--end::Title-->
+                        <!--begin::Content-->
+                        <div class="d-flex flex-wrap justify-content-between mt-1">
+                            <div class="d-flex flex-column flex-grow-1 pr-8">
+                                <div class="d-flex flex-wrap mb-1">
+                                    <a class="text-dark-50 font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                        <i class="flaticon2-new-email mr-2 font-size-lg">
+                                        </i>@UserModel.Email
+                                    </a>
+                                    <a class="text-dark-50 font-weight-bold">
+                                        <i class="flaticon2-placeholder mr-2 font-size-lg">
+                                        </i>@UserModel.Address.Country
+                                    </a>
+                                </div>
+                                <div class="d-flex flex-wrap my-1">
+                                    @if (UserModel.Id == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                    {
+                                        @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                        {
+                                            <a href="network/user/connections/@UserModel.Id" class="text-hover-primary font-weight-bolder mr-lg-8 mr-3">
+                                                <i class="flaticon-users text-primary mr-2 font-size-lg"></i>@UserModel.ConnectionIds.Count&nbsp;&nbsp;Connections
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="network/user/connections" class="text-hover-primary font-weight-bolder mr-lg-8 mr-3">
+                                                <i class="flaticon-users text-primary mr-2 font-size-lg"></i>@UserModel.ConnectionIds.Count&nbsp;&nbsp;Connections
+                                            </a>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <span href="#" class="text-dark-50 font-weight-bold">
+                                            <i class="flaticon-users mr-2 font-size-lg"></i>@UserModel.ConnectionIds.Count&nbsp;&nbsp;Connections
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Info-->
+                </div>
+                <!--end::Details-->
+
+                <div class="separator separator-solid"></div>
+
+                <!--begin::Items-->
+                <ul class="nav nav-tabs nav-bold nav-tabs-line d-flex align-items-center flex-wrap mt-2 border-bottom-0">
+
+                    @foreach (var tab in Tabs)
+                    {
+                        @switch (tab.Key)
+                        {
+                            case "About":
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1_1">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Ideas":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_2">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Community":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_3">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Events":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_4">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Incubation Programs":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_5">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Business Pages":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_6">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            case "Entrepreneurial Education":
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_1_7">
+                                        <div class="d-flex align-items-center flex-lg-fill">
+                                            <span class="mr-4">
+                                                <i class="@tab.Value icon-xl text-primary">
+                                                </i>
+                                            </span>
+                                            <div class="d-flex flex-column text-dark-75">
+                                                <span class="font-weight-bolder font-size-h5">@tab.Key</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                break;
+                            default:
+                                // code block
+                                break;
+                        }
+                    }
+                    <!--end::Item-->
+                </ul>
+                <!--begin::Items-->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2">
+        <div class="card card-custom card-stretch gutter-b">
+            @if (ProfileModel.Social.FacebookUrl == null && ProfileModel.Social.TwitterUrl == null && ProfileModel.Social.GithubUrl == null && ProfileModel.Social.LinkedInUrl == null && ProfileModel.Social.InstagramUrl == null && ProfileModel.Social.WebUrl == null)
+            {
+                @if (UserModel.Id == UXUtility.LoggedInUser.Id)
+                {
+                    <a href="settings/social/@UserModel.Id" class="btn btn-secondary btn-sm m-5" id="addSocialLinks">
+                        Add Social Links
+                    </a>
+                }
+                else
+                {
+                    <span class="label label-light-secondary label-inline font-weight-bolder m-5 p-5">No Social Links</span>
+                }
+            }
+            <div class="card-header border-0 pt-8 h-100">
+                <div class="d-flex justify-content-between flex-wrap">
+                    @if (ProfileModel.Social.FacebookUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.FacebookUrl" target="_blank" class="btn btn-icon btn-circle btn-light-facebook mr-2 mb-8" data-toggle="tooltip" title="facebook">
+                            <i class="socicon-facebook"></i>
+                        </a>
+                    }
+
+                    @if (ProfileModel.Social.TwitterUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.TwitterUrl" target="_blank" class="btn btn-icon btn-circle btn-light-twitter mr-2" data-toggle="tooltip" title="twitter">
+                            <i class="socicon-twitter"></i>
+                        </a>
+                    }
+                    @if (ProfileModel.Social.GithubUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.GithubUrl" target="_blank" class="btn btn-icon btn-circle btn-light-dark mr-2 mb-8" data-toggle="tooltip" title="github">
+                            <i class="socicon-github"></i>
+                        </a>
+                    }
+                    @if (ProfileModel.Social.LinkedInUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.LinkedInUrl" target="_blank" class="btn btn-icon btn-circle btn-light-linkedin mr-2" data-toggle="tooltip" title="linkedin">
+                            <i class="socicon-linkedin"></i>
+                        </a>
+                    }
+                    @if (ProfileModel.Social.InstagramUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.InstagramUrl" target="_blank" class="btn btn-icon btn-circle btn-light-linkedin mr-2" data-toggle="tooltip" title="instagram">
+                            <i class="socicon-instagram"></i>
+                        </a>
+                    }
+                    @if (ProfileModel.Social.WebUrl != null)
+                    {
+                        <a href="@ProfileModel.Social.WebUrl" target="_blank" class="btn btn-icon btn-circle btn-light-warning mr-2" data-toggle="tooltip" title="website-link">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    }
+                </div>
+                <!--end::Header-->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--start::Connection Note Section-->
+<PersonalizeNoteModal @ref="ConfirmConnectionRequest" UserName="@UserModel.Name" ButtonClickCallBack="SendConnectionRequest">
+    <div class="form-group mb-1">
+        <label>Message(Optional)</label>
+        <textarea class="form-control" @bind="@MessageValue" rows="3" maxlength="200" />
+        <span class="form-text text-muted">maximum character 200</span>
+    </div>
+</PersonalizeNoteModal>
+<!--end::Connection Note Section-->
+<!--start::Connection Note Section-->
+<ReportModal @ref="ConfirmReportRequest" ReportClickCallBack="SubmitProfileReport" />
+<!--end::Connection Note Section-->
+
+@code{
+   
+
+}

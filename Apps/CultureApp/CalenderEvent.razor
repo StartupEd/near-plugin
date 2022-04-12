@@ -1,0 +1,148 @@
+﻿@page "/calenderevent"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@using System.Net.Http
+@using System.Threading.Tasks
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.DependencyInjection
+@using StartupEd.Engine.MarketNetwork
+
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <h3>CalenderEvent</h3>
+        <div class="row">
+            <div class="col-lg-3">
+                <!--begin::Card-->
+                <div class="card card-custom card-stretch">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">
+                                Events
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="calendar-toolbar">
+                            <button class="toolbar-button"></button>
+                        </div>
+                        <div class="card-content">
+                            <AddEvent SelectedDay="selectedDay" />
+                            <EventList SelectedDay="selectedDay" />
+                        </div>
+                        @*<div class="card-content">
+                                <input type="text" class="fluent-input" placeholder="Event Subject" />
+                                <input type="time" class="fluent-input" placeholder="Event Start Date" />
+                                <input type="time" class="fluent-input" placeholder="Event End Date" />
+                            </div>
+                        *@
+                    </div>
+                </div>
+                <!--end::Card-->
+            </div>
+            <div class="col-lg-9">
+                <!--begin::Card-->
+                <div class="card card-custom card-stretch">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">
+                                Basic Calendar
+                            </h3>
+                        </div>
+
+                    </div>
+                    <div class="card card-custom">
+                        <div class="card-body" style=" background-color: white; text-emphasis-color:black">
+                            <header>
+                                <AuthorizeView>
+                                    <NotAuthorized>
+                                        <p class="ms-fontSize-14 ms-fontWeight-regular ">Please Sign In</p>
+                                        <a href="#" class="microsoft-login-button shadow-effect"><img src="_content/OneUX/assets/imgs/microsoft.png" />Sign In With Microsoft</a>
+
+                                    </NotAuthorized>
+                                </AuthorizeView>
+                            </header>
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-9">
+                                    <Calendar>
+                                        <DayTemplate Context="day">
+                                            @{
+                                                string currentDayClass = day.Date == DateTime.Now.Date ? "current-day" : "";
+                                                string selectedDayClass = day == selectedDay ? "selected-day" : "";
+                                            }
+                                            @if (!day.IsEmpty)
+                                            {
+                                                <div class="day shadow-effect @currentDayClass @selectedDayClass" @onclick="() => selectedDay = day">
+                                                    <h3 class="ms-fontSize-14 ms-fontWeight-regular">@day.DayNumber</h3>
+                                                    @if (day.Events != null && day.Events.Count != 0)
+                                                    {
+                                                        var firstEvent = day.Events.FirstOrDefault();
+                                                        <div class="day-event @firstEvent.Color">
+                                                            @if (firstEvent.Subject.Length > 25)
+                                                            {
+                                                                @firstEvent.Subject.Substring(0, 25)<text>...</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                @firstEvent.Subject
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+
+                                        </DayTemplate>
+                                    </Calendar>
+                                    <div class="col-sm-12 col-md-12 col-lg-9">
+
+                                        <AddEvent SelectedDay="selectedDay" />
+                                        <EventList SelectedDay="selectedDay" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code
+{
+    private CalendarDay selectedDay = new CalendarDay
+    {
+        Date = DateTime.Now
+
+    };
+
+    protected override void OnInitialized()
+    {
+        AddEvent.OnEventAdded += () =>
+        {
+            StateHasChanged();
+        };
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+    {
+        {"Culture App","/app/culture"},
+        { "Calender Event","/calenderevent"}
+    };
+
+}
+
+
+

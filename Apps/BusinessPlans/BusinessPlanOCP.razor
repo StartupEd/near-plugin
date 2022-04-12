@@ -1,0 +1,408 @@
+﻿@page "/businessplan/create"
+@page "/businessplan/{BplanId}/{BplanName}/edit"
+@inherits BusninessPlanOCPBase
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<!--<div class="d-flex flex-column-fluid">
+
+                <!--begin: Wizard-->
+<!--<div class="wizard wizard-4" id="businessPlanWizard" data-wizard-state="step-first" data-wizard-clickable="true">-->
+<!--begin: Wizard Nav-->
+<!--<div class="wizard-nav">
+    <div class="wizard-steps">-->
+<!--begin::Wizard Step 1 Nav-->
+<!--<div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="step1">
+    <div class="wizard-wrapper">
+        <div class="wizard-number">
+            1
+        </div>
+        <div class="wizard-label">
+            <div class="wizard-title">
+                Information
+            </div>
+            <div class="wizard-desc">Enter Venture Details</div>
+        </div>
+    </div>
+</div>-->
+<!--end::Wizard Step 1 Nav-->
+<!--begin::Wizard Step 2 Nav-->
+<!--<div class="wizard-step" data-wizard-type="step" id="step2">
+    <div class="wizard-wrapper">
+        <div class="wizard-number">
+            2
+        </div>
+        <div class="wizard-label">
+            <div class="wizard-title">
+                Market
+            </div>
+            <div class="wizard-desc">Enter Market Details</div>
+        </div>
+    </div>
+</div>-->
+<!--end::Wizard Step 2 Nav-->
+<!--begin::Wizard Step 3 Nav-->
+<!--<div class="wizard-step" data-wizard-type="step" id="step3">
+    <div class="wizard-wrapper">
+        <div class="wizard-number">
+            3
+        </div>
+        <div class="wizard-label">
+            <div class="wizard-title">
+                Plan Details
+            </div>
+            <div class="wizard-desc">Plan Your Venture</div>
+        </div>
+    </div>
+</div>-->
+<!--end::Wizard Step 3 Nav-->
+<!--begin::Wizard Step 4 Nav-->-->
+<!--@*<div class="wizard-step" data-wizard-type="step">
+    <div class="wizard-wrapper">
+        <div class="wizard-number">
+            4
+        </div>
+        <div class="wizard-label">
+            <div class="wizard-title">
+                Forecast(Optional)
+            </div>
+        </div>
+    </div>
+</div>*@-->
+<!--end::Wizard Step 4 Nav-->
+<!--<div class="wizard-step" data-wizard-type="step" id="step4">
+    <div class="wizard-wrapper">
+        <div class="wizard-number">
+            4
+        </div>
+        <div class="wizard-label">
+            <div class="wizard-title">
+                Review and Submit
+            </div>
+            <div class="wizard-desc">Review Your Details Here</div>
+        </div>
+    </div>
+</div>-->
+<!--end::Wizard Step 4 Nav-->
+<!--</div>
+</div>-->
+<!--end: Wizard Nav-->
+
+
+
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <!--begin: Wizard-->
+                <div class="wizard wizard-2" id="businessPlanWizard" data-wizard-state="step-first" data-wizard-clickable="false">
+                    <!--begin: Wizard Nav-->
+                    <div class="wizard-nav border-right py-8 px-8 py-lg-20 px-lg-10">
+                        <div class="wizard-steps">
+                            <!--begin::Wizard Step 1 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <div class="wizard-number">
+                                            1
+                                        </div>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <h3 class="wizard-title">Information</h3>
+                                        <div class="wizard-desc">Enter Venture Details</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 1 Nav-->
+                            <!--begin::Wizard Step 2 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" id="incubationstep2">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <div class="wizard-number">
+                                            2
+                                        </div>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <div class="wizard-title">
+                                            Market
+                                        </div>
+                                        <div class="wizard-desc">Enter Market Details</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 2 Nav-->
+                            <!--begin::Wizard Step 3 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" id="incubationstep3">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <div class="wizard-number">
+                                            3
+                                        </div>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <div class="wizard-title">
+                                            Plan Details
+                                        </div>
+                                        <div class="wizard-desc">Plan your venture</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 3 Nav-->
+                            <!--begin::Wizard Step 4 Nav-->
+                            <div class="wizard-step" data-wizard-type="step" id="incubationstep4">
+                                <div class="wizard-wrapper">
+                                    <div class="wizard-icon">
+                                        <div class="wizard-number">
+                                            4
+                                        </div>
+                                    </div>
+                                    <div class="wizard-label">
+                                        <div class="wizard-title">
+                                            Review and Submit
+                                        </div>
+                                        <div class="wizard-desc">Review your details here</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Wizard Step 4 Nav-->
+
+                        </div>
+                    </div>
+                    <!--end: Wizard Nav-->
+                    <!--begin: Wizard Body-->
+                    <div class="wizard-body py-8 px-8 py-lg-20 px-lg-10">
+                        <EditForm class="form" novalidate="novalidate" id="businessPlanForm" Model="@Model" OnSubmit="SubmitModel">
+                            <DataAnnotationsValidator />
+                            <!--begin: Wizard Form-->
+                            <div class="dataTables_scrollBody" style="position: relative; overflow-y: auto; overflow-x:hidden; width: 100%; max-height: 50vh;">
+
+                                <!--begin: Wizard Step 1-->
+                                <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+                                    <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                                        <CascadingValue Value="@LabelStyle" Name="Label Class">
+                                            <CascadingValue Value="@ElementWrapperStyle" Name="Wrapper Class">
+                                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                                    <div class="mb-10 h3 font-weight-bold text-dark">Enter your Information</div>
+                                                    <OneUX_InputBox @bind-Value="Model.Name" Label="Full Name" PlaceholderText="Enter your Name" />
+                                                    &nbsp;<ValidationMessage For="@(()=>Model.Name)"></ValidationMessage>
+
+
+                                                    <OneUX_InputBox @bind-Value="Model.Email" Label="Email" PlaceholderText="Ex- abc@gmail.com" />
+                                                    <pre class="tab1"><ValidationMessage For="@(()=>Model.Email)" /></pre>
+
+                                                    <OneUX_InputBox @bind-Value="Model.ContactNo" Label="ContactNo" MaxLength="10" PlaceholderText="Ex- 9999999999" />
+                                                    &nbsp;<ValidationMessage For="@(()=>Model.ContactNo)" />
+
+
+                                                    <OneUX_InputBox @bind-Value="Model.VentureName" Label="Venture Name" PlaceholderText="Venture Name" StarValidation="true" />
+                                                    <OneUX_TextArea @bind-Value="Model.ShortDescription" Label="Description" PlaceholderText="Short Description..." />
+
+                                                    @if (AllEvents != null && AllEvents.Count > 0)
+                                                    {
+
+                                                        <OneUX_InputSelect @bind-Value="Model.EventId" Label="Event" Id="eventList" Title="Select Event" class="form-control">
+                                                            <option>none</option>
+                                                            @foreach (var Event in AllEvents)
+                                                            {
+                                                                <option value="@Event.Id">@Event.Name</option>
+                                                            }
+                                                        </OneUX_InputSelect>
+                                                    }
+
+                                                    <OneUX_InputBox @bind-Value="Model.TeamMember" Label="Team Members" PlaceholderText="Enter Email Ids of team members" />
+                                                </div>
+                                                <!--end: Wizard Step 1-->
+                                                <!--begin: Wizard Step 2-->
+                                                <div class="pb-5" data-wizard-type="step-content">
+                                                    <div class="mb-10 h3 font-weight-bold text-dark">Business Market</div>
+                                                    <OneUX_MultiSelect Label="Focus Industry" ElementId="industryList" MultipleValues="multiple" PlaceholderText="Select Industry">
+                                                        @foreach (var industry in FocusIndustry)
+                                                        {
+                                                            <option value=@industry>@industry</option>
+                                                        }
+                                                    </OneUX_MultiSelect>
+                                                    <div class="mb-10 h3 font-weight-bold text-dark">Choose Your Business Model</div>
+                                                    <div class="form-group" id="businessModel">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.B2BSoftware" /><span></span>&nbsp;<b>Business-to-Buisness Software</b>
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I’m building software primarily for other organizations to use (e.g. Startup Rocket, Asana, Trello, etc…)
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.B2BTangible" /><span></span>&nbsp; <b>Business-to-Business Tangible Goods</b>
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I'm building real-life things for other organizations to buy (e.g. airPes, tractors, speciality tools)
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.ConsumerSoftware" /><span></span>&nbsp;<b>Consumer Software</b>
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I’m building an application for general consumers (this includes eCommerce, social media apps, games, lead-gen sites, etc…)
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.ConsumerTangible" /><span></span>&nbsp;<b>Consumer Tangible Goods</b>
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I’m building real-life things for general consumers to buy (e.g. IoT devices, Furniture, Stuffed Animals, Food products, etc…)
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.DecentralizedNetwork" /><span></span>&nbsp;<b>Decentralized Network</b>
+
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I’m building decentralized protocol(s) using cryptographically secure tokens and distributed ledger technology
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <InputCheckbox @bind-Value="@Model.MarketplaceSoftware" /><span></span>&nbsp;<b>Marketplace Software</b>
+
+                                                        </label>
+                                                        <span class="form-text text-muted">
+                                                            I’m taking a cut from buyer/seller transactions. (e.g. Uber, AirBnB, eBay, etc…)
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <!--end: Wizard Step 2-->
+                                                <!--begin: Wizard Step 3-->
+                                                <div class="pb-5" data-wizard-type="step-content">
+                                                    <div class="mb-10 h3 font-weight-bold text-dark">Setup Your Venture Plan Today.</div>
+                                                    <OneUX_TextArea @bind-Value="@Model.ProblemStatement" Label="Problem Statement" PlaceholderText="Enter your Problem Statement(Maximum 50 words)"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.MissionStatement" Label="Mission & Vision Statement" PlaceholderText="Enter your Mission Statement(Maximum 100 words)"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.SolutionStatement" Label="Solution Statement" PlaceholderText="Enter your Solution Statement(Maximum 100 words.)"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.Usp" Label="USP/Competitive Advantage?" PlaceholderText="What is your Unique Selling Proposition & how will you defend it?"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.Risks" Label="Identify Some Challenges or Risks In your Business?" PlaceholderText="What are the potential risks that your venture may face"></OneUX_TextArea>
+                                                    <OneUX_InputSelect @bind-Value="Model.MyLifeCycleStage" Label="LifeCycle Stage" Id="lifecycle-list" Title="Select Life Cycle">
+                                                        @foreach (var stage in MyLifeCycle)
+                                                        {
+                                                            <option value=@stage>@stage</option>
+                                                        }
+                                                    </OneUX_InputSelect>
+                                                    <OneUX_TextArea @bind-Value="@Model.FoundingTeam" Label="Founding Team Details" PlaceholderText="Names, Roles, Academic / Professional Backgrounds"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.ProjectTraction" Label="Project Traction" PlaceholderText="Project Traction is an easy way to refer to the progress of your project, the momentum & revenue it generates as it grows.What is project traction and projected annual revenue?"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.StartupedHelp" Label="What Kind Of Help Are You Seeking From Us?" PlaceholderText="What kind of help are you seeking from Us? Are you looking for a collaboration or mentorship. Be as specific as possible"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.Ask" Label="The Ask" ElementId="fundingAsk" PlaceholderText="Are you looking for funding?"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.ExtraDetails" Label="Anything Else You wish To Tell Us?" ElementId="extraDetails" PlaceholderText="Anything else you wish to tell us regarding your plan or future scope? Add the things you missed out before"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.SummaryLink" Label="Summary Link" ElementId="summaryLink" PlaceholderText="Do you have any Website/Product Preview Link/Business P Doc Link? Feel free to share"></OneUX_TextArea>
+                                                    <OneUX_TextArea @bind-Value="@Model.VideoLink" Label="Explainer Video Link" ElementId="videoLink" PlaceholderText="We would be glad To see a a video explaining your project!"></OneUX_TextArea>
+
+                                                </div>
+                                            </CascadingValue>
+                                        </CascadingValue>
+                                    </CascadingValue>
+                                </CascadingValue>
+                                <!--end: Wizard Step 4-->
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <h4 class="mb-10 font-weight-bold">Review your Details and Submit</h4>
+                                    <h6 class="font-weight-bold mb-3">
+                                        Information:
+                                    </h6>
+                                    <table class="w-100">
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Venture Name:</td>
+                                            <td class="font-weight-bold text-right">@Model.VentureName</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Venture Description:</td>
+                                            <td class="font-weight-bold text-right">@Model.ShortDescription</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Team Members:</td>
+                                            <td class="font-weight-bold text-right">@Model.TeamMember</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Focus Industry:</td>
+                                            <td class="font-weight-bold text-right">@Model.FocusIndustry</td>
+                                        </tr>
+                                    </table>
+                                    <div class="separator separator-dashed my-5"></div>
+
+                                    <h6 class="font-weight-bold mb-3">
+                                        Venture Information:
+                                    </h6>
+                                    <table class="w-100">
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Problem Statement:</td>
+                                            <td class="font-weight-bold text-right">@Model.ProblemStatement</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Solution Statement:</td>
+                                            <td class="font-weight-bold text-right">@Model.SolutionStatement</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold text-muted">Challenges:</td>
+                                            <td class="font-weight-bold text-right">@Model.Risks</td>
+                                        </tr>
+                                    </table>
+                                    <div class="separator separator-dashed my-5"></div>
+                                </div>
+
+
+                            </div>
+
+                            <!--begin::Actions-->
+                            <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                                <div class="mr-2">
+                                    <button type="button" class="btn btn-light-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-prev">
+                                        <span class="svg-icon svg-icon-md mr-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <rect fill="#000000" opacity="0.3" transform="translate(15.000000, 12.000000) scale(-1, 1) rotate(-90.000000) translate(-15.000000, -12.000000)" x="14" y="7" width="2" height="10" rx="1" />
+                                                    <path d="M3.7071045,15.7071045 C3.3165802,16.0976288 2.68341522,16.0976288 2.29289093,15.7071045 C1.90236664,15.3165802 1.90236664,14.6834152 2.29289093,14.2928909 L8.29289093,8.29289093 C8.67146987,7.914312 9.28105631,7.90106637 9.67572234,8.26284357 L15.6757223,13.7628436 C16.0828413,14.136036 16.1103443,14.7686034 15.7371519,15.1757223 C15.3639594,15.5828413 14.7313921,15.6103443 14.3242731,15.2371519 L9.03007346,10.3841355 L3.7071045,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(9.000001, 11.999997) scale(-1, -1) rotate(90.000000) translate(-9.000001, -11.999997)" />
+                                                </g>
+                                            </svg>
+                                        </span>Previous
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-secondary font-weight-bold text-uppercase px-9 py-4 submitFormBtn" data-wizard-type="action-submit">
+                                        Submit
+                                        <span class="svg-icon svg-icon-md ml-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary font-weight-bold text-uppercase px-9 py-4" data-wizard-type="action-next" id="next">
+                                        Next Step
+                                        <span class="svg-icon svg-icon-md ml-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--end::Actions-->
+                        </EditForm>
+                        <!--end: Wizard Form-->
+
+                    </div>
+
+                    <!--end: Wizard Body-->
+                </div>
+                <!--end: Wizard-->
+            </div>
+        </div>
+    </div>
+</div>
+

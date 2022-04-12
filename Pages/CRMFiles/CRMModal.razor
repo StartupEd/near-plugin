@@ -1,0 +1,22 @@
+﻿<div class="modal fade" id="crmModal" tabindex="-1" role="dialog" aria-labelledby="crmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectModalLabel">Create CRM</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@Model" OnValidSubmit="(()=>CreateCRM(Model))">
+                    <DataAnnotationsValidator />
+                    <OneUX_InputBox @bind-Value="@Model.Core.Name" Label="CRM Name" PlaceholderText="Enter Your CRM Name" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold">Submit</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>

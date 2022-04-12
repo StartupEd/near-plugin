@@ -1,0 +1,162 @@
+﻿@page "/search/results/all/Keyword/{Query}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using StartupEd.UX.Incubation
+
+<OneUX_SubHeader IsInviteShow="true"/>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (SearchData != null && SearchData.Count > 0)
+        {
+            @if (AllUserInfo.Count > 0)
+            {
+                UserCount = 0;
+                EventCount = 0;
+                BusinessPageCount = 0;
+
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-5">
+                        <h3 class="card-title font-weight-bolder text-dark">MEMBERS</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var user in AllUserInfo)
+                        {
+                            if (UserCount > 5)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                <SearchedUserCard Data="user" />
+                            }
+                            UserCount++;
+                        }
+                        @if (AllUserInfo.Count > 5)
+                        {
+                            <div class="d-flex justify-content-center">
+                                <a href="search/results/Members/Keyword/@Query/1" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center">Search All Members</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @if (AllEvents.Count > 0)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-5">
+                        <h3 class="card-title font-weight-bolder text-dark">EVENTS</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var events in AllEvents)
+                        {
+                            if (EventCount > 10)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                <SearchedEventCard Model="events" />
+                            }
+                            EventCount++;
+                        }
+                        @if (AllEvents.Count > 10)
+                        {
+                            <div class="d-flex justify-content-center">
+                                <a href="#" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center">Search All Events</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @if (AllBusinessPages.Count > 0)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-5">
+                        <h3 class="card-title font-weight-bolder text-dark">Business Pages</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var businessPage in AllBusinessPages)
+                        {
+                            if (BusinessPageCount > 10)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                <SearchedBusinessPageCard Page="businessPage" />
+                            }
+                            BusinessPageCount++;
+                        }
+                        @if (AllBusinessPages.Count > 10)
+                        {
+                            <div class="d-flex justify-content-center">
+                                <a href="#" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center">Search All Events</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @if (AllGroups.Count > 0)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-5">
+                        <h3 class="card-title font-weight-bolder text-dark">Communities</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var group in AllGroups)
+                        {
+                            if (GroupsCount > 10)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                <SearchedGroupCard Model="group" />
+                            }
+                            GroupsCount++;
+                        }
+                        @if (AllGroups.Count > 10)
+                        {
+                            <div class="d-flex justify-content-center">
+                                <a href="#" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center">Search All Communities</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @if (AllIncubationPrograms.Count > 0)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-5">
+                        <h3 class="card-title font-weight-bolder text-dark">Incubation Programs</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var incubationProgram in AllIncubationPrograms)
+                        {
+                            if (IncubationProgramCount > 10)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                <SearchedIncubationProgramCard Model="incubationProgram" />
+                            }
+                            IncubationProgramCount++;
+                        }
+                        @if (AllIncubationPrograms.Count > 10)
+                        {
+                            <div class="d-flex justify-content-center">
+                                <a href="#" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center">Search All Incubation Programs</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        @*ku*@
+    </div>
+</div>
+
+@code{
+   
+}

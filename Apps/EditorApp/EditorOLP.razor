@@ -1,0 +1,267 @@
+﻿@page "/app/editor/new"
+@using Microsoft.AspNetCore.SignalR.Client
+@using StartupEd.Engine.MarketNetwork 
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+<div class=" row">
+    <div class="col-lg-4 col-md-9 col-sm-12">
+
+        <input id="group" @bind="GroupValue" />
+        <button class="btn" @onclick="JoinGroup">Join Group</button>
+        <button class="btn-light" @onclick="SubmitModel">Save</button>
+
+        @*<style>
+                *,
+                *:before,
+                *:after {
+                    box-sizing: border-box;
+                }
+
+                .toolbar {
+                }
+
+                .tool-list {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    list-style: none;
+                    padding: 0;
+                    margin: 1rem;
+                    overflow: hidden;
+                    border-raduis: 10px;
+                }
+
+                .tool {
+                }
+
+                .tool--btn {
+                    display: block;
+                    border: none;
+                    padding: .5rem;
+                    font-size: 20px;
+                }
+
+                #output {
+                        height: 400px;
+                        width:400px;
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+                        margin: 1rem;
+                        margin-bottom:0rem;
+                        padding: 1rem;
+
+                }
+            </style>
+            <EditForm Model="@Model">
+                <div class="toolbar" onmouseover="HandleRichness()">
+                    <ul class="tool-list">
+                        <li class="tool">
+                            <button type="button"
+                                    data-command='justifyLeft'
+                                    class="tool--btn">
+                                <i class='fa fa-align-left'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command='justifyCenter'
+                                    class="tool--btn">
+                                <i class='fa fa-align-center'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command="bold"
+                                    class="tool--btn">
+                                <i class='fa fa-bold'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command="italic"
+                                    class="tool--btn">
+                                <i class='fa fa-italic'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command="underline"
+                                    class="tool--btn">
+                                <i class='fas fa-underline'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command="insertOrderedList"
+                                    class="tool--btn">
+                                <i class='fa fa-list-ol'></i>
+                            </button>
+                        </li>
+                        <li class="tool">
+                            <button type="button"
+                                    data-command="insertUnorderedList"
+                                    class="tool--btn">
+                                <i class='fa fa-list-ul'></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>*@
+        @*<div id="output" contenteditable="true" oninput="GetInput()" placeholder="Message" @onclick="TakeInput"></div>*@
+        @*<InputTextArea id="output" class="form-control"
+            @bind-Value="Model.Summary"  @oninput="HandleInput" placeholder="Message" @onclick="TakeInput" />
+            </EditForm>*@
+        <div class="shadow-effect">
+            <OneUX_QuillEditor ElementId="EditorSummary" PlaceholderText="Wrire Something..." Label="" Summary="@Model.Summary" StarValidation="@false" />
+        </div>
+    </div>
+</div>
+<!--<script src="https://s1.startuped.net/incubation_cloud/assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+<script src="https://s1.startuped.net/incubation_cloud/assets/plugins/custom/tinymce/plugins/advlist/plugin.min.js"></script>-->
+
+
+@code{
+    public static Editor Model = new Editor();
+    public static CS_Editor ClientService { get; set; }
+    public static HubConnection hubConnection;
+    public string EditorValue { get; set; }
+    public string GroupValue { get; set; }
+    public static bool IsConnected
+    {
+        get
+        {
+            HubConnectionState x = hubConnection.State;
+            return x == HubConnectionState.Connected;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            //  await JSRuntime.InvokeVoidAsync("HandleRichness");
+            ClientService = new CS_Editor(ClientExchange, EngineServices.MarketNetwork);
+
+
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(EngineServices.MarketNetwork.SystemEndpoint.Host + "/editorhub").Build();
+
+            hubConnection.On<string>("Send", (group) =>
+            {
+                GroupValue = group;
+                Console.WriteLine(GroupValue);
+            });
+
+            hubConnection.On<string>("ReceiveText", (text) =>
+            {
+                Model.Summary = text;
+                StateHasChanged();
+            });
+
+            await hubConnection.StartAsync();
+
+        }
+        catch (NullReferenceException e)
+        {
+            SLog.Write(e.Message);
+        }
+    }
+    [JSInvokable]
+    public static async Task<string> HandleInput(string args)
+    {
+
+        try
+        {
+
+            Model.Summary = args;
+            if (IsConnected)
+            {
+                await hubConnection.SendAsync("BroadcastText", Model.Summary);
+                return Model.Summary;
+            }
+            else
+            {
+                SLog.Write("Connection Broken");
+                return "";
+            }
+
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex.Message);
+            return "";
+        }
+    }
+
+
+    public async void JoinGroup()
+    {
+        try
+        {
+            // await JSRuntime.InvokeVoidAsync("hello");
+            Console.WriteLine(GroupValue);
+            if (IsConnected)
+            {
+                await hubConnection.SendAsync("JoinGroup", GroupValue);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+        }
+    }
+
+
+
+    public async void SubmitModel()
+    {
+        //try
+        //{
+        //    HttpResponseMessage response;
+        //    response = await ClientService.PostAsync(Model);
+
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        ToastService.ShowSuccess("Editor Saved Successfully!", ":)");
+        //    }
+        //    else
+        //    {
+        //        ToastService.ShowError("Editor Failed!", await response.Content.ReadAsStringAsync());
+        //    }
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    SLog.Write(ex);
+        //}
+    }
+
+    public void Dispose()
+    {
+        _ = hubConnection.DisposeAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                //await JSRuntime.InvokeVoidAsync("Editor", EngineServices.MarketNetwork.SystemEndpoint.Host);
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+        }
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Editor","/app/editor" }
+    };
+    public async Task TakeInput()
+    {
+        await JSRuntime.InvokeVoidAsync("HandleRichness");
+    }
+
+}
+

@@ -1,0 +1,53 @@
+﻿@page "/resend-verification-email"
+@using StartupEd.Engine.MarketNetwork
+@inherits BaseComponent
+
+
+<div class="d-flex flex-row-fluid flex-center">
+    <div class="resend-verification-email">
+        <div class="text-center mb-10 mb-lg-20">
+            <h2 class="font-weight-bold">Resend Verification Email</h2>
+            <p class="text-muted font-weight-bold">
+                Enter the email associated with your account. You will get an email.
+            </p>
+        </div>
+        <div class="form-group py-2 m-0 border-bottom">
+            <input class="form-control h-auto border-0 px-0 placeholder-dark-75" type="email"
+                   @bind="@EmailAddress" placeholder="Registered Email" name="email" autocomplete="off" />
+        </div>
+        <div class="form-group d-flex flex-wrap flex-center mt-10">
+            <button type="submit" class="btn btn-primary btn-pill font-weight-bold px-9 py-4 my-3 mx-2" @onclick="SubmitEmailModel">Resend</button>
+            <a href="login" class="btn btn-outline-primary btn-pill font-weight-bold px-9 py-4 my-3 mx-2">Cancel</a>
+        </div>
+
+    </div>
+</div>
+
+@code{
+    public Authentication Model = new Authentication();
+    private CS_Authentication ModelService { get; set; }
+    private string EmailAddress { get; set; }
+
+    private async void SubmitEmailModel()
+    {
+        if (EmailAddress != null)
+        {
+            ModelService = new CS_Authentication(ClientExchange, EngineServices.MarketNetwork);
+
+            var result = await ModelService.ResendVerificationEmailAsync(EmailAddress);
+
+            if (result == true)
+            {
+                ToastService.ShowSuccess("We have sent you an email for verification..!", "Resend Verification Email");
+                SLog.Write("Email Sent!");
+                EmailAddress = "";
+                navigationManager.NavigateTo("/email-verification");
+            }
+            else
+            {
+                ToastService.ShowError("Please Enter Valid Email Or Email is already validated", "Invalid Email");
+            }
+
+        }
+    }
+}

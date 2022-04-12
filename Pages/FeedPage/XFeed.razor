@@ -1,0 +1,46 @@
+@attribute [AllowAnonymous]
+
+
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    @if (Posts != null && cachedUsers != null)
+    {
+        @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+        {
+            <Virtualize Items="Posts" Context="Post">
+                <PostCard Model="@Post" PostCallBack="LoadData" ShowReactionModel="() => CallReactionListModel(Post.Id)" />
+            </Virtualize>
+        }
+        else
+        {
+            <Virtualize Items="Posts" Context="Post">
+                
+                <XPost Model="@Post" PostCallBack="LoadData" ShowReactionModelCallBack="() => CallReactionListModel(Post.Id)" Cacheduser="cachedUsers.Where(cu => cu.UserId == Post.Core.CreatorId).FirstOrDefault()" />
+            </Virtualize>
+
+            //this is for progessive Loading
+            @*<Virtualize ItemsProvider="LoadPost" Context="Post" ItemSize="40" OverscanCount="10">
+                    <ItemContent>
+                        <XPost Model="@Post" PostCallBack="LoadData" ShowReactionModelCallBack="()=>CallReactionListModel(Post.Id)" />
+                    </ItemContent>
+                    <Placeholder>
+                        <OneUX_Spinner />
+                    </Placeholder>
+                </Virtualize>*@
+
+        }
+    }
+}
+
+@if (PostModel != null)
+{
+    <ReactionListModel @ref="OpenReactionList" Model="PostModel"  Reactions="@cachedUserss"/>
+}

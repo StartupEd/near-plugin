@@ -1,0 +1,58 @@
+﻿@page "/account-verification/{LoginUserId}"
+
+
+@*<div class="d-flex flex-row-fluid flex-center">
+    <div class="login-forgot">
+        <div class="text-center mb-10 mb-lg-20">
+            <h3 class="">Account Verification</h3>
+            <p class="text-muted font-weight-bold font-size-h4">
+                Please Verify Your StartupEd Incubation Cloud Account.
+            </p>
+        </div>
+        <div class="form-group d-flex flex-wrap flex-center mt-10">
+            <button type="submit" class="btn btn-primary btn-pill font-weight-bold px-9 py-4 my-3 mx-2" @onclick="SubmitVerification">Click Me</button>
+        </div>
+
+    </div>
+</div>*@
+@code {
+    [Parameter]
+    public string LoginUserId { get; set; }
+    private Authentication Model = new Authentication();
+    private CS_Authentication ModelService { get; set; }
+    private User UserModel = new User();
+    private CS_User UserClientService { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await SubmitVerification();
+    }
+    private async Task SubmitVerification()
+    {
+        try
+        {
+            ModelService = new CS_Authentication(ClientExchange, EngineServices.MarketNetwork);
+            UserClientService = new CS_User(ClientExchange, EngineServices.MarketNetwork);
+            Model.UserId = LoginUserId;
+            var response = await ModelService.PutAsync(Model, "Verification/" + LoginUserId);
+            if (response.IsSuccessStatusCode)
+            {
+                UserModel.Id = LoginUserId;
+                var UserResponse = await UserClientService.PutAsync(UserModel, "UserVerification/" + LoginUserId);
+                if (UserResponse.IsSuccessStatusCode)
+                {
+                    ToastService.ShowSuccess("Your account has been verified successfully!", "Verification");
+                    navigationManager.NavigateTo("/login");
+                }
+            }
+            else
+            {
+                ToastService.ShowError("Account Verification Failed!", "Verification");
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+        }
+    }
+
+}

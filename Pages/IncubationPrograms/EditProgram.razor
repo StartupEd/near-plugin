@@ -1,0 +1,203 @@
+﻿@page "/incubationprogram/{Id}/{Name}/edit"
+<Head Title="Incubation Programs">
+</Head>
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/incubationprogram" class="text-muted">Incubation Programs</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="incubationprogram/@Id/@Name" class="text-muted">Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<EditForm class="form" id="programForm" Model="@Program" OnValidSubmit="SubmitModel">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="d-flex flex-column-fluid">
+                <div class="container">
+                    <div class="card card-custom gutter-b ribbon ribbon-top">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                @if (!string.IsNullOrEmpty(Program.Core.ImageUrl))
+                                {
+                                    <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(@Program.Core.ImageUrl)">
+                                        <div class="image-input-wrapper" style="background-image: url(@Program.Core.ImageUrl)"></div>
+                                        <div class="url-encoded"></div>
+                                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                            <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                            <input type="hidden" name="profile_avatar_remove" />
+                                        </label>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(https://s2.startuped.net/incubation_cloud/assets/media/users/default.jpg)">
+                                        <div class="image-input-wrapper" style="background-image: url(https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                        <div class="url-encoded"></div>
+                                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                            <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                            <input type="hidden" name="profile_avatar_remove" />
+                                        </label>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+                                    </div>
+                                }
+                                <div class="d-flex align-items-center ml-10 flex-grow-1 justify-content-between">
+                                    <OneUX_InputBox @bind-Value="Program.Name" Label="Name" StarValidation="@Validation" />
+                                    <div>
+                                        <button type="submit" class="btn btn-secondary mr-2" id="updateProgramBtn">Submit</button>
+                                        <a href="incubationprogram/@Id/@Name" class="btn btn-light-secondary btn-hover-light-secondary" id="cancelProgramLink">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label">
+                                    Description about Program
+                                    <span class="text-danger">*</span>
+                                </h3>
+                            </div>
+                        </div>
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <OneUX_QuillEditor ElementId="programDescription" Summary="@Program.Core.Description" />
+                        </div>
+                        <!--end::Body-->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card card-custom gutter-b">
+                                <!--begin::Header-->
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Important Dates and Deadlines</h3>
+                                    </div>
+                                </div>
+                                <!--begin::Body-->
+                                <div class="card-body">
+                                    <OneUX_DateRangePicker Style="row col-xl-12 m-0" Label1="Registration Dates" Label2="Program Dates" ElementId_3="startRegId" ElementId_4="endRegId" ElementId_5="startProgramId" ElementId_6="endProgramId" Dates="Program.Deadlines" />
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        @if (Program.ContactInfo != null)
+                        {
+                            <div class="col-lg-6">
+                                <div class="card card-custom gutter-b">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <h3 class="card-label">Organisers Detail</h3>
+                                        </div>
+                                    </div>
+                                    <!--begin::Body-->
+                                    <div class="card-body">
+                                        <div class="d-flex flex-column flex-wrap">
+                                            <div class="d-flex justify-content-around">
+                                                <OneUX_InputBox @bind-Value="Program.ContactInfo.Name" Label="Name" StarValidation="@Validation" />
+                                                <OneUX_InputBox @bind-Value="Program.ContactInfo.Email" Label="Email Id" StarValidation="@Validation" />
+                                            </div>
+                                            <div class="d-flex justify-content-around">
+                                                <OneUX_InputBox @bind-Value="Program.ContactInfo.Website" Label="Website" />
+                                                <OneUX_InputBox @bind-Value="Program.ContactInfo.PhoneNo" Label="PhoneNumber" MaxLength="10" StarValidation="@Validation" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Body-->
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-custom gutter-b">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Multiple Stages</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    @if (StageContainer == "d-none")
+                                    {
+                                        <button class="btn btn-secondary" @onclick="ShowStageForm">Add Stage</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-light-secondary" disabled>Add Stage</button>
+                                    }
+
+                                    @if (Program.Stages != null && Program.Stages.Count > 0)
+                                    {
+                                        <StageTimeline Stages="@Program.Stages" ReturnStage="UpdateStage" />
+                                    }
+
+                                    <div class="@StageContainer mt-10">
+                                        @if (Stage != null)
+                                        {
+                                            <StageForm Style="row col-xl-12 m-0" StageData="@Stage" OnClickCallback1="SaveStage" OnClickCallback2="CancelStage" />
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card card-custom gutter-b">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Additional Details</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <OneUX_InputBox @bind-Value="Program.EligibilityCriteria" Label="EligibilityCriteria" StarValidation="@Validation" />
+                                    <OneUX_InputBox @bind-Value="Program.Charges" PlaceholderText="Cash Prize" Label="Prize" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+
+
+@code {
+  
+}
+

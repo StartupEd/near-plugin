@@ -1,0 +1,140 @@
+﻿@page "/blog/{Id}/{BlogName}"
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="blog" class="text-muted">Blogs</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="blog/@Model.Id/@Model.Name" class="text-muted">Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom ribbon ribbon-top">
+            <div class="ribbon-target bg-danger" style="top: -2px; right: 100px;">@Model.BlogViewCounter.Values.Sum(x => x.Count) Views</div>
+            <div class="card-body p-0">
+                <div class="row justify-content-center pt-8 px-8 pt-md-27 px-md-0">
+                    <div class="col-md-9">
+                        <div class="d-flex justify-content-between pb-10 pb-md-20 flex-column">
+                            <div class="d-flex  justify-content-between">
+                                <h1 class="display-4 font-weight-boldest mb-10">@Model.Name</h1>
+                                <div class="d-flex align-items-center">
+                                    @if (Model.BookmarkedByUserIds != null && Model.BookmarkedByUserIds.Contains(UXUtility.LoggedInUser.Id))
+                                    {
+                                        <a class="font-weight-bold" href="" @onclick="Unbookmark" @onclick:preventDefault>
+                                            <i class="fas fa-star text-primary"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="font-weight-bold" href="" @onclick="Bookmark" @onclick:preventDefault>
+                                            <i class="fas fa-star"></i>
+                                        </a>
+                                    }
+
+                                    @if (Model.Core.CreatorId == UXUtility.LoggedInUser.Id)
+                                    {
+                                        <OneUX_DotToolbar>
+                                            <ul class="navi navi-hover">
+                                                <li class="navi-item">
+                                                    <a href="blog/@Model.Id/@Model.Name/edit" class="navi-link">
+                                                        <span class="navi-icon"><i class="far fa-edit"></i></span>
+                                                        <span class="navi-text">Edit</span>
+                                                    </a>
+                                                </li>
+                                                <li class="navi-item">
+                                                    <a href="" class="navi-link" @onclick="ShowSweetAlert" @onclick:preventDefault>
+                                                        <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                                        <span class="navi-text">Delete</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="navi-item">
+                                                    <a href="blog/@Model.Id/@Model.Name/insight" class="navi-link">
+                                                        <span class="navi-icon"><i class="fas fa-eye"></i></span>
+                                                        <span class="navi-text">Insights</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </OneUX_DotToolbar>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <span>By <a href="profile/@Model.Core.CreatorId"><strong>@Model.AuthorName</strong></a></span>
+                                @*<button type="button" class="btn btn-secondary btn-sm">Follow</button>
+                                    @if (!Page.PageLikes.Any(pl => pl.AuthorId == UXUtility.LoggedInUser.Id && pl.IsLiked == true))
+                                    {
+                                        <button id="followBtn" class="btn btn-light-secondary" @onclick="@Follow">
+                                            <i class="far fa-thumbs-up"></i> Like
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="ufollowBtn" class="btn btn-secondary" @onclick="Unfollow">
+                                            <i class="fas fa-thumbs-up"></i> Unlike
+                                        </button>
+                                    }*@
+                            </div>
+                            <div class="separator separator-solid my-7"></div>
+                            <span>Posted @RelativeDateTime.SetRelativeDate(Model.Core.CreatedAt)</span>
+                            <div class="separator separator-solid my-7"></div>
+                            <div class="d-flex">
+                                <img src="@Model.CoverImage" alt="Alternate Text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row border-bottom pb-10 text-dark font-size-h5 font-weight-normal">
+                            @((MarkupString)Model.BlogSummary)
+                        </div>
+                        <div class="d-flex justify-content-between mt-5 mb-5">
+                            @if (Model != null)
+                            {
+                                <BlogReactions Model="@Model" OnReactionClick="LikeMe" OnReactionCountClick="CallReactionListModal" />
+                            }
+                            <a href="#" class="btn btn-hover-text-warning btn-hover-icon-warning btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2" @onclick="ShowComments" @onclick:preventDefault>
+                                <span class="svg-icon svg-icon-md svg-icon-dark-25 pr-2">
+                                    <img src="_content/OneUX/assets/imgs/reactions/comments.svg" alt="startuped-icon" class="reaction-icon_img" width="24" />
+                                </span>@Model.Comments.Count()
+                            </a>
+                        </div>
+                        <div class="card-footer">
+                            @if (IsShow)
+                            {
+                                <OneUX_CommentBox OnClickCallback="@SubmitComment" />
+
+                                @if (Model.Comments != null)
+                                {
+                                    foreach (var Comment in Model.Comments.OrderByDescending(x => x.CommentedAt))
+                                    {
+                                        <XComment CommentModel="@Comment" OnCommentChange="CommentUpdateAsync" OnDeleteComment="CommentDeleteAsync" />
+                                    }
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="text-center ml-10 px-10">
+                       <OneUX_ShareButton></OneUX_ShareButton>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<OneUX_SweetAlertBox @ref="ConfirmSweetAlert" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, Delete It!" OnButtonClickk="DeleteBlog" />
+
+@if (Model != null)
+{
+    <BlogReactionListModal @ref="OpenReactionList" Model="Model" />
+}

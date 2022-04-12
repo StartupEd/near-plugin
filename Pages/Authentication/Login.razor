@@ -1,0 +1,175 @@
+﻿@page "/login/{LoginEmail}"
+@page "/login"
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.Extensions.Configuration
+
+<div class="login-signin">
+    <div class="text-center mb-10 mb-lg-20">
+        <h2 class="font-weight-bold">Sign In</h2>
+        <p class="text-muted font-weight-bold">Enter Email and Password</p>
+    </div>
+    <EditForm class="form text-left" id="loginForm" Model="@Model" OnValidSubmit="SubmitModel">
+        <DataAnnotationsValidator />
+        <CascadingValue Value="@FormElementStyle" Name="FormInput Class">
+            <CascadingValue Value="@InputElementStyle" Name="Input Class">
+                <OneUX_InputBox @bind-Value="Model.UserName" ValidationFor="@(() => Model.UserName)" PlaceholderText="Email" ElementId="loginEmail" />
+                <OneUX_InputBox @bind-Value="Model.Password" ValidationFor="@(() => Model.Password)" PlaceholderText="Password" ElementId="loginPassword" Type="password" />
+            </CascadingValue>
+        </CascadingValue>
+        <div class="form-group d-flex flex-wrap justify-content-between align-items-center mt-5">
+            @*<div class="checkbox-inline">
+                    <label class="checkbox m-0 text-muted font-weight-bold">
+                        <input type="checkbox" name="remember" />
+                        <span></span>
+                        Remember me
+                    </label>
+                </div>*@
+            <a href="request-password-reset" id="kt_login_forgot" class="text-muted text-hover-primary font-weight-bold">Forgot Password ?</a>
+        </div>
+        <div class="text-center mt-15">
+            <button id="loginBtn" class="btn btn-primary btn-pill shadow-sm py-4 px-9 font-weight-bold">Sign In</button>
+        </div>
+        <div class="text-center mt-3">
+            <a href="resend-verification-email" id="kt_resend-verification-email" class="text-muted text-hover-primary font-weight-bold">Resend Verification Email</a>
+        </div>
+    </EditForm>
+   
+</div>
+
+@code{
+    private Authentication Model = new Authentication();
+    private CS_Authentication ModelService { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+
+    [Parameter]
+    public string LoginEmail { get; set; }
+    public string[] separateURL { get; set; }
+
+    [Inject]
+    IConfiguration Configuration { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SLog.Write("Login Page OnInitialied");
+        Model.UserName = LoginEmail;
+        EngineServices = MyServiceProvider.GetService<EngineServices>();
+        var URI = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        separateURL = URI.Split('=');
+    }
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        SLog.Write("Login Page OnAfterRender");
+    }
+
+    public async Task SubmitModel()
+    {
+        ModelService = new CS_Authentication(ClientExchange, EngineServices.MarketNetwork);
+        //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+        try
+        {
+            HttpResponseMessage response = await ModelService.PostAsync(Model, "Login");
+            if (response.IsSuccessStatusCode)
+            {
+
+
+                SLog.Write("Login Successful");
+                var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+                var returnUrl = "";
+                if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var param))
+                {
+                    returnUrl = param.First();
+                }
+                Authentication authResult = await response.Content.ReadFromJsonAsync<Authentication>();
+                //SLog.Write(authResult.Token);
+                await loginService.Login(authResult);
+                await SyncLoggedInUserStatus();
+                string logincheck = "false";
+                //string logincheck = await CheckLogin(UXUtility.LoggedInUser.Email);
+                if (authResult.CountLogin == 1)
+                {
+                    navigationManager.NavigateTo("/welcome");
+                }
+                else if (separateURL.Count() > 1 && authResult.CountLogin > 1)
+                {
+                    navigationManager.NavigateTo(separateURL[1]);
+                }
+                else
+                {
+                    Model.CountLogin++;
+                    if (returnUrl.Contains("network/user/pending-requests"))
+                    {
+                        navigationManager.NavigateTo("/network/user/pending-requests");
+                    }
+                    else
+                    {
+                        navigationManager.NavigateTo("/home");
+                    }
+                }
+
+                //UserActivity userActivity = new UserActivity();
+                //userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+                //userActivity.Activities.Add(new ActivityModule { FeatureId = authResult.UserId, Feature = "Account SignIn", SubModuleId = "", Description = "You have Signed In StartupEd Account with " +Model.UserName });
+                //await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+            }
+            else
+            {
+                SLog.Write(await response.Content.ReadAsStringAsync());
+                ToastService.ShowError(await response.Content.ReadAsStringAsync(), "Login Failed");
+            }
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+            ToastService.ShowError(ex.Message, "Login Failed Exception");
+        }
+
+    }
+
+    //public async Task<string> CheckLogin(string Id)
+    //{
+    //    Cache_ClientService cacheService = new Cache_ClientService(UXUtility.Engines.MarketNetwork);
+    //    var logincheck = await cacheService.SelfGetValue(Id);
+    //    if (logincheck == "true")
+    //    {
+    //        cacheService.SelfSetValue(Id, "false");
+    //    }
+
+    //    SLog.Write("Cache Updated");
+    //    return logincheck;
+    //}
+
+
+    public string InputElementStyle { get; set; } = "h-auto border-0 px-0 placeholder-dark-75";
+    public string FormElementStyle { get; set; } = "py-2 m-0 border-bottom";
+
+    //public async Task LoginWithTwitter()
+    //{
+    //    string callBackUrl = Uri.EscapeDataString(Configuration.GetValue<string>("Authentication:LinkedIn:CallbackUrl"));
+    //    string url = string.Format(Configuration.GetValue<string>("Authentication:LinkedIn:AuthorizationUrl"),
+    //        Configuration.GetValue<string>("Authentication:LinkedIn:ClientId"), callBackUrl);
+    //    navigationManager.NavigateTo(url);
+    //    //string url = "/counter";
+    //    //await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+    //    // ModelService = new CS_Authentication(ClientExchange, EngineServices.MarketNetwork);
+    //    // try
+    //    // {
+    //    //     HttpResponseMessage response = await ModelService.GetAsync("TwitterSignIn");
+    //    //     if (response.IsSuccessStatusCode)
+    //    //     {
+    //    //         string result = await response.Content.ReadAsStringAsync();
+
+    //    //     }
+    //    //}
+    //    //catch (Exception ex)
+    //    //{
+    //    //     SLog.Write(ex);
+    //    //     ToastService.ShowError(ex.Message, "Login Failed Exception");
+    //    //}
+    //}
+
+
+}
+

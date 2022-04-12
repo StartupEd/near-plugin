@@ -1,0 +1,218 @@
+﻿@page "/event/{Id}/{EventName}/edit"
+
+
+<Head Title="Events">
+</Head>
+
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/events" class="text-muted">Events</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="event/@Id/@EventName" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="event/@Id/@EventName/edit" class="text-muted">Edit</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<EditForm class="form" id="eventForm" Model="@Model" OnValidSubmit="SubmitModel">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="d-flex flex-column-fluid">
+                <div class="container">
+                    <div class="card card-custom gutter-b ribbon ribbon-top">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                @if (!string.IsNullOrEmpty(Model.CoverImage))
+                                {
+                                    <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(@Model.CoverImage)">
+                                        <div class="image-input-wrapper" style="background-image: url(@Model.CoverImage)"></div>
+                                        <div class="url-encoded"></div>
+                                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                            <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                            <input type="hidden" name="profile_avatar_remove" />
+                                        </label>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(https://s2.startuped.net/incubation_cloud/assets/media/users/default.jpg)">
+                                        <div class="image-input-wrapper" style="background-image: url(https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                        <div class="url-encoded"></div>
+                                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                            <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                            <input type="hidden" name="profile_avatar_remove" />
+                                        </label>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+
+                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+                                    </div>
+                                }
+                                <div class="d-flex align-items-center ml-10 flex-grow-1 justify-content-between">
+                                    <OneUX_InputBox @bind-Value="Model.Name" Label="Name" StarValidation="@Validation" />
+                                    <div>
+                                        <button type="submit" class="btn btn-secondary mr-2" id="updateEventBtn">Submit</button>
+                                        <a href="event/@Id/@EventName" class="btn btn-light-secondary btn-hover-light-secondary" id="cancelEventLink">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label">
+                                    Description about Event
+                                    <span class="text-danger">*</span>
+                                </h3>
+                            </div>
+                        </div>
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <OneUX_QuillEditor ElementId="eventDetail" Summary="@Model.Description" />
+                        </div>
+                        <!--end::Body-->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card card-custom gutter-b">
+                                <!--begin::Header-->
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Important Dates and Deadlines</h3>
+                                    </div>
+                                </div>
+                                <!--begin::Body-->
+                                <div class="card-body">
+                                    <OneUX_DateRangePicker Style="row col-xl-12 m-0" Label1="Registration Dates" Label2="Event Dates" ElementId_3="startRegId" ElementId_4="endRegId" ElementId_5="startEventId" ElementId_6="endEventId" Dates="Model.Deadlines" />
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        @if (Model.ContactInfo != null)
+                        {
+                            <div class="col-lg-6">
+                                <div class="card card-custom gutter-b">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <h3 class="card-label">Organisers Detail</h3>
+                                        </div>
+                                    </div>
+                                    <!--begin::Body-->
+                                    <div class="card-body">
+                                        <div class="d-flex flex-column flex-wrap">
+                                            <div class="d-flex justify-content-around">
+                                                <OneUX_InputBox @bind-Value="Model.ContactInfo.Name" Label="Name" StarValidation="@Validation" />
+                                                <OneUX_InputBox @bind-Value="Model.ContactInfo.Email" Label="Email Id" StarValidation="@Validation" />
+                                            </div>
+                                            <div class="d-flex justify-content-around">                                                
+                                                <OneUX_InputBox @bind-Value="Model.ContactInfo.Website" Label="Website" />
+                                                <OneUX_InputBox @bind-Value="Model.ContactInfo.PhoneNo" Label="Phone Number" MaxLength="10" StarValidation="@Validation" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Body-->
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-custom gutter-b">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Rounds Timeline</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    @if (RoundContainer == "d-none")
+                                    {
+                                        <button class="btn btn-secondary" @onclick="ShowRoundForm">Add Round</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-light-secondary" disabled>Add Round</button>
+                                    }
+
+                                    @if (Model.Rounds != null && Model.Rounds.Count > 0)
+                                    {
+                                        <RoundTimeline RoundList="@Model.Rounds" ReturnRound="UpdateRound" />
+                                    }
+
+                                    <div class="@RoundContainer mt-10">
+                                        @if (Round != null)
+                                        {
+                                            <RoundForm Style="row col-xl-12 m-0" RoundData="@Round" OnClickCallback1="SaveRound" OnClickCallback2="CancelRound" />
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card card-custom gutter-b">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3 class="card-label">Additional Details</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <OneUX_InputSelect @bind-Value="Model.Type" Label="Event Type" Id="eventList" StarValidation="@Validation">
+                                        @foreach (var type in EventType)
+                                        {
+                                            <option value=@type>@type</option>
+                                        }
+                                    </OneUX_InputSelect>
+                                    <OneUX_InputBox @bind-Value="Model.Organisation" Label="Organisation" StarValidation="@Validation" />
+                                    <OneUX_InputBox @bind-Value="Model.Prizes" PlaceholderText="Cash Prize" Label="Prize" />
+
+                                    @if (Programs != null && Programs.Count > 0)
+                                    {
+                                        <OneUX_InputSelect @bind-Value="Model.IncubationProgramId" Id="programList" Title="Select Program" Label="Incubation Program">
+                                            @foreach (var IncubationProgram in Programs)
+                                                {
+                                                <option value=@IncubationProgram.Id>@IncubationProgram.Name</option>
+                                                }
+                                        </OneUX_InputSelect>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+

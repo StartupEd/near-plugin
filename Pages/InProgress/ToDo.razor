@@ -1,0 +1,22 @@
+﻿@page "/todo"
+   
+<h3>ToDo</h3>
+<div class="todo-container">
+    <h1>To-Do App</h1>
+    <div class="todo-input">
+        <input type="text" @bind="todoInput"/>
+        <button @onclick="AddTodo">Add</button>
+    </div>
+    @for (int i = 0; i < todos.Count; i++)
+    {
+        var index = i;
+        var todo = todos[i];
+<div class="todo-item">
+    <div class="todo-item__text">@todo</div>
+    <div class="todo-item__close" @onclick="@(() => RemoveTodo(index))">&times;</div>
+</div>
+    }
+</div>
+@code {
+   
+}

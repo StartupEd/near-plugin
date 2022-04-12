@@ -1,0 +1,18 @@
+
+<LoadingScreen>
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(Program).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        <RedirectToLogin />
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            </Found>
+            <NotFound>
+                <ErrorPage />
+            </NotFound>
+        </Router>
+
+    </CascadingAuthenticationState>
+</LoadingScreen>

@@ -1,0 +1,49 @@
+﻿
+
+<div class="timeline timeline-justified timeline-4 mt-10 @DisplayTimeLine">
+    <div class="timeline-bar"></div>
+    <div class="timeline-items">
+        @foreach (var Round in RoundList)
+        {
+            <div class="timeline-item">
+                <div class="timeline-badge">
+                    <div class="bg-danger"></div>
+                </div>
+                <div class="timeline-label">
+                    <span class="text-primary font-weight-bold">@Round.StartDate.ToString("dd MMMM yy") - @Round.EndDate.ToString("dd MMMM yy")</span>
+                </div>
+                <div class="timeline-content">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="mr-2">
+                            <a class="text-dark-75 text-hover-primary font-weight-bold">
+                                @Round.Title
+                            </a>
+                        </div>
+                        <OneUX_DotToolbar>
+                            <ul class="navi navi-hover">
+                                @*<li class="navi-item">
+                                    <a class="navi-link" @onclick="(() => EditRound(Round))">
+                                        <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                        <span class="navi-text">Edit</span>
+                                    </a>
+                                </li>*@
+                                <li class="navi-item">
+                                    <a class="navi-link" @onclick="(() => DeleteRound(Round))">
+                                        <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                        <span class="navi-text">Delete</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </OneUX_DotToolbar>
+                    </div>
+                    <p class="p-0">
+                        @Round.Description
+                    </p>
+                    <p class="p-0">
+                        @Round.BusinessApp
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

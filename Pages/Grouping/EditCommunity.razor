@@ -1,0 +1,115 @@
+﻿@page "/community/{Id}/{GroupName}/edit"
+<Head Title="Community" />
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/community" class="text-muted">Community</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/community/@Id/@GroupName" class="text-muted">Detail</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/community/@Id/@GroupName/edit" class="text-muted">Edit</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <EditForm class="form" id="programForm" Model="@GroupInfo" OnValidSubmit="UpdateGroupInformation">
+            <DataAnnotationsValidator />
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="d-flex align-items-center flex-grow-1 justify-content-between">
+                        <h3 class="card-label">Community Informations Modification</h3>
+                        <div>
+                            <a href="community/@GroupInfo.Id/@GroupInfo.Name" class="btn btn-default btn-sm text-uppercase font-weight-bolder">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-sm text-uppercase font-weight-bolder">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            @if (!string.IsNullOrEmpty(GroupInfo.Core.ImageUrl))
+                            {
+                                <div class="image-input image-input-outline" id="kt_profile_avatar" style="height: 250px; width: calc(100% - 0px); background-image: url(@GroupInfo.Core.ImageUrl )">
+                                    <div class="image-input-wrapper" style="height: 250px; width: calc(100% - 0px); background-image: url(@GroupInfo.Core.ImageUrl )"></div>
+                                    <div class="url-encoded"></div>
+                                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                        <i class="fa fa-pen icon-sm text-muted"></i>
+                                        <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                        <input type="hidden" name="profile_avatar_remove" />
+                                    </label>
+
+                                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                    </span>
+
+                                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="image-input image-input-outline" id="kt_profile_avatar" style="height:250px; width: calc(100% - 0px); background-image: url(https://s2.startuped.net/incubation_cloud/assets/media/users/default.jpg)">
+                                    <div class="image-input-wrapper" style="height: 250px; width: calc(100% - 0px); background-image: url(https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                    <div class="url-encoded"></div>
+                                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                        <i class="fa fa-pen icon-sm text-muted"></i>
+                                        <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                        <input type="hidden" name="profile_avatar_remove" />
+                                    </label>
+
+                                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                    </span>
+
+                                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-lg-8 justify-content-center">
+                            <OneUX_InputBox @bind-Value="GroupInfo.Name" Label="Community Name" StarValidation="true" />
+                            <OneUX_InputSelect @bind-Value="GroupInfo.Privacy" Id="groupPrivacy" Label="Privacy">
+                                @foreach (var privacy in Enum.GetValues(typeof(GroupPrivacy)))
+                                {
+                                    <option value="@privacy">@privacy</option>
+                                }
+                            </OneUX_InputSelect>
+                            <OneUX_MultiSelect ElementId="memberName" Label="Add Members" PlaceholderText="Enter Name" MultipleValues="multiple">
+                                @if (Connections != null)
+                                {
+                                    @foreach (var User in Connections)
+                                    {
+                                        <option value="@User.Id">@User.Name</option>
+                                    }
+                                }
+                            </OneUX_MultiSelect>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-custom gutter-b">
+                <div class="card-title my-5 px-10">
+                    <h5 class="card-label">Community Description &nbsp;<span class="text-danger">*</span></h5>
+                </div>
+                <div class="card-body py-0">
+                    <OneUX_QuillEditor ElementId="communityDescription" PlaceholderText="Write about community" Summary="@GroupInfo.Core.Description" />
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+@code {
+   
+}

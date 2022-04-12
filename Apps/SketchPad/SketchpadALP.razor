@@ -1,0 +1,332 @@
+﻿@page "/sketchpad"
+@using StartupEd.Engine.MarketNetwork
+
+<Head Title="Sketchpad" />
+
+<OneUX_SubHeader BreadCrumbItems="Routes" IsInviteShow="true" />
+
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="card card-custom d-flex rounded bg-secondary p-8 flex-column flex-md-row flex-lg-column flex-xxl-row">
+            <div class="card card-custom">
+                <div class="card-body">
+                    <h3 class="font-weight-bolder font-size-h2 mb-1">SketchPad</h3>
+                    <div class="font-size-h5 mt-3">
+                        Create and save drawings at the click of a button.
+                        SketchPad is a simple to use app that allows you to create and save quick and important sketches.Unleash your creativity with SketchPad. Draw, illustrate, sketch, doodle, or scribble - the choice is up to you.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-1 mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Design/Edit.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                            <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1" />
+                                        </g>
+                                    </svg><!--end::Svg Icon-->
+                                </span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Draw Solo With Draw Tool</div>
+                                <div class="text-dark-75"></div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Callout-->
+            </div>
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Design/Color-profile.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M12,10.9996338 C12.8356605,10.3719448 13.8743941,10 15,10 C17.7614237,10 20,12.2385763 20,15 C20,17.7614237 17.7614237,20 15,20 C13.8743941,20 12.8356605,19.6280552 12,19.0003662 C11.1643395,19.6280552 10.1256059,20 9,20 C6.23857625,20 4,17.7614237 4,15 C4,12.2385763 6.23857625,10 9,10 C10.1256059,10 11.1643395,10.3719448 12,10.9996338 Z M13.3336047,12.504354 C13.757474,13.2388026 14,14.0910788 14,15 C14,15.9088933 13.7574889,16.761145 13.3336438,17.4955783 C13.8188886,17.8206693 14.3938466,18 15,18 C16.6568542,18 18,16.6568542 18,15 C18,13.3431458 16.6568542,12 15,12 C14.3930587,12 13.8175971,12.18044 13.3336047,12.504354 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <circle fill="#000000" cx="12" cy="9" r="5" />
+                                        </g>
+                                    </svg><!--end::Svg Icon-->
+                                </span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Choose Colors With The Color Picker</div>
+                                <div class="text-dark-75"></div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Callout-->
+            </div>
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Text/Edit-text.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M3,19 L5,19 L5,21 L3,21 L3,19 Z M8,19 L10,19 L10,21 L8,21 L8,19 Z M13,19 L15,19 L15,21 L13,21 L13,19 Z M18,19 L20,19 L20,21 L18,21 L18,19 Z" fill="#000000" opacity="0.3" />
+                                            <path d="M10.504,3.256 L12.466,3.256 L17.956,16 L15.364,16 L14.176,13.084 L8.65000004,13.084 L7.49800004,16 L4.96000004,16 L10.504,3.256 Z M13.384,11.14 L11.422,5.956 L9.42400004,11.14 L13.384,11.14 Z" fill="#000000" />
+                                        </g>
+                                    </svg><!--end::Svg Icon-->
+                                </span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Add Text To Sketch With The Type Tool</div>
+
+                                <div class="text-dark-75"></div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Callout-->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Design/Triangle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M3.95428417,19 L20.0457158,19 C20.3218582,19 20.5457158,18.7761424 20.5457158,18.5 C20.5457158,18.3982978 20.5147019,18.2990138 20.4568119,18.215395 L12.4110961,6.59380547 C12.2539131,6.36676337 11.9424371,6.31013137 11.715395,6.46731437 C11.6659703,6.50153145 11.623121,6.54438079 11.5889039,6.59380547 L3.54318807,18.215395 C3.38600507,18.4424371 3.44263707,18.7539131 3.66967918,18.9110961 C3.75329796,18.968986 3.85258194,19 3.95428417,19 Z" fill="#000000" />
+                                        </g>
+                                    </svg><!--end::Svg Icon-->
+                                </span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Make Shapes With The Shape Tool</div>
+                                <div class="text-dark-75"></div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Callout-->
+            </div>
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Design/Bucket.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M5,5 L5,15 C5,15.5948613 5.25970314,16.1290656 5.6719139,16.4954176 C5.71978107,16.5379595 5.76682388,16.5788906 5.81365532,16.6178662 C5.82524933,16.6294602 15,7.45470952 15,7.45470952 C15,6.9962515 15,6.17801499 15,5 L5,5 Z M5,3 L15,3 C16.1045695,3 17,3.8954305 17,5 L17,15 C17,17.209139 15.209139,19 13,19 L7,19 C4.790861,19 3,17.209139 3,15 L3,5 C3,3.8954305 3.8954305,3 5,3 Z" fill="#000000" fill-rule="nonzero" transform="translate(10.000000, 11.000000) rotate(-315.000000) translate(-10.000000, -11.000000) " />
+                                            <path d="M20,22 C21.6568542,22 23,20.6568542 23,19 C23,17.8954305 22,16.2287638 20,14 C18,16.2287638 17,17.8954305 17,19 C17,20.6568542 18.3431458,22 20,22 Z" fill="#000000" opacity="0.3" />
+                                        </g>
+                                    </svg><!--end::Svg Icon-->
+                                </span>
+                            </div>
+                            <!--end::Icon-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Add Color With The Fill Tool</div>
+                                <div class="text-dark-75"></div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Callout-->
+            </div>
+            <div class="col-lg-4">
+                <!--begin::Callout-->
+                <div class="card card-custom wave wave-animate-slow wave-secondary mb-8 mb-lg-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center p-5">
+                            <!--begin::Icon-->
+                            <div class="mr-6">
+                                <span class="svg-icon svg-icon-secondary svg-icon-4x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-10-29-133027/theme/html/demo1/dist/../src/media/svg/icons/Design/Select.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path d="M18.5,8 C17.1192881,8 16,6.88071187 16,5.5 C16,4.11928813 17.1192881,3 18.5,3 C19.8807119,3 21,4.11928813 21,5.5 C21,6.88071187 19.8807119,8 18.5,8 Z M18.5,21 C17.1192881,21 16,19.8807119 16,18.5 C16,17.1192881 17.1192881,16 18.5,16 C19.8807119,16 21,17.1192881 21,18.5 C21,19.8807119 19.8807119,21 18.5,21 Z M5.5,21 C4.11928813,21 3,19.8807119 3,18.5 C3,17.1192881 4.11928813,16 5.5,16 C6.88071187,16 8,17.1192881 8,18.5 C8,19.8807119 6.88071187,21 5.5,21 Z" fill="#000000" opacity="0.3" />
+                                            <path d="M5.5,8 C4.11928813,8 3,6.88071187 3,5.5 C3,4.11928813 4.11928813,3 5.5,3 C6.88071187,3 8,4.11928813 8,5.5 C8,6.88071187 6.88071187,8 5.5,8 Z M11,4 L13,4 C13.5522847,4 14,4.44771525 14,5 C14,5.55228475 13.5522847,6 13,6 L11,6 C10.4477153,6 10,5.55228475 10,5 C10,4.44771525 10.4477153,4 11,4 Z M11,18 L13,18 C13.5522847,18 14,18.4477153 14,19 C14,19.5522847 13.5522847,20 13,20 L11,20 C10.4477153,20 10,19.5522847 10,19 C10,18.4477153 10.4477153,18 11,18 Z M5,10 C5.55228475,10 6,10.4477153 6,11 L6,13 C6,13.5522847 5.55228475,14 5,14 C4.44771525,14 4,13.5522847 4,13 L4,11 C4,10.4477153 4.44771525,10 5,10 Z M19,10 C19.5522847,10 20,10.4477153 20,11 L20,13 C20,13.5522847 19.5522847,14 19,14 C18.4477153,14 18,13.5522847 18,13 L18,11 C18,10.4477153 18.4477153,10 19,10 Z" fill="#000000" />
+                                        </g>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="text-dark text-hover-secondary font-weight-bold font-size-h4 mb-3">Move,Resize And Rotate Sketches</div>
+                                <div class="text-dark-75"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            @if (Sketches != null && Sketches.Count > 0)
+            {
+                <OneUX_AlpHeader HeaderId="newSketch" Route="sketchpad/create" Name="Sketchpad" Count="Sketches.Count" ReturnSearchedQuery="GetSearchedString">
+                    <OneUX_ToggleViewsApp ReturnView="ToggleView" Route="sketchpad/create" />
+                </OneUX_AlpHeader>
+                @if (ProgramView == "List")
+                {
+                    <div class="row">
+                        @foreach (var Sketch in Sketches)
+                        {
+                            if (!IsVisible(Sketch)) continue;
+                            <OneUX_GridView Title="@Sketch.Name" CreatedAt="@Sketch.Core.CreatedAt" DeleteCallback="DeleteSketch" Route="sketchpad" IsDeleted="@Sketch.Core.IsDeleted" ComponentId="@Sketch.Id" ThumbnailImg="_content/OneUX/assets/imgs/Sketch1.png" Creator="@Sketch.Core.CreatorId" />
+                        }
+                    </div>
+                    @*<Virtualize Items="Sketches" Context="Sketch">*@
+
+                    @* </Virtualize>*@
+                }
+                else
+                {
+                    <OneUX_ListView Data="Sketches" Route="sketchpad" ListDivId="sketch" />
+                }
+
+            }
+            else
+            {
+
+                <OneUX_AlpHeader HeaderId="newSketch" Route="sketchpad/create" Name="Sketch" />
+
+
+            }
+
+        }
+    </div>
+</div>
+
+@code {
+    private string SearchString { get; set; }
+    private List<Sketch> Sketches { get; set; }
+    public CS_Sketch ClientService;
+    public enum LoadingContainerState { Loading, Loaded, Error }
+    public LoadingContainerState State;
+    public string ProgramView { get; set; }
+    //private UserActivity_ClientService Activity_ClientService { get; set; }
+
+    public void ToggleView(string view)
+    {
+        ProgramView = view;
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SyncLoggedInUserStatus();
+        State = LoadingContainerState.Loading;
+        try
+        {
+            //Activity_ClientService = new UserActivity_ClientService(ClientExchange, EngineServices.MarketNetwork);
+            ClientService = new CS_Sketch(ClientExchange, EngineServices.MarketNetwork);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            SLog.Write(ex);
+            State = LoadingContainerState.Error;
+            StateHasChanged();
+        }
+
+    }
+
+    protected async Task LoadData()
+    {
+        Sketches = await ClientService.GetSketchByUserId(UXUtility.LoggedInUser.Id);
+        State = LoadingContainerState.Loaded;
+        StateHasChanged();
+    }
+
+    //protected bool IsVisible(Sketch Sketches)
+    //{
+    //    if (string.IsNullOrEmpty(SearchString))
+    //        return true;
+
+    //    if (Sketches.Name.ToUpper().StartsWith(SearchString) || Sketches.Name.ToLower().StartsWith(SearchString))
+    //        return true;
+    //    return false;
+    //}
+
+
+    public async void DeleteSketch(string SketchId)
+    {
+        try
+        {
+            if (Sketches != null)
+            {
+                string sketchName = Sketches.Find(r => r.Id == SketchId).Name;
+                UserActivity userActivity = new UserActivity();
+                userActivity.Core.CreatorId = UXUtility.LoggedInUser.Id;
+                userActivity.Activities.Add(new ActivityModule { FeatureId = SketchId, Feature = sketchName, SubModuleId = "", Description = "You have recently deleted Sketch " + sketchName });
+                await Activity_ClientService.SubmitUserRecentActivityAsync(userActivity);
+            }
+            Sketches = await ClientService.DeleteObject(Sketches, SketchId);
+            if (Sketches != null)
+            {
+                StateHasChanged();
+                ToastService.ShowSuccess("Sketch Deleted Successfuly");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message, "Deletion Failed");
+        }
+    }
+
+
+    public void GetSearchedString(string str)
+    {
+        SearchString = str;
+        StateHasChanged();
+    }
+
+    public Dictionary<string, string> Routes = new Dictionary<string, string>()
+{
+        { "Sketchpad","sketchpad" }
+    };
+}

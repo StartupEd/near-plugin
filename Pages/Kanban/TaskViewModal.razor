@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @if (!Editable)
+                {
+                    <OneUX_DotToolbar>
+                        <ul class="navi navi-hover">
+                            @*<li class="navi-item">
+                                    <a href="" class="navi-link">
+                                        <span class="navi-icon"><i class="fas fa-pen"></i></span>
+                                        <span class="navi-text">Edit</span>
+                                    </a>
+                                </li>*@
+                            <li class="navi-item">
+                                <a class="navi-link" @onclick="TaskDelete">
+                                    <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                    <span class="navi-text">Delete</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </OneUX_DotToolbar>
+                }
+            </div>
+            <div class="modal-body">
+                <EditForm class="kt-section__form kt-form" autocomplete="off" id="kt-section_form" Model="@Model">
+
+                    @*<OneUX_InputBox @bind-Value="Model.TaskTitle" Label="Task Title" PlaceholderText="Name of Task" IsTrue="@Editable" />*@
+                    <OneUX_InputBox @bind-Value="Model.Core.Name" Label="Title" IsTrue="false" />
+                    @if (Editable)
+                    {
+                        <OneUX_InputBox @bind-Value="Model.TaskAssignUserName" Label="Assignee" PlaceholderText="Assignee" IsTrue="@Editable" />
+                    }
+                    else
+                    {
+                        <OneUX_InputSelect Label="Task Assignee" @bind-Value="Model.TaskAssignUserId" Title="Assign Task" Data="@Members.Where(us=>us.Id==Model.TaskAssignUserId).FirstOrDefault().Name">
+                            @foreach (var Member in Members)
+                                {
+                                <option value="@Member.Core.Id">@Member.Name</option>
+
+                                }
+                        </OneUX_InputSelect>
+                    }
+                    <OneUX_InputBox @bind-Value="Model.Name" Label="Reporter" IsTrue="true" />
+                    <OneUX_TextArea @bind-Value="@Model.Core.Description" Label="Description" ElementId="TextArea" PlaceholderText="Description" IsTrue="false" />
+                    @* <OneUX_TextArea PlaceholderText="Description" Label="Task Description" ElementId="taskDescription" @bind-Value="@Model.TaskDescription" IsTrue="@Editable" />*@
+                    @if (Editable)
+
+                    {
+                        <OneUX_InputBox @bind-Value="@Model.TaskPriority" Label="Priority" PlaceholderText="Priority" IsTrue="@Editable" />
+                    }
+                    else
+                    {
+                        <OneUX_InputSelect @bind-Value="@Model.TaskPriority" Id="priorityList" Label="Task Priority" Title="Select Priority" Data="@Model.TaskPriority">
+                            @foreach (var priority in PriorityList)
+                                {
+                                <option value="@priority">@priority</option>
+
+                                }
+                        </OneUX_InputSelect>
+                    }
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Close</button>
+                        @if (!Editable)
+                        {
+                            <button type="button" class="btn btn-primary" @onclick="TaskUpdate">Save changes</button>
+
+                        }
+                    </div>
+                </EditForm>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+   
+}

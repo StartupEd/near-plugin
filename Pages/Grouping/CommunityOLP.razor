@@ -1,0 +1,210 @@
+﻿@page "/community/{GroupId}/{GroupName}"
+<Head Title="Community">
+</Head>
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-1">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <a href="/" class="text-dark font-weight-bold my-1 mr-5">Home</a>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/community" class="text-muted">Community</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/community/@GroupId/@GroupName" class="text-muted">Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@if (State == LoadingContainerState.Loading)
+{
+    <div class="d-flex justify-content-center">
+        <div class="fa-5x">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="card card-custom gutter-b ribbon ribbon-top">
+                <div class="ribbon-target bg-secondary px-5" style="top: -2px; right: 45px;">@GroupDetail.Privacy.ToString()</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            @*<div class="flex-shrink-0 mt-lg-0 mt-3">
+                                    <div class="symbol symbol-80 mr-5 align-self-start">
+                                        @if (GroupDetail.CoverImage != null)
+                                        {
+                                            <img src="@GroupDetail.CoverImage" alt="image" />
+                                        }
+                                        else
+                                        {
+                                            <img src="https://s1.startuped.net/incubation_cloud/assets/media/users/default.jpg" alt="image" />
+                                        }
+                                    </div>
+                                </div>*@
+                            <div class="rounded overflow-hidden w-100 max-h-md-200px mb-10">
+                                @if (!string.IsNullOrEmpty(GroupDetail.CoverImage))
+                                {
+                                    <img src="@GroupDetail.CoverImage" class="w-100" alt="Cover Image" />
+                                }
+                                else
+                                {
+                                    <img src="https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg" class="w-100" alt="Cover Image" />
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="d-flex justify-content-between flex-wrap mt-1">
+                                <div class="d-flex mb-0">
+                                    <h1 class="text-primary font-weight-bolder">@GroupDetail.Name</h1>
+                                    @*<label class="text-dark-50 font-weight-bold font-size-h6 ml-5">@GroupDetail.Privacy.ToString()</label>*@
+                                </div>
+                                <div class="my-lg-0 my-3 d-none">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ml-0 mt-1">
+                                <div class="d-flex justify-content-between flex-wrap mt-1">
+                                    <div class="d-flex mb-0">
+                                        <h5 class="text-dark-50">Description:</h5>
+                                    </div>
+                                </div>
+                                <p class="text-dark-50 font-weight-bold mt-2 mb-lg-0">
+                                    @((MarkupString)GroupDetail.Description)
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="separator separator-solid"></div>
+                    <!--begin::Items-->
+                    <div class="d-flex align-items-center flex-wrap mt-8">
+                        <!--begin::Item 1-->
+                        <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+                            <span class="mr-4">
+                                <i class="flaticon-network display-4 text-muted font-weight-bold"></i>
+                            </span>
+                            <div class="d-flex flex-column text-dark-75" id="communityMembers">
+                                @if (CommunityAllMembers != null && CommunityAllMembers.Count > 0)
+                                {
+                                    @if (IsVirtualize)
+                                    {
+                                        <OneUX_DropdownCard Count="@GroupDetail.MemberIds.Count" Name="Members" LinkStyle="font-weight-bolder text-dark-75 text-hover-primary font-size-h5 ">
+                                            <Virtualize ItemsProvider="LoadGroupsData" Context="member" ItemSize="9">
+                                                <OneUX_CardView Route="@("profile/" + member.UserModel.Id)" LabelText="@member.UserModel.Name" MutedText="@member.UserModel.Persona" ImageUrl="@member.ProfileModel.AvatarImageUrl">
+                                                    @if (GroupDetail.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                                    {
+                                                        @if (member.UserModel.Id == GroupDetail.Core.CreatorId)
+                                                        {
+                                                            <a class="btn btn-sm btn-light-primary disabled">Admin</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-sm btn-light-primary" @onclick="@(()=>RemoveMemberFromGroup(member.UserModel.Id))">Remove</a>
+                                                        }
+                                                    }
+                                                </OneUX_CardView>
+                                            </Virtualize>
+                                        </OneUX_DropdownCard>
+                                    }
+                                    else
+                                    {
+                                        <OneUX_DropdownCard Count="@GroupDetail.MemberIds.Count" Name="Members" LinkStyle="font-weight-bolder text-dark-75 text-hover-primary font-size-h5 ">
+                                            <Virtualize ItemsProvider="LoadGroupsData" Context="member" ItemSize="9">
+                                                <OneUX_CardView Route="@("profile/" + member.UserModel.Id)" LabelText="@member.UserModel.Name" MutedText="@member.UserModel.Persona" ImageUrl="@member.ProfileModel.AvatarImageUrl">
+                                                    @if (GroupDetail.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                                                    {
+                                                        @if (member.UserModel.Id == GroupDetail.Core.CreatorId)
+                                                        {
+                                                            <a class="btn btn-sm btn-light-primary disabled">Admin</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-sm btn-light-primary" @onclick="@(()=>RemoveMemberFromGroup(member.UserModel.Id))">Remove</a>
+                                                        }
+                                                    }
+                                                </OneUX_CardView>
+                                            </Virtualize>
+                                        </OneUX_DropdownCard>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <!--end::Item 1-->
+                        <!--begin::Item 2-->
+                        <div class="d-flex align-items-center flex-lg-fill mr-5 mb-2">
+                            <span class="mr-4">
+                                <i class="flaticon-file-2 display-4 text-muted font-weight-bold"></i>
+                            </span>
+                            <div class="d-flex flex-column text-dark-75">
+                                <span class="font-weight-bolder font-size-h5">Total Posts</span>
+                                <span class="text-dark-50 font-weight-bold font-size-h6">@PostCount</span>
+                            </div>
+                        </div>
+                        <!--begin::Item 3-->
+
+                        <div class="align-items-center my-lg-0 my-3">
+                            @if (GroupDetail.Core.CreatorId == UXUtility.LoggedInUser.Id || UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+                            {
+                                <OneUX_DotToolbar DirectionIcon="ki ki-bold-more-hor" MenuDirection="dropdown-menu-right">
+                                    <a href="community/@GroupDetail.Id/@GroupName/edit" class="font-weight-bold dropdown-item"><i class="fas fa-pen icon-md"></i>&nbsp;Edit</a>
+                                    <a class="font-weight-bold dropdown-item" href="#" @onclick="@(()=>CallDeleteGroupAlert(GroupDetail.Id))" @onclick:preventDefault>
+                                        <i class="far fa-trash-alt icon-md"></i>&nbsp;Delete
+                                    </a>
+                                </OneUX_DotToolbar>
+                            }
+                            else if (GroupDetail.Core.CreatorId != UXUtility.LoggedInUser.Id && GroupDetail.MemberIds.Contains(UXUtility.LoggedInUser.Id))
+                            {
+                                <a class="btn btn-sm btn-primary font-weight-bolder mr-3" @onclick="@(()=>LeaveGroupAsync(GroupId))">Leave</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-sm btn-primary font-weight-bolder mr-3" @onclick="@(()=>JoinPublicGroup(GroupId))"><i class="fas fa-plus"></i>&nbsp;Join</a>
+                            }
+                        </div>
+
+                    </div>
+                    <!--begin::Items-->
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+
+        @if (UXUtility.LoggedInUserRole == Roles.Root_SuperAdmin.ToString())
+        {
+            <div id="communityPost">
+                <OneUX_Composer OnClickCallback="@SubmitGroupPost"></OneUX_Composer>
+            </div>
+            <PostReaderExperience CommunityId="@GroupId" TotalPosts="TotalPostCounts" />
+        }
+        else
+        {
+            @if (GroupDetail.MemberIds.Contains(UXUtility.LoggedInUser.Id))
+            {
+                <div id="communityPost">
+                    <OneUX_Composer OnClickCallback="@SubmitGroupPost"></OneUX_Composer>
+                </div>
+            }
+            <GroupPostFeed GroupId="@GroupId" TotalPosts="TotalPostCounts" />
+        }
+    </div>
+</div>
+
+<OneUX_SweetAlertBox @ref="ShowSweetAlertBox" Header="Are you sure?" Text="You won't be able to revert this!" Type="warning" ButtonName="Yes, delete it!" OnButtonClickk="DeleteCommunity" />
+
+
+@code {
+   
+
+}

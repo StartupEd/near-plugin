@@ -1,0 +1,30 @@
+﻿
+
+@if (State == LoadingContainerState.Loading)
+{
+    <p></p>
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    @if (Posts != null)
+    {
+        <Virtualize Items="Posts" Context="Post" ItemSize="19">
+            <XPost Model="@Post" PostCallBack="LoadData" ShowReactionModelCallBack="@(()=>CallReactionListModel(Post.Id))" Cacheduser="cachedUsers.Where(cu => cu.UserId == Post.Core.CreatorId).FirstOrDefault()" />
+            @*<CommunityPostCard Model="@Post" PostCallBack="LoadData" ShowReactionModelCallBack="@(()=>CallReactionListModel(Post.Id))"  Cacheduser="cachedUsers.Where(cu => cu.UserId == Post.Core.CreatorId).FirstOrDefault()"/>*@
+
+        </Virtualize>
+    }
+}
+
+@if (PostModel != null)
+{
+    <ReactionListModel @ref="OpenReactionList" Model="PostModel" Reactions="@cachedUserss" />
+}
+
+@code{
+   
+}

@@ -1,0 +1,128 @@
+﻿
+<!-- Modal-->
+@if (IsNoteAlertPopUp)
+{
+    <div class="modal fade show d-block" id="RId" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-3">
+                    <h5 class="modal-title" id="exampleModalLabel">Reactions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="() => OnCloseClick(false)">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body py-3">
+                    <div class="card-header-tabs-line">
+                        <ul class="nav nav-tabs nav-tabs-line">
+                            <li class="nav-item">
+                                <a class="nav-link font-size-h5 active" data-toggle="tab" href="#kt_quick_panel_All">All</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_quick_panel_Love">
+                                    <span class="svg-icon svg-icon-xl svg-icon-danger pr-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                                <path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_quick_panel_Insight">
+                                    <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                                        <img src="_content/OneUX/assets/imgs/reactions/insight.svg" alt="insight-icon" class="reaction-icon_img" width="24" height="24" />
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_quick_panel_Dollar">
+                                    <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                                        <img src="_content/OneUX/assets/imgs/reactions/dollar.svg" alt="dollar-icon" class="reaction-icon_img" width="24" height="24" />
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_quick_panel_Rocket">
+                                    <span class="svg-icon svg-icon-md svg-icon-danger pr-1">
+                                        <img src="_content/OneUX/assets/imgs/reactions/rocket.svg" alt="rocket-icon" class="reaction-icon_img" width="24" height="24" />
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content mt-5" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_quick_panel_All" role="tabpanel" aria-labelledby="kt_quick_panel_All">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl" />
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="kt_quick_panel_Love" role="tabpanel" aria-labelledby="kt_quick_panel_Love">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.Value == ReactionType.Love && Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl"/>
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="kt_quick_panel_Insight" role="tabpanel" aria-labelledby="kt_quick_panel_Insight">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.Value == ReactionType.Insight && Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl"/>
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="kt_quick_panel_Dollar" role="tabpanel" aria-labelledby="kt_quick_panel_Dollar">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.Value == ReactionType.Dollar && Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl"/>
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="kt_quick_panel_Rocket" role="tabpanel" aria-labelledby="kt_quick_panel_Rocket">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.Value == ReactionType.Rocket && Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl"/>
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="kt_quick_panel_StartupEd" role="tabpanel" aria-labelledby="kt_quick_panel_StartupEd">
+                            @if (Model.Reactions != null && Model.Reactions.Count > 0)
+                            {
+                                <Virtualize Items="Model.Reactions" Context="Reaction" ItemSize="9">
+                                    @if (Reaction.Value == ReactionType.StartupEd && Reaction.IsLiked == true)
+                                    {
+                                        <OneUX_CardView Route="@("profile/" + Reaction.AuthorId)" LabelText="@Reaction.AuthorName" ImageUrl="@Reactions.Where(cu=>cu.UserId==Reaction.AuthorId).FirstOrDefault().AvatarImageUrl" />
+                                    }
+                                </Virtualize>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

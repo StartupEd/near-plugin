@@ -1,0 +1,44 @@
+﻿@page "/root/invitations"
+<Head Title="Invites" />
+<OneUX_SubHeader />
+<AdminPageHeader Title="User Invitations" MutedText="Invitations has been sended by network users">
+    <h5 class="card-label font-weight-bold text-dark-50 mr-3">Total Invitations</h5>
+    <div class="symbol symbol-35 symbol-2by3 mr-3">
+        <span class="symbol-label font-size-h5">@Invitations.Count</span>
+    </div>
+</AdminPageHeader>
+
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    <div class="d-flex flex-column-fluid my-3">
+        <div class="container">
+            @if (Invitations != null && Invitations.Count > 0)
+            {
+                <div class="card card-custom">
+                    <div class="card-header border-0 py-3">
+                        <div class="card-title align-items-center">
+                            <h3 class="card-label font-weight-bolder text-dark">User Invitations And Referal Credits</h3>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 m-0">
+                        <OneUX_ListView Data="Invitations" ListDivId="invitationsList" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@code {
+   
+
+}

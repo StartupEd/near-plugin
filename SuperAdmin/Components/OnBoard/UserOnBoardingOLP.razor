@@ -1,0 +1,41 @@
+﻿@page "/root/user-onboard"
+@using System.Text.RegularExpressions;
+<Head Title="User Onboard" />
+<OneUX_SubHeader />
+<AdminPageHeader Title="User Onboarding" MutedText="Create User Account To Onboard.">
+    <a href="" class="btn btn-sm btn-secondary font-weight-bold mx-3" @onclick="()=>OnCreateUserAccounts(true)" @onclick:preventDefault>
+        <i class="far fa-plus-square"></i>&nbsp;Create New
+    </a>
+</AdminPageHeader>
+@if (State == LoadingContainerState.Loading)
+{
+    <OneUX_Spinner />
+}
+else if (State == LoadingContainerState.Error)
+{
+    <p>Oops something went wrong ...</p>
+}
+else if (State == LoadingContainerState.Loaded)
+{
+    <div class="d-flex flex-column-fluid my-3">
+        <div class="container">
+            @if (UserAccounts != null && UserAccounts.Count > 0)
+            {
+                <div class="card card-custom">
+                    <div class="card-header border-0 py-3">
+                        <div class="card-title align-items-center">
+                            <h3 class="card-label font-weight-bolder text-dark">User Onboard Accounts</h3>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 m-0">
+                        <OneUX_ListView Data="UserAccounts" Route="root/user-onboard" ListDivId="UsersObBoardList" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+    @code {
+       
+    }

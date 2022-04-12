@@ -1,0 +1,76 @@
+﻿@foreach (var Question in QuestionList)
+{
+
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="card card-custom">
+                <div class="card-body pt-5 pb-0">
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <input class="form-control" id="questionBox" autocomplete="off" placeholder="Question" @bind="@Question.Name" />
+                            @*<OneUX_InputBox @bind-Value="@QuestionData.Name" PlaceholderText="Assessment Name" StarValidation="@Validation" />*@
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-control kt-selectpicker form-control-solid form-control-lg" id="TypeSelectId" data-size="5" data-live-search="true" disabled>
+                                @if (Question.value == QuestionType.MultipleChoice)
+                                {
+                                    <option value=@Question.value>Multiple choice</option>
+                                }
+                                @if (Question.value == QuestionType.ShortAnswer)
+                                {
+                                    <option value=@Question.value>Short answer</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <OneUX_DotToolbar>
+                                <ul class="navi navi-hover">
+                                    <li class="navi-item">
+                                        <a class="navi-link" @onclick="(() => DeleteQuestion(Question))">
+                                            <span class="navi-icon"><i class="fas fa-trash"></i></span>
+                                            <span class="navi-text">Delete</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </OneUX_DotToolbar>
+                        </div>
+                    </div>
+                    @if (Question.value == QuestionType.ShortAnswer)
+                    {
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" rows="1" readonly placeholder="Short answer text" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (Question.value == QuestionType.MultipleChoice)
+                    {
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <div class="radio-list">
+                                    @foreach (var item in Question.MultipleChoiceOption)
+                                    {
+                                        <div class="form-group row">
+                                            <div class="col-lg-12 input-group">
+                                                <label class="radio m-0" style="margin-top:12px">
+                                                    <input type="radio" name="@Question.Id" />
+                                                    <span></span>
+                                                </label>
+                                                <input type="text" class="form-control" autocomplete="off" tabindex="0" readonly aria-label="option value" value="@item.Value" dir="ltr" data-initial-value="@item.Value" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

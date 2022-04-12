@@ -1,0 +1,260 @@
+﻿@page "/root/user-profile/{UserId}"
+
+<OneUX_SubHeader />
+<Head Title="Profile" />
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        @if (State == LoadingContainerState.Loading)
+        {
+            <OneUX_Spinner />
+        }
+        else if (State == LoadingContainerState.Error)
+        {
+            <p>Oops something went wrong ...</p>
+        }
+        else if (State == LoadingContainerState.Loaded)
+        {
+            <EditForm class="form" id="userProfileForm" Model="@UserFullInfo" OnValidSubmit="UpdateUserProfileAsync">
+                <DataAnnotationsValidator />
+
+                <div class="card card-custom gutter-b">
+                    <div class="card-header py-3">
+                        <div class="card-title align-items-start flex-column">
+                            <h3 class="card-label font-weight-bolder text-dark">User Information</h3>
+                            <span class="text-muted font-weight-bold font-size-sm mt-1">Update user personal informaiton</span>
+                        </div>
+                        <div class="card-toolbar">
+                            <a href="root/network-user" class="btn btn-default btn-sm text-uppercase font-weight-bolder mr-5">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-sm text-uppercase font-weight-bolder">Save Changes</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="d-flex">
+                                    @if (!string.IsNullOrEmpty(UserFullInfo.ProfileModel.Core.ImageUrl))
+                                    {
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(@UserFullInfo.ProfileModel.Core.ImageUrl)">
+                                            <div class="image-input-wrapper" style="background-image: url(@UserFullInfo.ProfileModel.Core.ImageUrl)"></div>
+                                            <div class="url-encoded"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                                <input type="hidden" name="profile_avatar_remove" />
+                                            </label>
+
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar" style="background-image: url(https://s2.startuped.net/incubation_cloud/assets/media/users/default.jpg)">
+                                            <div class="image-input-wrapper" style="background-image: url(https://s3.startuped.net/incubation_cloud/assets/media/users/default.jpg)"></div>
+                                            <div class="url-encoded"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <InputFile name="profile_avatar" accept=".png, .jpg, .jpeg" OnChange="@OnInputFileChange" />
+                                                <input type="hidden" name="profile_avatar_remove" />
+                                            </label>
+
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <OneUX_InputBox @bind-Value="@UserFullInfo.UserModel.FirstName" Label="First Name" StarValidation="true" />
+                                <OneUX_InputBox @bind-Value="@UserFullInfo.UserModel.Email" Label="Email" StarValidation="true" />
+                                <OneUX_InputBox @bind-Value="@UserFullInfo.UserModel.ContactNo.Mobile" Label="Phone No" MaxLength="10" PlaceholderText="Contact" Type="text" />
+                            </div>
+                            <div class="col-lg-5">
+                                <OneUX_InputBox @bind-Value="@UserFullInfo.UserModel.LastName" Label="Last Name" StarValidation="true" />
+                                <OneUX_DatePicker Label="Date Of Birth" ElementId="dateOfBirth" PlaceholderText="Select date" DateValue="@UserFullInfo.UserModel.DateOfBirth" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">
+                                <i class="fas fa-info-circle text-primary"></i>
+                            </span>
+                            <h3 class="card-label">
+                                Profile Info
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <OneUX_QuillEditor ElementId="userProfileAbout" Label="About" Summary="@UserFullInfo.ProfileModel.Core.Description" />
+                            </div>
+                            <div class="col-lg-5">
+                                <OneUX_MultiSelect Label="School" ElementId="schoolList" PlaceholderText="Enter School" MultipleValues="multiple" Data="UserFullInfo.ProfileModel.Education.School">
+                                    @foreach (var school in SchoolList)
+                                    {
+                                        <option value=@school>@school</option>
+                                    }
+                                </OneUX_MultiSelect>
+                                <OneUX_MultiSelect Label="College" ElementId="collegeList" PlaceholderText="Enter College" MultipleValues="multiple" Data="UserFullInfo.ProfileModel.Education.College">
+                                    @foreach (var college in CollegeList)
+                                    {
+                                        <option value=@college>@college</option>
+                                    }
+                                </OneUX_MultiSelect>
+
+                                <OneUX_MultiSelect Label="Degree\Course" ElementId="degreeList" PlaceholderText="Enter Degree" MultipleValues="multiple" Data="UserFullInfo.ProfileModel.Education.Degree">
+                                    @foreach (var stream in DegreeList)
+                                    {
+                                        <option value=@stream>@stream</option>
+                                    }
+                                </OneUX_MultiSelect>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-custom gutter-b">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <span class="card-icon">
+                                        <i class="fas fa-external-link-square-alt text-primary"></i>
+                                    </span>
+                                    <h3 class="card-label">
+                                        Social Links
+                                    </h3>
+                                </div>
+                            </div>
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.FacebookUrl" Label="Facebook" PlaceholderText="FacebookURL" />
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.InstagramUrl" Label="Instagram" PlaceholderText="InstagramURL" />
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.TwitterUrl" Label="Twitter" PlaceholderText="TwitterURL" />
+                                    </div>
+                                    <div class="col">
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.WebUrl" Label="Website" PlaceholderText="WebsiteURL" />
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.LinkedInUrl" Label="LinkedIn" PlaceholderText="LinkedInURL" />
+                                        <OneUX_InputBox @bind-Value="@UserFullInfo.ProfileModel.Social.GithubUrl" Label="Github" PlaceholderText="GithubURL" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-custom gutter-b">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <span class="card-icon">
+                                        <i class="fas fa-map-marker-alt text-primary"></i>
+                                    </span>
+                                    <h3 class="card-label">
+                                        Location
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                    <OneUX_GetLocation ReturnLocation="GetLocation" />
+                                <div class="row">
+                                    <div class="col">
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.UserModel.Address.FirstLine" Label="Address Line 1" PlaceholderText="Address Line 1" />
+                                        @if (!string.IsNullOrEmpty(UserFullInfo.UserModel.Address.Country))
+                                        {
+                                            <OneUX_InputSelect @bind-Value="UserFullInfo.UserModel.Address.Country" Label="Country" Id="countryInputSelect" Title="Select Country">
+                                                <option selected="selected" value=@UserFullInfo.UserModel.Address.Country>@UserFullInfo.UserModel.Address.Country</option>
+                                                @foreach (var country in CountryList)
+                                                        {
+                                                    <option value=@country>@country</option>
+                                                        }
+                                            </OneUX_InputSelect>
+                                        }
+                                        else
+                                        {
+                                            <OneUX_InputSelect @bind-Value="UserFullInfo.UserModel.Address.Country" Label="Country" Id="countryInputSelect" Title="Select Country">
+                                                @foreach (var country in CountryList)
+                                                        {
+                                                    <option value=@country>@country</option>
+                                                        }
+                                            </OneUX_InputSelect>
+                                        }
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.UserModel.Address.State" Label="State" PlaceholderText="State" ElementId="stateInputId" />
+                                    </div>
+                                    <div class="col">
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.UserModel.Address.SecondLine" Label="Address Line 2" PlaceholderText="Address Line 2" />
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.UserModel.Address.City" Label="City" PlaceholderText="City" ElementId="cityInputId" />
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.UserModel.Address.Zip" Label="Postal Code" PlaceholderText="Postal Code" ElementId="zipInputId" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-custom gutter-b">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <span class="card-icon">
+                                        <i class="fas fa-info-circle text-primary"></i>
+                                    </span>
+                                    <h3 class="card-label">
+                                        Other Info
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <OneUX_InputSelect @bind-Value="UserFullInfo.ProfileModel.FocusIndustry" Label="Focus Industry" Id="industryList" Title="Select Industry">
+                                            @foreach (var industry in FocusIndustry)
+                                                {
+                                                <option value=@industry>@industry</option>
+                                                }
+                                        </OneUX_InputSelect>
+                                        @if (UserFullInfo.UserModel.Persona == "Student Entrepreneur")
+                                        {
+                                            <OneUX_InputBox @bind-Value="UserFullInfo.ProfileModel.EntrepreneurshipCell" Label="Entrepreneurship Cell" PlaceholderText="E Cell" />
+                                        }
+                                        else if (UserFullInfo.UserModel.Persona == "Founder")
+                                        {
+                                            <OneUX_InputSelect @bind-Value="UserFullInfo.ProfileModel.FounderStage" Label="Founder Stage" Id="stageList" Title="Select Stage">
+                                                @foreach (var stage in FounderStage)
+                                                        {
+                                                    <option value=@stage>@stage</option>
+                                                        }
+                                            </OneUX_InputSelect>
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        <OneUX_InputBox @bind-Value="UserFullInfo.ProfileModel.ProfileUrl" Label="Profile Address" PlaceholderText="Profile Address" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        }
+    </div>
+</div>
+
+
+@code {
+   
+}

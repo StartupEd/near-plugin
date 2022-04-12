@@ -1,0 +1,50 @@
+/***********************SKETCHPAD COMPONENT*******************/
+.canvas-container {
+	background-color: #fff;
+	height:75vh;
+}
+	.canvas-container .canvas-toolbar_1,
+	.canvas-container .canvas-toolbar_2 {
+		display: flex;		
+		justify-content: space-evenly;
+		align-items: center;
+		padding: 0.5rem;
+	}
+	.canvas-container .canvas-toolbar_1
+	{
+		background-color: #7c8188;
+	}
+	.canvas-container .canvas-toolbar_2 {
+		background-color: #878c92;
+	}
+
+		canvas-container .canvas-toolbar_items
+		canvas-container .canvas-toolbar_items {
+			transition: filter 0.5s ease;
+		}
+
+.canvas-container .canvas-toolbar_items i{
+	color:#000;
+}
+
+.canvas-container .canvas-toolbar_items:hover {
+	cursor: pointer;
+	filter: drop-shadow(2px 4px 6px black);
+}
+
+.canvas-container .canvas-toolbar_1 .selectedTool,
+.canvas-container .canvas-toolbar_2 .selectedTool {
+	filter: drop-shadow(2px 4px 6px black);
+}
+
+#maxBtn i,
+#saveBtn i {
+	color: #000 !important;
+}
+
+#maxBtn i:hover,
+#saveBtn i:hover {
+	cursor: pointer;
+	filter: drop-shadow(2px 4px 6px black);
+}
+
